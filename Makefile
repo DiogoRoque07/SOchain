@@ -27,6 +27,7 @@ RM          := rm -f
 all:        ${NAME}
 
 ${NAME}:    ${OBJS}
+			clear
 			@echo "$(GREEN)Compilation ${CLR_RMV}of ${YELLOW}$(NAME) ${CLR_RMV}..."
 			@${CC} ${FLAGS} -o ./bin/${NAME} ${OBJS}
 			@echo "$(GREEN)$(NAME) created[0m ✔️"
@@ -46,8 +47,10 @@ fclean:     clean
 re:         fclean all
 
 run: all
-	@ echo "$(BLUE)compilação de $(CYAN)$(NAME) $(GREEN) feita $(CLR_RMV) ✔️"
 
+	@ echo "$(BLUE)compilação de $(CYAN)$(NAME) $(GREEN) feita $(CLR_RMV) ✔️"
+	# @sleep 2
+	# clear
 	@./bin/$(NAME)
 
 .PHONY:     all clean fclean re

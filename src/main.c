@@ -1,7 +1,7 @@
 #include "../inc/main.h"
 
 void printSEITUDO(void){
-    write(1, "A ECLIPSE SABE TUDO\n",21);
+    write(1, "A ROXY VAI CLARAMENTE PERGUNTAR\n",33);
 }
 
 int main(int argc, char const *argv[])
