@@ -9,7 +9,7 @@ FLAGS       := -Wall -Wextra -Werror
 #                                 PROGRAM'S SRCS                               #
 ################################################################################
 
-SRCS        := src/main.c
+SRCS        := src/main.c src/server.c  src/memory.c  src/process.c  src/wallet.c  
 OBJS        := $(SRCS:src/%.c=obj/%.o)
 
 ################################################################################
@@ -22,6 +22,7 @@ GREEN       := \033[1;32m
 YELLOW      := \033[1;33m
 BLUE        := \033[1;34m
 CYAN        := \033[1;36m
+PINK        := \033[1;35m
 RM          := rm -f
 
 all:        ${NAME}
@@ -33,7 +34,6 @@ ${NAME}:    ${OBJS}
 			@echo "$(GREEN)$(NAME) created[0m ✔️"
 
 obj/%.o: src/%.c
-			@mkdir -p obj
 			@${CC} ${FLAGS} -c $< -o $@
 
 clean:
