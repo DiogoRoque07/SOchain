@@ -9,7 +9,7 @@ FLAGS       := -Wall -Wextra -Werror
 #                                 PROGRAM'S SRCS                               #
 ################################################################################
 
-SRCS        := src/main.c src/server.c  src/memory.c  src/process.c  src/wallet.c  
+SRCS        := $(wildcard src/*.c)
 OBJS        := $(SRCS:src/%.c=obj/%.o)
 
 ################################################################################
@@ -31,7 +31,7 @@ ${NAME}:    ${OBJS}
 			clear
 			@echo "$(GREEN)Compilation ${CLR_RMV}of ${YELLOW}$(NAME) ${CLR_RMV}..."
 			@${CC} ${FLAGS} -o ./bin/${NAME} ${OBJS}
-			@echo "$(GREEN)$(NAME) created[0m ✔️"
+			@echo "$(GREEN)$(NAME) created$(CLR_RMV)✔️"
 
 obj/%.o: src/%.c
 			@${CC} ${FLAGS} -c $< -o $@
