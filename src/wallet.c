@@ -1,6 +1,5 @@
 #include "../inc/wallet.h"
 
-
 int execute_wallet(int wallet_id, struct info_container* info, struct buffers* buffs){
     int num_transacs = 0;
     while(info->terminate == 0){

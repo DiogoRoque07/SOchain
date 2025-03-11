@@ -5,6 +5,8 @@
 #include <unistd.h>
 #include <sys/types.h>
 
+#include <string.h>
+
 
 #define RESET   "\033[0m"
 #define RED     "\033[31m"
@@ -97,12 +99,14 @@ void main_args(int argc, char *argv[], struct info_container *info)
 {
     if (check_args(argc, argv) == -1)
     {
+        printf("[Main] Parâmetros incorretos!");
         deallocate_dynamic_memory(info);
         exit(-1);
     }
-
+    
     if (check_args(argc, argv) == 0)
     {
+        printf("[Main] Parâmetros corretos!");
         info->init_balance = atof(argv[1]);
         info->n_wallets = atoi(argv[2]);
         info->n_servers = atoi(argv[3]);
@@ -118,6 +122,7 @@ void create_dynamic_memory_structs(struct info_container *info, struct buffers *
     buffs->buff_main_wallets = allocate_dynamic_memory(info->buffers_size);
 }
 
+//falta
 void create_shared_memory_structs(struct info_container *info, struct buffers *buffs)
 {
     (void)info;
@@ -133,6 +138,7 @@ void destroy_dynamic_memory_structs(struct info_container *info, struct buffers 
     deallocate_dynamic_memory(buffs);
 }
 
+//falta
 void destroy_shared_memory_structs(struct info_container *info, struct buffers *buffs)
 {
     (void)info;
@@ -153,8 +159,47 @@ void create_processes(struct info_container *info, struct buffers *buffs)
 
 void user_interaction(struct info_container *info, struct buffers *buffs)
 {
+
+    while(1){
+        char *input;
+        printf("[Main] Introduzir operação: ");
+        scanf("%s",input);
+
+        // dividir as informações do comando 
+        char words[] = strtok(input," ");
+        char op[] = words[0];
+        
+        int id1 = atoi(words[1]);
+
+        switch (user_hash(op))
+        {
+        case 1:
+            if(sizeof(words));
+            print_balance(atoi(words[1]));
+            break;
+        
+        
+        default:
+            printf("[Main] Introduzir operação: [Main] Operação não reconhecida, insira 'help' para assistência.");
+            break;
+        }
+    }
+
+
     (void)info;
     (void)buffs;
+
+}
+
+//incompleto
+int user_hash(char op[]){
+
+    if(strcmp(op,"bal") == 1){
+        return 1;
+    } else if(strcmp(op,"trx")){
+
+    }
+
 
 }
 
@@ -199,13 +244,16 @@ void print_balance(struct info_container *info)
         printf("ID invalido\n");
 }
 
+//Falta
 void create_transaction(int *tx_counter, struct info_container *info, struct buffers *buffs)
 {
     (void)tx_counter;
     (void)info;
     (void)buffs;
 }
-
+// ctrl k; ctr c
+// ctrl k; ctr u
+// Falta
 void receive_receipt(struct info_container *info, struct buffers *buffs)
 {
     (void)info;
@@ -213,7 +261,44 @@ void receive_receipt(struct info_container *info, struct buffers *buffs)
 }
 
 void print_stat(int tx_counter, struct info_container *info)
-{// ISSO É DO COPILOT SÓ PARA FICAR BONITINHO IG
+{
+    char tabulation[] = "        ";
+    printf("- Configuração inicial:\n");
+    printf("%sPropriedade     Valor\n",tabulation);
+    printf("%sinit_balance    %.2f",tabulation,info->init_balance);
+    printf("%sn_wallets       %d",tabulation,info->n_wallets);
+    printf("%sn_servers       %d",tabulation,info->n_servers);
+    printf("%sbuffer_size     %d",tabulation,info->buffers_size);
+    printf("%smax_txs         %d",tabulation,info->max_txs);
+    printf("- Variáveis atuais:\n");
+    printf("%stx_count        %.2f",tabulation,info->init_balance);
+    printf("%sterminate       %.2f",tabulation,tx_counter);
+    printf("- Informações sobre as carteiras:\n");
+    printf("%sCarteira        PID             Saldo           Transações Assinadas\n");
+    //informações sobre as carteiras
+    for(int i = 0; i < info->n_wallets; i++){
+        printf("%sid:%d        Saldo%.2f SOT        %d",tabulation,i,info->wallets_pids);
+    }
+    printf("- Informações sobre os servidores:\n");
+    printf("%sServidor        PID             Transações Processadas\n");
+    for (int i = 0; i < info->n_servers; i++)
+    {
+        printf("%sID:%dPID:%dTransações:%d",i,info->servers_pids[i],info->servers_stats[i]);
+    }
+    
+    
+
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    // ISSO É DO COPILOT SÓ PARA FICAR BONITINHO IG
     printf("Configurações iniciais do sistema:\n");
     printf("Saldo inicial: %.2f\n", info->init_balance);
     printf("Número de carteiras: %d\n", info->n_wallets);

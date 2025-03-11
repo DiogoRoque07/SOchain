@@ -12,7 +12,7 @@ int launch_wallet(int wallet_id, struct info_container* info, struct buffers* bu
         return pid;
     } 
     else if (pid == 0){
-        execute_wallet(wallet_id, info, buffs);
+  execute_wallet(wallet_id, info, buffs);      
     }
     else {
         perror("fork failed");
