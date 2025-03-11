@@ -2,3 +2,7 @@ quando usar shared memory(seria por exemplo dynamic para o server e shared para 
 
 
 na funcao create proccess é necessario executar os proccessos criados?(por exemplo um wallet proccess executava com execl ou execve(ou outra funcao exec) ou só cria os)
+
+no programa do prof uma transação falhada conta para o numero total das transações a mesma, é suposto?
+
+no help do programa do prof nao tem o stat
