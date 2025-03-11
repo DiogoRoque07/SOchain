@@ -27,36 +27,52 @@ void* create_shared_memory(char* name, int size){
     // shmget(); //  https://users.cs.cf.ac.uk/Dave.Marshall/C/node27.html
 }
 
-void deallocate_dynamic_memory(void* ptr){
+void deallocate_dynamic_memory(void* ptr)
+{
     if (ptr)
         free(ptr);
 }
 
-void destroy_shared_memory(char* name, void* ptr, int size){
+void destroy_shared_memory(char* name, void* ptr, int size)
+{
     munmap(ptr, size);//libertar shared mem
     shm_unlink(name);//desmapear(supostamente opcional mas boa pratica)
 }
+// Escreve uma transação no buffer de memória partilhada entre a Main e as carteiras.
+// A transação deve ser escrita numa posição livre do buffer,
+// tendo em conta o tipo de buffer e as regras de escrita em buffers desse tipo.
+// Se não houver nenhuma posição livre, não escreve nada e a transação é perdid
+void write_main_wallets_buffer(struct ra_buffer* buffer, int buffer_size, struct transaction* tx)
+{
+    int i;
+    if(i = 0, i <= buffer_size, i ++){
+        if(!buffer->buffer){
+            
+        }
+    }
+}
 
-void write_main_wallets_buffer(struct ra_buffer* buffer, int buffer_size, struct transaction* tx){
+void write_wallets_servers_buffer(struct circ_buffer* buffer, int buffer_size, struct transaction* tx)
+{
 
 }
 
-void write_wallets_servers_buffer(struct circ_buffer* buffer, int buffer_size, struct transaction* tx){
+void write_servers_main_buffer(struct ra_buffer* buffer, int buffer_size, struct transaction* tx)
+{
 
 }
 
-void write_servers_main_buffer(struct ra_buffer* buffer, int buffer_size, struct transaction* tx){
+void read_main_wallets_buffer(struct ra_buffer* buffer, int wallet_id, int buffer_size, struct transaction* tx)
+{
 
 }
 
-void read_main_wallets_buffer(struct ra_buffer* buffer, int wallet_id, int buffer_size, struct transaction* tx){
+void read_wallets_servers_buffer(struct circ_buffer* buffer, int buffer_size, struct transaction* tx)
+{
 
 }
 
-void read_wallets_servers_buffer(struct circ_buffer* buffer, int buffer_size, struct transaction* tx){
-
-}
-
-void read_servers_main_buffer(struct ra_buffer* buffer, int tx_id, int buffer_size, struct transaction* tx){
+void read_servers_main_buffer(struct ra_buffer* buffer, int tx_id, int buffer_size, struct transaction* tx)
+{
     
 }
