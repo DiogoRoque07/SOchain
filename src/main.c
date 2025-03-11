@@ -48,28 +48,28 @@ int check_args(int argc, char *argv[])
     int ret = 0;
     if (argc != 6)
     {
-        fprint(stderr, "NUMBER OF ARGUMENTS INCORRECT\n");
+        fprintf(stderr, "NUMBER OF ARGUMENTS INCORRECT\n");
 
         ret = -1;
     }
     // init_balance
     if (atoi(argv[1]) <= 0)
     {
-        fprint(stderr, "INITIAL BALANCE NEEDS TO BE POSITIVE\n");
+        fprintf(stderr, "INITIAL BALANCE NEEDS TO BE POSITIVE\n");
         ret = -1;
     }
 
     // n_wallets
     if (atoi(argv[2]) <= 0)
     {
-        fprint(stderr, "NUMBER OF WALLETS NEEDS TO BE POSITIVE\n");
+        fprintf(stderr, "NUMBER OF WALLETS NEEDS TO BE POSITIVE\n");
         ret = -1;
     }
 
     // n_servers
     if (atoi(argv[3]) <= 0)
     {
-        fprint(stderr, "NUMBER OF SERVERS NEEDS TO BE POSITIVE\n");
+        fprintf(stderr, "NUMBER OF SERVERS NEEDS TO BE POSITIVE\n");
         ret = -1;
     }
 
@@ -77,14 +77,14 @@ int check_args(int argc, char *argv[])
     // TODO: ver
     if (atoi(argv[4]) <= 0)
     {
-        fprint(stderr, "BUFFER SIZE NEEDS TO BE POSITIVE\n");
+        fprintf(stderr, "BUFFER SIZE NEEDS TO BE POSITIVE\n");
         ret = -1;
     }
 
     // max_txs
     if (atoi(argv[5]) <= 0)
     {
-        fprint(stderr, "MAX TRANSACTIONS NEEDS TO BE POSITIVE\n");
+        fprintf(stderr, "MAX TRANSACTIONS NEEDS TO BE POSITIVE\n");
         ret = -1;
     }
     return ret;
@@ -120,7 +120,8 @@ void create_dynamic_memory_structs(struct info_container *info, struct buffers *
 
 void create_shared_memory_structs(struct info_container *info, struct buffers *buffs)
 {
-
+    (void)info;
+    (void)buffs;
 }
 
 void destroy_dynamic_memory_structs(struct info_container *info, struct buffers *buffs)
@@ -134,6 +135,8 @@ void destroy_dynamic_memory_structs(struct info_container *info, struct buffers 
 
 void destroy_shared_memory_structs(struct info_container *info, struct buffers *buffs)
 {
+    (void)info;
+    (void)buffs;
     // ver se é preciso por algo depois da info e buffs e o quÊ
     //  destroy_shared_memory(info->);
     //  destroy_shared_memory(buffs->);
@@ -141,41 +144,18 @@ void destroy_shared_memory_structs(struct info_container *info, struct buffers *
 
 void create_processes(struct info_container *info, struct buffers *buffs)
 {
-    pid_t pid;
-    for (int i = 0; i < info->n_wallets; i++) {
-        pid = fork();
-        // if (pid == 0) {
-        // usar o execl ou assim para executar o servidor, pq sem fazer nada o processo é criado e faz exit pq n ha nada a fzr
-        //     exit();
-        // } 
-        // else 
-        if (pid > 0) {
-            info->wallets_pids[i] = pid;
-        } 
-        else {
-            perror("fork failed");
-            exit(EXIT_FAILURE);
-        }
-    }
+    for (int i = 0; i < info->n_wallets; i++)
+        info->wallets_pids[i] = launch_wallet(i, info, buffs);
 
-    for (int i = 0; i < info->n_servers; i++) {
-        pid = fork();
-        // if (pid == 0) {
-        //     exit();//mesma coisa aqui
-        // } 
-        // else
-         if (pid > 0) {
-            info->servers_pids[i] = pid;
-        } 
-        else {
-            perror("fork failed");
-            exit(EXIT_FAILURE);
-        }
-    }
+    for (int i = 0; i < info->n_servers; i++)
+        info->servers_pids[i] = launch_server(i, info, buffs);
 }
 
 void user_interaction(struct info_container *info, struct buffers *buffs)
 {
+    (void)info;
+    (void)buffs;
+
 }
 
 void write_final_statistics(struct info_container *info)
@@ -190,7 +170,8 @@ void write_final_statistics(struct info_container *info)
 
 void end_execution(struct info_container *info, struct buffers *buffs)
 {
-    info->terminate = 1;
+    *info->terminate = 1;
+    (void)buffs;
     wait_processes(info);
     write_final_statistics(info);
 
@@ -213,18 +194,22 @@ void print_balance(struct info_container *info)
     printf("Indica o ID da carteira: ");
     scanf("%d", &wallet_id);
     if (wallet_id >= 0 && wallet_id < info->n_wallets)
-        printf("Saldo atual da careira %d: %.2f\n", wallet_id, info->wallets_stats[wallet_id]);
+        printf("Saldo atual da careira %d: %d\n", wallet_id, info->wallets_stats[wallet_id]);
     else
         printf("ID invalido\n");
 }
 
 void create_transaction(int *tx_counter, struct info_container *info, struct buffers *buffs)
 {
-    
+    (void)tx_counter;
+    (void)info;
+    (void)buffs;
 }
 
 void receive_receipt(struct info_container *info, struct buffers *buffs)
 {
+    (void)info;
+    (void)buffs;
 }
 
 void print_stat(int tx_counter, struct info_container *info)
@@ -235,7 +220,7 @@ void print_stat(int tx_counter, struct info_container *info)
     printf("Número de servidores: %d\n", info->n_servers);
     printf("Tamanho dos buffers: %d\n", info->buffers_size);
     printf("Número máximo de transações: %d\n", info->max_txs);
-    printf("Variável terminate: %d\n", info->terminate);
+    printf("Variável terminate: %d\n", *info->terminate);
     printf("Contador de transações criadas: %d\n", tx_counter);
 
     printf("PIDs dos processos das carteiras:\n");

@@ -2,6 +2,8 @@
 #include <stdlib.h>
 #include <unistd.h>
 #include <sys/mman.h>
+#include <string.h>
+#include <stdio.h>
 
 void* allocate_dynamic_memory(int size){
     void* ptr = malloc(size);
@@ -17,8 +19,10 @@ void* create_shared_memory(char* name, int size){
     int visibility = MAP_SHARED | MAP_ANONYMOUS;
     
     unsigned int userID = getuid();
-    name = strcat(name, userID);
-    return mmap(NULL, size, protection, visibility, -1,0);
+    char userID_str[10];
+    snprintf(userID_str, sizeof(userID_str), "%u", userID);
+    name = strcat(name, userID_str);
+    return mmap(NULL, size, protection, visibility, -1, 0);
     // int memfd = shm_open(name, O_CREAT | O_RDWR, 0666);
     // shmget(); //  https://users.cs.cf.ac.uk/Dave.Marshall/C/node27.html
 }

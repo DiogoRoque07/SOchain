@@ -1,7 +1,10 @@
 quando usar shared memory(seria por exemplo dynamic para o server e shared para o wallets)
+R:(omeir) - no buffer_wallet_server so
+R:(prof) - 
 
-
-na funcao create proccess é necessario executar os proccessos criados?(por exemplo um wallet proccess executava com execl ou execve(ou outra funcao exec) ou só cria os)
+//na funcao create proccess é necessario executar os proccessos criados?(por exemplo um wallet proccess executava com execl ou execve(ou outra funcao exec) ou só cria os)
+R:(Bowser) - chama as funcoes launch_wallet/ launch_server
+R:(prof) - 
 
 no programa do prof uma transação falhada conta para o numero total das transações a mesma, é suposto?
 
