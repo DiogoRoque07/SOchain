@@ -288,11 +288,11 @@ void print_stat(int tx_counter, struct info_container *info)
 // TODO: adicionar cores ao [$(processo)]
 void help()
 {   
-    printf("[Main] Operações disponíveis:\n");
-    printf("[Main]  bal id - consultar o saldo da carteira identificada por id.\n");
-    printf("[Main]  trx src_id dest_id amount - criar uma nova transação.\n");
-    printf("[Main]  rcp id - obter o comprovativo da transação de número id.\n");
-    printf("[Main]  help - imprime a informação sobre as operações disponíveis.\n");
-    printf("[Main]  stat - imprime as estatisticas atuais do sistema SOchain\n");
-    printf("[Main]  end - termina a execução do SOchain.\n");
+    printf(BLUE "[Main] " RESET GREEN "Operações disponíveis:\n"RESET);
+    printf(BLUE "[Main] " RESET GREEN "bal id - consultar o saldo da carteira identificada por id.\n"RESET);
+    printf(BLUE "[Main] " RESET GREEN "trx src_id dest_id amount - criar uma nova transação.\n"RESET);
+    printf(BLUE "[Main] " RESET GREEN "rcp id - obter o comprovativo da transação de número id.\n"RESET);
+    printf(BLUE "[Main] " RESET GREEN "help - imprime a informação sobre as operações disponíveis.\n"RESET);
+    printf(BLUE "[Main] " RESET GREEN "stat - imprime as estatisticas atuais do sistema SOchain\n"RESET);
+    printf(BLUE "[Main] " RESET GREEN "end - termina a execução do SOchain.\n"RESET);
 }
