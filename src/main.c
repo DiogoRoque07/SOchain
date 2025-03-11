@@ -203,13 +203,14 @@ int user_hash(char op[])
 
 void write_final_statistics(struct info_container *info)
 {
+    printf("[Main] A encerrar a execução do SOchain! As estatísticas da execução são:");
     for (int i = 0; i < info->n_wallets; i++)
     {
-        printf("Carteira %d assinou %d transações\n", i, info->wallets_stats[i]);
+        printf("[Main] A carteira %d assinou %d transações e terminou com %.2f\n", i, info->wallets_stats[i], info->balances[i]);
     }
     for (int i = 0; i < info->n_servers; i++)
     {
-        printf("Servidor %d processou %d transações\n", i, info->servers_stats[i]);
+        printf("[Main] Servidor %d assinou %d transações\n", i, info->servers_stats[i]);
     }
 }
 
@@ -235,12 +236,11 @@ void wait_processes(struct info_container *info)
 void print_balance(struct info_container *info)
 {
     int wallet_id;
-    printf("Indica o ID da carteira: ");
     scanf("%d", &wallet_id);
     if (wallet_id >= 0 && wallet_id < info->n_wallets)
-        printf("Saldo atual da careira %d: %d\n", wallet_id, info->wallets_stats[wallet_id]);
+        printf("[Main] O saldo da carteira %d é de %.2f SOT atualmente.\n", wallet_id, info->wallets_stats[wallet_id]);
     else
-        printf("ID invalido\n");
+        printf("[Main] Não foi possível verificar o saldo da carteira %d\n", wallet_id);
 }
 
 // Falta
@@ -285,13 +285,14 @@ void print_stat(int tx_counter, struct info_container *info)
 
 }
 
+// TODO: adicionar cores ao [$(processo)]
 void help()
-{
-    printf(GREEN "Comandos disponíveis:\n" RESET);
-    printf(YELLOW "1. bal id" RESET " – Obtém o saldo atual da carteira cujo identificador é id.\n");
-    printf(YELLOW "2. trx src_id dest_id amount" RESET " – Solicita a criação de uma transação em que a carteira de origem envia uma quantidade de SOT tokens para a carteira de destino.\n");
-    printf(YELLOW "3. rcp id" RESET " – Obtém o comprovativo da execução de uma transação específica, identificada por id.\n");
-    printf(YELLOW "4. stat" RESET " – Apresenta o estado atual das variáveis do info_container.\n");
-    printf(YELLOW "5. help" RESET " – Mostra as informações de ajuda sobre as operações disponíveis.\n");
-    printf(YELLOW "6. end" RESET " – Termina a execução do sistema SOchain.\n");
+{   
+    printf("[Main] Operações disponíveis:\n");
+    printf("[Main]  bal id - consultar o saldo da carteira identificada por id.\n");
+    printf("[Main]  trx src_id dest_id amount - criar uma nova transação.\n");
+    printf("[Main]  rcp id - obter o comprovativo da transação de número id.\n");
+    printf("[Main]  help - imprime a informação sobre as operações disponíveis.\n");
+    printf("[Main]  stat - imprime as estatisticas atuais do sistema SOchain\n");
+    printf("[Main]  end - termina a execução do SOchain.\n");
 }

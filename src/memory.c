@@ -38,25 +38,31 @@ void destroy_shared_memory(char* name, void* ptr, int size)
     munmap(ptr, size);//libertar shared mem
     shm_unlink(name);//desmapear(supostamente opcional mas boa pratica)
 }
-// Escreve uma transação no buffer de memória partilhada entre a Main e as carteiras.
-// A transação deve ser escrita numa posição livre do buffer,
-// tendo em conta o tipo de buffer e as regras de escrita em buffers desse tipo.
-// Se não houver nenhuma posição livre, não escreve nada e a transação é perdid
+
+//Escreve uma transação no buffer de memória partilhada entre a Main e as carteiras.
 void write_main_wallets_buffer(struct ra_buffer* buffer, int buffer_size, struct transaction* tx)
 {
     int i;
-    if(i = 0, i <= buffer_size, i ++){
-        if(!buffer->buffer){
-            
+    int found = 0;
+    for(i = 0; i < buffer_size && found == 0; i++){
+        if(!buffer->ptrs[i]){
+            buffer->ptrs[i] = tx;
+            found = 1;
         }
     }
 }
-
+//Função que escreve uma transação no buffer de memória partilhada entre as carteiras e os servidores.
+//A transação deve ser escrita numa posição livre do buffer, tendo em conta o tipo de buffer
+//e as regras de escrita em buffers desse tipo. Se não houver nenhuma posição livre, não escreve nada.
 void write_wallets_servers_buffer(struct circ_buffer* buffer, int buffer_size, struct transaction* tx)
 {
 
 }
 
+// //Função que escreve uma transação no buffer de memória partilhada entre os servidores e a Main, a qual
+// servirá de comprovativo da execução da transação. A transação deve ser escrita numa posição livre do
+// buffer, tendo em conta o tipo de buffer e as regras de escrita em buffers desse tipo.
+// Se não houver nenhuma posição livre, não escreve nada.
 void write_servers_main_buffer(struct ra_buffer* buffer, int buffer_size, struct transaction* tx)
 {
 
