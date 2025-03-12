@@ -155,54 +155,6 @@ void create_processes(struct info_container *info, struct buffers *buffs)
         info->servers_pids[i] = launch_server(i, info, buffs);
 }
 
-void user_interaction(struct info_container *info, struct buffers *buffs)
-{
-    int tx_counter = -1;
-    while (1)
-    {
-        char *input;
-        printf("[Main] Introduzir operação: ");
-        scanf("%s", input);
-
-        // dividir as informações do comando
-        char *words = strtok(input, " ");
-        if (!words)
-            continue;
-        char *op = words[0];
-
-        switch (user_hash(op))
-        {
-        case 1: // "ball" command
-            print_balance(info);
-            break;
-        case 2: // "trx" command
-            create_transaction(tx_counter, info, buffs);
-            break;
-        case 3: // "rcp" command
-            receive_receipt(info, buffs);
-            break;
-        case 4: // "help" command
-            printf("[Main] Operações disponíveis:");
-            printf("[Main]  bal id - consultar o saldo da carteira identifcada por id");
-            printf("[Main]  trx src_id dest_id amount - criar uma nova transação");
-            printf("[Main]  rcp id - obter o comprovativo da transação de número id");
-            printf("[Main]  help - imprime a informação sobre as operações disponíveis");
-            printf("[Main]  stat - imprime as estatísticas atuais do SOchain");
-            printf("[Main]  end - termina a execução do SOchain");
-            break;
-        case 5: // "stat" command
-            print_stat(tx_counter, info);
-            break;
-        case 6: // "end" command
-            end_execution(info, buffs);
-            break;
-        default:
-            printf("[Main] Introduzir operação: [Main] Operação não reconhecida, insira 'help' para assistência.");
-            break;
-        }
-    }
-}
-
 /**
  * Returns a hash for the user interaction commands
  * bal -> 1
@@ -247,6 +199,54 @@ int user_hash(char op[])
     }
 }
 
+void user_interaction(struct info_container *info, struct buffers *buffs)
+{
+    int tx_counter = -1;
+    while (1)
+    {
+        char *input = malloc(50);
+        printf("[Main] Introduzir operação: ");
+        scanf("%s", input);
+
+        // dividir as informações do comando
+        char *words = strtok(input, " ");
+        if (!words)
+            continue;
+        char *op = words;
+
+        switch (user_hash(op))
+        {
+        case 1: // "ball" command
+            print_balance(info);
+            break;
+        case 2: // "trx" command
+            create_transaction(&tx_counter, info, buffs);
+            break;
+        case 3: // "rcp" command
+            receive_receipt(info, buffs);
+            break;
+        case 4: // "help" command
+            printf("[Main] Operações disponíveis:");
+            printf("[Main]  bal id - consultar o saldo da carteira identifcada por id");
+            printf("[Main]  trx src_id dest_id amount - criar uma nova transação");
+            printf("[Main]  rcp id - obter o comprovativo da transação de número id");
+            printf("[Main]  help - imprime a informação sobre as operações disponíveis");
+            printf("[Main]  stat - imprime as estatísticas atuais do SOchain");
+            printf("[Main]  end - termina a execução do SOchain");
+            break;
+        case 5: // "stat" command
+            print_stat(tx_counter, info);
+            break;
+        case 6: // "end" command
+            end_execution(info, buffs);
+            break;
+        default:
+            printf("[Main] Introduzir operação: [Main] Operação não reconhecida, insira 'help' para assistência.");
+            break;
+        }
+    }
+}
+
 void write_final_statistics(struct info_container *info)
 {
     printf("[Main] A encerrar a execução do SOchain! As estatísticas da execução são:");
@@ -284,7 +284,7 @@ void print_balance(struct info_container *info)
     int wallet_id;
     scanf("%d", &wallet_id);
     if (wallet_id >= 0 && wallet_id < info->n_wallets)
-        printf("[Main] O saldo da carteira %d é de %.2f SOT atualmente.\n", wallet_id, info->wallets_stats[wallet_id]);
+        printf("[Main] O saldo da carteira %d é de %.2f SOT atualmente.\n", wallet_id, info->balances[wallet_id]);
     else
         printf("[Main] Não foi possível verificar o saldo da carteira %d\n", wallet_id);
 }
@@ -292,9 +292,9 @@ void print_balance(struct info_container *info)
 // Falta
 void create_transaction(int *tx_counter, struct info_container *info, struct buffers *buffs)
 {
-    tx_counter++;
-    buffs->buff_main_wallets->buffer->src_id;
-    info->wallets_pids;
+    // tx_counter++;
+    // buffs->buff_main_wallets->buffer->src_id;
+    // info->wallets_pids;
     (void)tx_counter;
     (void)info;
     (void)buffs;
@@ -322,14 +322,14 @@ void print_stat(int tx_counter, struct info_container *info)
     printf("- Informações sobre as carteiras:\n");
     printf("%sCarteira        PID             Saldo           Transações Assinadas\n", tabulation);
     for (int i = 0; i < info->n_wallets; i++)
-    {
-        printf("%s%-15d%-15d%-15d%-15d\n", tabulation, i, info->wallets_pids[i], info->balances[i], info->wallets_stats[i]);
+    {   // TODO fix
+        // printf("%s%-15d%-15d%-15d%-15d\n", tabulation, i, info->wallets_pids[i], info->balances[i], info->wallets_stats[i]);
     }
     printf("- Informações sobre os servidores:\n");
     printf("%sServidor        PID             Transações Processadas\n", tabulation);
     for (int i = 0; i < info->n_servers; i++)
-    {
-        printf("%s%-15d%-15d%-15d\n", tabulation, i, info->servers_pids[i], info->servers_stats[i]);
+    {   // TODO fix
+        // printf("%s%-15d%-15d%-15d\n", tabulation, i, info->servers_pids[i], info->servers_stats[i]);
     }
 }
 
