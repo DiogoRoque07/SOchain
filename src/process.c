@@ -1,9 +1,11 @@
 #include "../inc/process.h"
 #include "../inc/wallet.h"
+#include "../inc/server.h"
 #include <sys/wait.h>
 #include <stdlib.h>
 #include <unistd.h>
 #include <sys/types.h>
+#include <stdio.h>
 
 int launch_wallet(int wallet_id, struct info_container *info, struct buffers *buffs)
 {
@@ -15,7 +17,7 @@ int launch_wallet(int wallet_id, struct info_container *info, struct buffers *bu
     }
     else if (pid == 0)
     {
-        execute_wallet(wallet_id, info, buffs);
+        return execute_wallet(wallet_id, info, buffs);
     }
     else
     {
@@ -34,7 +36,7 @@ int launch_server(int server_id, struct info_container *info, struct buffers *bu
     }
     else if (pid == 0)
     {
-        execute_server(server_id, info, buffs);
+        return execute_server(server_id, info, buffs);
     }
     else
     {
