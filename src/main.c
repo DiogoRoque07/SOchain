@@ -157,7 +157,7 @@ void create_processes(struct info_container *info, struct buffers *buffs)
 
 void user_interaction(struct info_container *info, struct buffers *buffs)
 {
-
+    int tx_counter = -1;
     while (1)
     {
         char *input;
@@ -165,19 +165,37 @@ void user_interaction(struct info_container *info, struct buffers *buffs)
         scanf("%s", input);
 
         // dividir as informações do comando
-        char words[] = strtok(input, " ");
-        char op[] = words[0];
-
-        int id1 = atoi(words[1]);
+        char *words = strtok(input, " ");
+        if (!words)
+            continue;
+        char *op = words[0];
 
         switch (user_hash(op))
         {
-        case 1:
-            if (sizeof(words))
-                ;
-            print_balance(atoi(words[1]));
+        case 1: // "ball" command
+            print_balance(info);
             break;
-
+        case 2: // "trx" command
+            create_transaction(tx_counter, info, buffs);
+            break;
+        case 3: // "rcp" command
+            receive_receipt(info, buffs);
+            break;
+        case 4: // "help" command
+            printf("[Main] Operações disponíveis:");
+            printf("[Main]  bal id - consultar o saldo da carteira identifcada por id");
+            printf("[Main]  trx src_id dest_id amount - criar uma nova transação");
+            printf("[Main]  rcp id - obter o comprovativo da transação de número id");
+            printf("[Main]  help - imprime a informação sobre as operações disponíveis");
+            printf("[Main]  stat - imprime as estatísticas atuais do SOchain");
+            printf("[Main]  end - termina a execução do SOchain");
+            break;
+        case 5: // "stat" command
+            print_stat(tx_counter, info);
+            break;
+        case 6: // "end" command
+            end_execution(info, buffs);
+            break;
         default:
             printf("[Main] Introduzir operação: [Main] Operação não reconhecida, insira 'help' para assistência.");
             break;
@@ -188,16 +206,47 @@ void user_interaction(struct info_container *info, struct buffers *buffs)
     (void)buffs;
 }
 
-// incompleto
+/**
+ * Returns a hash for the user interaction commands
+ * bal -> 1
+ * trx -> 2
+ * rcp -> 3
+ * help -> 4
+ * stat -> 5
+ * end -> 6
+ * undefined command -> 7
+ * undefined command not meant to
+ */
 int user_hash(char op[])
 {
 
-    if (strcmp(op, "bal") == 1)
+    if (strcmp(op, "bal") == 0)
     {
         return 1;
     }
-    else if (strcmp(op, "trx"))
+    else if (strcmp(op, "trx") == 0)
     {
+        return 2;
+    }
+    else if (strcmp(op, "rcp") == 0)
+    {
+        return 3;
+    }
+    else if (strcmp(op, "help") == 0)
+    {
+        return 4;
+    }
+    else if (strcmp(op, "stat") == 0)
+    {
+        return 5;
+    }
+    else if (strcmp(op, "end") == 0)
+    {
+        return 6;
+    }
+    else
+    {
+        return 7;
     }
 }
 
@@ -246,6 +295,9 @@ void print_balance(struct info_container *info)
 // Falta
 void create_transaction(int *tx_counter, struct info_container *info, struct buffers *buffs)
 {
+    tx_counter++;
+    buffs->buff_main_wallets->buffer->src_id;
+    info->wallets_pids;
     (void)tx_counter;
     (void)info;
     (void)buffs;
@@ -282,17 +334,16 @@ void print_stat(int tx_counter, struct info_container *info)
     {
         printf("%s%-15d%-15d%-15d\n", tabulation, i, info->servers_pids[i], info->servers_stats[i]);
     }
-
 }
 
 // TODO: adicionar cores ao [$(processo)]
 void help()
-{   
-    printf(BLUE "[Main] " RESET GREEN "Operações disponíveis:\n"RESET);
-    printf(BLUE "[Main] " RESET GREEN "bal id - consultar o saldo da carteira identificada por id.\n"RESET);
-    printf(BLUE "[Main] " RESET GREEN "trx src_id dest_id amount - criar uma nova transação.\n"RESET);
-    printf(BLUE "[Main] " RESET GREEN "rcp id - obter o comprovativo da transação de número id.\n"RESET);
-    printf(BLUE "[Main] " RESET GREEN "help - imprime a informação sobre as operações disponíveis.\n"RESET);
-    printf(BLUE "[Main] " RESET GREEN "stat - imprime as estatisticas atuais do sistema SOchain\n"RESET);
-    printf(BLUE "[Main] " RESET GREEN "end - termina a execução do SOchain.\n"RESET);
+{
+    printf(BLUE "[Main] " RESET GREEN "Operações disponíveis:\n" RESET);
+    printf(BLUE "[Main] " RESET GREEN "bal id - consultar o saldo da carteira identificada por id.\n" RESET);
+    printf(BLUE "[Main] " RESET GREEN "trx src_id dest_id amount - criar uma nova transação.\n" RESET);
+    printf(BLUE "[Main] " RESET GREEN "rcp id - obter o comprovativo da transação de número id.\n" RESET);
+    printf(BLUE "[Main] " RESET GREEN "help - imprime a informação sobre as operações disponíveis.\n" RESET);
+    printf(BLUE "[Main] " RESET GREEN "stat - imprime as estatisticas atuais do sistema SOchain\n" RESET);
+    printf(BLUE "[Main] " RESET GREEN "end - termina a execução do SOchain.\n" RESET);
 }
