@@ -201,9 +201,6 @@ void user_interaction(struct info_container *info, struct buffers *buffs)
             break;
         }
     }
-
-    (void)info;
-    (void)buffs;
 }
 
 /**
