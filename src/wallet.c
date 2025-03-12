@@ -26,10 +26,10 @@ void wallet_receive_transaction(struct transaction* tx, int wallet_id, struct in
 
 }
 
+// Função que assina uma transação comprovando que a carteira de origem src_id da transação corresponde
+// ao wallet_id. Atualiza o campo wallet_signature da transação e incrementa o contador de transações
+// assinadas pela carteira.
 void wallet_process_transaction(struct transaction* tx, int wallet_id, struct info_container* info){
-    (void)tx;
-    (void)wallet_id;
-    (void) info;
     
 }
 
