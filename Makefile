@@ -51,6 +51,6 @@ run: all
 	@ echo "$(BLUE)compilação de $(CYAN)$(NAME) $(GREEN) feita $(CLR_RMV) ✔️"
 	# @sleep 2
 	# clear
-	@./bin/$(NAME)
+	@./bin/$(NAME) 2 2 2 2 2
 
 .PHONY:     all clean fclean re

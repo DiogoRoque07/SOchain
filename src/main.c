@@ -170,33 +170,19 @@ int user_hash(char op[])
 {
 
     if (strcmp(op, "bal") == 0)
-    {
         return 1;
-    }
     else if (strcmp(op, "trx") == 0)
-    {
         return 2;
-    }
     else if (strcmp(op, "rcp") == 0)
-    {
         return 3;
-    }
     else if (strcmp(op, "help") == 0)
-    {
         return 4;
-    }
     else if (strcmp(op, "stat") == 0)
-    {
         return 5;
-    }
     else if (strcmp(op, "end") == 0)
-    {
         return 6;
-    }
     else
-    {
         return 7;
-    }
 }
 
 void user_interaction(struct info_container *info, struct buffers *buffs)
@@ -251,13 +237,9 @@ void write_final_statistics(struct info_container *info)
 {
     printf("[Main] A encerrar a execução do SOchain! As estatísticas da execução são:");
     for (int i = 0; i < info->n_wallets; i++)
-    {
         printf("[Main] A carteira %d assinou %d transações e terminou com %.2f\n", i, info->wallets_stats[i], info->balances[i]);
-    }
     for (int i = 0; i < info->n_servers; i++)
-    {
         printf("[Main] Servidor %d assinou %d transações\n", i, info->servers_stats[i]);
-    }
 }
 
 void end_execution(struct info_container *info, struct buffers *buffs)

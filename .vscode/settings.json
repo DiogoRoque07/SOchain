@@ -2,6 +2,7 @@
     "files.associations": {
         "main.h": "c",
         "memory.h": "c",
-        "unistd.h": "c"
+        "unistd.h": "c",
+        "process.h": "c"
     }
 }
