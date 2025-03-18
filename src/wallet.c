@@ -4,8 +4,6 @@
 int execute_wallet(int wallet_id, struct info_container* info, struct buffers* buffs){
     int num_transacs = 0;
     while(*info->terminate == 0){
-        // struct transaction transac;
-
         wallet_receive_transaction(buffs->buff_main_wallets->buffer, wallet_id, info, buffs);
         if(buffs->buff_main_wallets->buffer->id == -1)
             usleep(100000);
@@ -29,18 +27,21 @@ void wallet_receive_transaction(struct transaction* tx, int wallet_id, struct in
 }
 
 //VER ESTA SE ESTÁ BEM
+
 void wallet_process_transaction(struct transaction* tx, int wallet_id, struct info_container* info){
-        static int count_signed_transactions = 0;
+        // static int count_signed_transactions = 0; //isso conta para nada visto que nao e retornado
         if (tx->src_id == wallet_id) {
-            tx->wallet_signature = generate_signature(tx, wallet_id, info);
-            count_signed_transactions++;
+            // (void)info;
+            tx->wallet_signature = generate_signature(tx, wallet_id, info);//de onde vem o generate signature?
+            // count_signed_transactions++;
         }
 }
 
 //VER ESTA SE ESTÁ BEM
+
 void wallet_send_transaction(struct transaction* tx, struct info_container* info, struct buffers* buffs){
     if(*info->terminate == 1){
         return;
     }
-    write_wallets_servers_buffer(buffs->buff_wallets_servers, tx, info->buffers_size);
+    write_wallets_servers_buffer(buffs->buff_wallets_servers, info->buffers_size, tx);
 }

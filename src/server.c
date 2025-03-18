@@ -1,4 +1,5 @@
 #include "../inc/server.h"
+#include "../inc/wallet.h"
 #include <unistd.h>
 
 int execute_server(int server_id, struct info_container *info, struct buffers *buffs)
