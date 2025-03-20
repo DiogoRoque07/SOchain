@@ -35,7 +35,7 @@ int main(int argc, char *argv[])
     user_interaction(info, buffs);
 
     // release memory before terminating
-    destroy_shared_memory_structs(info, buffs);
+    destroy_shared_memory_structs(info, buffs);//tem de ser chamado antes do destroy_dynamic pq o dynamic deAlloca os structs info e buffs em si
     destroy_dynamic_memory_structs(info, buffs);
     return 0;
 }
@@ -115,32 +115,82 @@ void main_args(int argc, char *argv[], struct info_container *info)
 
 void create_dynamic_memory_structs(struct info_container *info, struct buffers *buffs)
 {
+    (void)buffs;//colocado pq indica um erro ao compilar com as flags -Wall -Werror -Wextra
     info->wallets_pids = allocate_dynamic_memory(info->n_wallets * sizeof(int));
-    info->wallets_stats = allocate_dynamic_memory(info->n_wallets * sizeof(int));
-    buffs->buff_main_wallets = allocate_dynamic_memory(info->buffers_size);
+    // info->wallets_stats = allocate_dynamic_memory(info->n_wallets * sizeof(int));
+    info->servers_pids = allocate_dynamic_memory(info->n_servers * sizeof(int));
+    // buffs->buff_main_wallets = allocate_dynamic_memory(info->buffers_size);
 }
 
 // falta
 void create_shared_memory_structs(struct info_container *info, struct buffers *buffs)
 {
-    (void)info;
-    (void)buffs;
+    buffs->buff_main_wallets->ptrs = create_shared_memory(ID_SHM_MAIN_WALLETS_PTR, info->buffers_size *  sizeof(int));
+    buffs->buff_main_wallets = create_shared_memory(ID_SHM_MAIN_WALLETS_BUFFER, info->buffers_size * sizeof(struct transaction));
+   
+    buffs->buff_wallets_servers->ptrs = create_shared_memory(ID_SHM_WALLETS_SERVERS_PTR, sizeof(struct pointers));
+    buffs->buff_wallets_servers = create_shared_memory(ID_SHM_WALLETS_SERVERS_BUFFER, info->buffers_size * sizeof(struct transaction));
+   
+    buffs->buff_servers_main->ptrs = create_shared_memory(ID_SHM_SERVERS_MAIN_PTR, info->buffers_size *  sizeof(int));
+    buffs->buff_servers_main = create_shared_memory(ID_SHM_SERVERS_MAIN_BUFFER, info->buffers_size * sizeof(struct transaction));
+    
+    info->wallets_stats = create_shared_memory(ID_SHM_WALLETS_STATS, sizeof(int) * info->n_wallets);
+    info->servers_stats = create_shared_memory(ID_SHM_SERVERS_STATS, sizeof(int) * info->n_servers);
+    
+    info->balances = create_shared_memory(ID_SHM_BALANCES, sizeof(int) * info->n_wallets);
+    info->terminate = create_shared_memory(ID_SHM_TERMINATE, sizeof(int));
+
 }
 
 void destroy_dynamic_memory_structs(struct info_container *info, struct buffers *buffs)
 {
     deallocate_dynamic_memory(info->wallets_pids);
-    deallocate_dynamic_memory(info->wallets_stats);
-    deallocate_dynamic_memory(buffs->buff_main_wallets);
+    deallocate_dynamic_memory(info->servers_pids);
+
     deallocate_dynamic_memory(info);
     deallocate_dynamic_memory(buffs);
+
 }
 
 // falta
 void destroy_shared_memory_structs(struct info_container *info, struct buffers *buffs)
 {
-    (void)info;
-    (void)buffs;
+    // (void)info;
+    // (void)buffs;
+    /*
+        buffs->buff_main_wallets->ptrs = create_shared_memory(ID_SHM_MAIN_WALLETS_PTR, info->buffers_size *  sizeof(int));
+    buffs->buff_main_wallets = create_shared_memory(ID_SHM_MAIN_WALLETS_BUFFER, info->buffers_size * sizeof(struct transaction));
+   
+    buffs->buff_wallets_servers->ptrs = create_shared_memory(ID_SHM_WALLETS_SERVERS_PTR, sizeof(struct pointers));
+    buffs->buff_wallets_servers = create_shared_memory(ID_SHM_WALLETS_SERVERS_BUFFER, info->buffers_size * sizeof(struct transaction));
+   
+    buffs->buff_servers_main->ptrs = create_shared_memory(ID_SHM_SERVERS_MAIN_PTR, info->buffers_size *  sizeof(int));
+    buffs->buff_servers_main = create_shared_memory(ID_SHM_SERVERS_MAIN_BUFFER, info->buffers_size * sizeof(struct transaction));
+    
+    info->wallets_stats = create_shared_memory(ID_SHM_WALLETS_STATS, sizeof(int) * info->n_wallets);
+    info->servers_stats = create_shared_memory(ID_SHM_SERVERS_STATS, sizeof(int) * info->n_servers);
+    
+    info->balances = create_shared_memory(ID_SHM_BALANCES, sizeof(int) * info->n_wallets);
+    info->terminate = create_shared_memory(ID_SHM_TERMINATE, sizeof(int));
+    */
+
+    destroy_shared_memory(ID_SHM_MAIN_WALLETS_PTR, buffs->buff_main_wallets->ptrs, info->buffers_size *  sizeof(int));
+    destroy_shared_memory(ID_SHM_MAIN_WALLETS_BUFFER, buffs->buff_main_wallets, info->buffers_size * sizeof(struct transaction));
+
+    destroy_shared_memory(ID_SHM_WALLETS_SERVERS_PTR, buffs->buff_wallets_servers->ptrs, sizeof(struct pointers));
+    destroy_shared_memory(ID_SHM_WALLETS_SERVERS_BUFFER, buffs->buff_wallets_servers, info->buffers_size * sizeof(struct transaction));
+
+    destroy_shared_memory(ID_SHM_SERVERS_MAIN_PTR, buffs->buff_servers_main->ptrs, info->buffers_size *  sizeof(int));
+    destroy_shared_memory(ID_SHM_SERVERS_MAIN_BUFFER, buffs->buff_servers_main,  info->buffers_size * sizeof(struct transaction));
+
+    destroy_shared_memory(ID_SHM_WALLETS_STATS, info->wallets_stats, sizeof(int) * info->n_wallets );
+    destroy_shared_memory(ID_SHM_SERVERS_STATS, info->servers_stats, sizeof(int) * info->n_servers);
+
+    destroy_shared_memory(ID_SHM_BALANCES, info->balances, sizeof(int) * info->n_wallets);
+    destroy_shared_memory(ID_SHM_TERMINATE, info->terminate, sizeof(int));
+
+
+
     // ver se é preciso por algo depois da info e buffs e o quÊ
     //  destroy_shared_memory(info->);
     //  destroy_shared_memory(buffs->);
