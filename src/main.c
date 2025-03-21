@@ -15,12 +15,10 @@
 #define MAGENTA "\033[35m"
 #define CYAN "\033[36m"
 #define WHITE "\033[37m"
+#define PINK "\033[35m"
+#define ORANGE "\033[38;5;214m"
 
-/* Função que lê do stdin com o scanf apropriado para cada tipo de dados
- * e valida os argumentos da aplicação, incluindo o saldo inicial,
- * o número de carteiras, o número de servidores, o tamanho dos buffers
- * e o número máximo de transações. Guarda essa informação na estrutura info_container.
- */
+
 int main(int argc, char *argv[])
 {
     // init data structures
@@ -32,6 +30,8 @@ int main(int argc, char *argv[])
     create_dynamic_memory_structs(info, buffs);
     create_shared_memory_structs(info, buffs);
     create_processes(info, buffs);
+
+    printf(BLUE " EU SOU O MAIN: %d" RESET "\n", getpid());
     user_interaction(info, buffs);
 
     // release memory before terminating
@@ -117,22 +117,19 @@ void create_dynamic_memory_structs(struct info_container *info, struct buffers *
 {
     (void)buffs;//colocado pq indica um erro ao compilar com as flags -Wall -Werror -Wextra
     info->wallets_pids = allocate_dynamic_memory(info->n_wallets * sizeof(int));
-    // info->wallets_stats = allocate_dynamic_memory(info->n_wallets * sizeof(int));
     info->servers_pids = allocate_dynamic_memory(info->n_servers * sizeof(int));
-    // buffs->buff_main_wallets = allocate_dynamic_memory(info->buffers_size);
 }
 
-// falta
 void create_shared_memory_structs(struct info_container *info, struct buffers *buffs)
 {
-    buffs->buff_main_wallets->ptrs = create_shared_memory(ID_SHM_MAIN_WALLETS_PTR, info->buffers_size *  sizeof(int));
     buffs->buff_main_wallets = create_shared_memory(ID_SHM_MAIN_WALLETS_BUFFER, info->buffers_size * sizeof(struct transaction));
+    buffs->buff_main_wallets->ptrs = create_shared_memory(ID_SHM_MAIN_WALLETS_PTR, info->buffers_size *  sizeof(int));
    
-    buffs->buff_wallets_servers->ptrs = create_shared_memory(ID_SHM_WALLETS_SERVERS_PTR, sizeof(struct pointers));
     buffs->buff_wallets_servers = create_shared_memory(ID_SHM_WALLETS_SERVERS_BUFFER, info->buffers_size * sizeof(struct transaction));
+    buffs->buff_wallets_servers->ptrs = create_shared_memory(ID_SHM_WALLETS_SERVERS_PTR, sizeof(struct pointers));
    
-    buffs->buff_servers_main->ptrs = create_shared_memory(ID_SHM_SERVERS_MAIN_PTR, info->buffers_size *  sizeof(int));
     buffs->buff_servers_main = create_shared_memory(ID_SHM_SERVERS_MAIN_BUFFER, info->buffers_size * sizeof(struct transaction));
+    buffs->buff_servers_main->ptrs = create_shared_memory(ID_SHM_SERVERS_MAIN_PTR, info->buffers_size *  sizeof(int));
     
     info->wallets_stats = create_shared_memory(ID_SHM_WALLETS_STATS, sizeof(int) * info->n_wallets);
     info->servers_stats = create_shared_memory(ID_SHM_SERVERS_STATS, sizeof(int) * info->n_servers);
@@ -152,28 +149,8 @@ void destroy_dynamic_memory_structs(struct info_container *info, struct buffers 
 
 }
 
-// falta
 void destroy_shared_memory_structs(struct info_container *info, struct buffers *buffs)
 {
-    // (void)info;
-    // (void)buffs;
-    /*
-        buffs->buff_main_wallets->ptrs = create_shared_memory(ID_SHM_MAIN_WALLETS_PTR, info->buffers_size *  sizeof(int));
-    buffs->buff_main_wallets = create_shared_memory(ID_SHM_MAIN_WALLETS_BUFFER, info->buffers_size * sizeof(struct transaction));
-   
-    buffs->buff_wallets_servers->ptrs = create_shared_memory(ID_SHM_WALLETS_SERVERS_PTR, sizeof(struct pointers));
-    buffs->buff_wallets_servers = create_shared_memory(ID_SHM_WALLETS_SERVERS_BUFFER, info->buffers_size * sizeof(struct transaction));
-   
-    buffs->buff_servers_main->ptrs = create_shared_memory(ID_SHM_SERVERS_MAIN_PTR, info->buffers_size *  sizeof(int));
-    buffs->buff_servers_main = create_shared_memory(ID_SHM_SERVERS_MAIN_BUFFER, info->buffers_size * sizeof(struct transaction));
-    
-    info->wallets_stats = create_shared_memory(ID_SHM_WALLETS_STATS, sizeof(int) * info->n_wallets);
-    info->servers_stats = create_shared_memory(ID_SHM_SERVERS_STATS, sizeof(int) * info->n_servers);
-    
-    info->balances = create_shared_memory(ID_SHM_BALANCES, sizeof(int) * info->n_wallets);
-    info->terminate = create_shared_memory(ID_SHM_TERMINATE, sizeof(int));
-    */
-
     destroy_shared_memory(ID_SHM_MAIN_WALLETS_PTR, buffs->buff_main_wallets->ptrs, info->buffers_size *  sizeof(int));
     destroy_shared_memory(ID_SHM_MAIN_WALLETS_BUFFER, buffs->buff_main_wallets, info->buffers_size * sizeof(struct transaction));
 
@@ -188,21 +165,18 @@ void destroy_shared_memory_structs(struct info_container *info, struct buffers *
 
     destroy_shared_memory(ID_SHM_BALANCES, info->balances, sizeof(int) * info->n_wallets);
     destroy_shared_memory(ID_SHM_TERMINATE, info->terminate, sizeof(int));
-
-
-
-    // ver se é preciso por algo depois da info e buffs e o quÊ
-    //  destroy_shared_memory(info->);
-    //  destroy_shared_memory(buffs->);
 }
 
 void create_processes(struct info_container *info, struct buffers *buffs)
 {
     for (int i = 0; i < info->n_wallets; i++)
+    {
         info->wallets_pids[i] = launch_wallet(i, info, buffs);
+    }
 
-    for (int i = 0; i < info->n_servers; i++)
+    for (int i = 0; i < info->n_servers; i++){
         info->servers_pids[i] = launch_server(i, info, buffs);
+    }
 }
 
 /**
@@ -241,9 +215,9 @@ void user_interaction(struct info_container *info, struct buffers *buffs)
     while (1)
     {
         char *input = malloc(50);
-        printf("[Main] Introduzir operação: ");
-        scanf("%s", input);
-
+        printf("[" BLUE "%d" RESET"] Introduzir operação: " PINK, getpid());
+        scanf( "%s", input);
+        printf(RESET"\n");
         // dividir as informações do comando
         char *words = strtok(input, " ");
         if (!words)
@@ -262,13 +236,13 @@ void user_interaction(struct info_container *info, struct buffers *buffs)
             receive_receipt(info, buffs);
             break;
         case 4: // "help" command
-            printf("[Main] Operações disponíveis:");
-            printf("[Main]  bal id - consultar o saldo da carteira identifcada por id");
-            printf("[Main]  trx src_id dest_id amount - criar uma nova transação");
-            printf("[Main]  rcp id - obter o comprovativo da transação de número id");
-            printf("[Main]  help - imprime a informação sobre as operações disponíveis");
-            printf("[Main]  stat - imprime as estatísticas atuais do SOchain");
-            printf("[Main]  end - termina a execução do SOchain");
+            printf("["BLUE "%d" RESET "]" ORANGE" Operações disponíveis:\n"RESET, getpid());
+            printf("["BLUE "%d" RESET "]" ORANGE"  bal id - consultar o saldo da carteira identifcada por id\n"RESET, getpid());
+            printf("["BLUE "%d" RESET "]" ORANGE"  trx src_id dest_id amount - criar uma nova transação\n"RESET, getpid());
+            printf("["BLUE "%d" RESET "]" ORANGE"  rcp id - obter o comprovativo da transação de número id\n"RESET, getpid());
+            printf("["BLUE "%d" RESET "]" ORANGE"  help - imprime a informação sobre as operações disponíveis\n"RESET, getpid());
+            printf("["BLUE "%d" RESET "]" ORANGE"  stat - imprime as estatísticas atuais do SOchain\n"RESET, getpid());
+            printf("["BLUE "%d" RESET "]" ORANGE"  end - termina a execução do SOchain\n"RESET, getpid());
             break;
         case 5: // "stat" command
             print_stat(tx_counter, info);
@@ -277,7 +251,7 @@ void user_interaction(struct info_container *info, struct buffers *buffs)
             end_execution(info, buffs);
             break;
         default:
-            printf("[Main] Introduzir operação: [Main] Operação não reconhecida, insira 'help' para assistência.");
+            printf("[Main] Introduzir operação: [Main] Operação não reconhecida, insira 'help' para assistência.\n");
             break;
         }
     }
@@ -285,7 +259,7 @@ void user_interaction(struct info_container *info, struct buffers *buffs)
 
 void write_final_statistics(struct info_container *info)
 {
-    printf("[Main] A encerrar a execução do SOchain! As estatísticas da execução são:");
+    printf("[Main] A encerrar a execução do SOchain! As estatísticas da execução são:\n");
     for (int i = 0; i < info->n_wallets; i++)
         printf("[Main] A carteira %d assinou %d transações e terminou com %.2f\n", i, info->wallets_stats[i], info->balances[i]);
     for (int i = 0; i < info->n_servers; i++)
@@ -302,7 +276,6 @@ void end_execution(struct info_container *info, struct buffers *buffs)
 
 void wait_processes(struct info_container *info)
 {
-
     // ver se é para esperar para todos os processos ou so um dos seguintes servers
     for (int i = 0; i < info->n_servers; i++)
         wait_process(info->servers_pids[i]);
@@ -365,7 +338,6 @@ void print_stat(int tx_counter, struct info_container *info)
     }
 }
 
-// TODO: adicionar cores ao [$(processo)]
 void help()
 {
     printf(BLUE "[Main] " RESET GREEN "Operações disponíveis:\n" RESET);

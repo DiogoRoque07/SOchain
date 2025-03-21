@@ -9,6 +9,7 @@
 
 int launch_wallet(int wallet_id, struct info_container *info, struct buffers *buffs)
 {
+
     int pid = fork();
 
     if (pid > 0)
@@ -16,11 +17,12 @@ int launch_wallet(int wallet_id, struct info_container *info, struct buffers *bu
         return pid;
     }
     else if (pid == 0)
-    {
+    {   
         return execute_wallet(wallet_id, info, buffs);
     }
     else
     {
+        printf("\n\n \033[31m LAUNCH WALLET FALHOU    \033[0m \n\n");
         perror("fork failed");
         exit(EXIT_FAILURE);
     }

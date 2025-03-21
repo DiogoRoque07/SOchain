@@ -79,3 +79,8 @@
 
 - PIDs de Wallets e Servers (`info->wallets_pids`, `info->servers_pids`).
 - Arrays de estatísticas (`info->wallets_stats`, `info->servers_stats` se apenas usados pela Main).
+
+
+
+
+# Iniciar bem as variaveis, balances etc

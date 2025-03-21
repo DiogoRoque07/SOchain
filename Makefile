@@ -4,7 +4,8 @@
 
 NAME        := SOchain
 CC          := gcc
-FLAGS       := -Wall -Wextra -Werror 
+FLAGS       := -Wall -Wextra -Werror -g
+RUN			:= ./bin/$(NAME)
 ################################################################################
 #                                 PROGRAM'S SRCS                               #
 ################################################################################
@@ -34,6 +35,7 @@ ${NAME}:    ${OBJS}
 			@echo "$(GREEN)$(NAME) created$(CLR_RMV)✔️"
 
 obj/%.o: src/%.c
+			mkdir -p obj
 			@${CC} ${FLAGS} -c $< -o $@
 
 clean:
@@ -51,6 +53,18 @@ run: all
 	@ echo "$(BLUE)compilação de $(CYAN)$(NAME) $(GREEN) feita $(CLR_RMV) ✔️"
 	@# @sleep 2
 	@ # clear
-	@./bin/$(NAME) 2 2 2 2 2
+	@$(RUN) 200 2 5 10 10 
+
+mem: all
+	@valgrind --leak-check=full --show-leak-types=all --log-file=val.log ./bin/$(NAME)
+
+debug: all
+	@gdbtui --args $(RUN) 200 2 4 5 10 
+
+testsInstall:
+	sudo apt-get install libcunit1 libcunit1-doc libcunit1-dev
+
+test: src/test_main.c obj/main.o obj/memory.o obj/process.o obj/server.o
+	gcc -o test src/test_main.c obj/main.o obj/memory.o obj/process.o obj/server.o -lcunit
 
 .PHONY:     all clean fclean re
