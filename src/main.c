@@ -327,14 +327,17 @@ void print_stat(int tx_counter, struct info_container *info)
     printf("- Informações sobre as carteiras:\n");
     printf("%sCarteira        PID             Saldo           Transações Assinadas\n", tabulation);
     for (int i = 0; i < info->n_wallets; i++)
-    {   // TODO fix
-        // printf("%s%-15d%-15d%-15d%-15d\n", tabulation, i, info->wallets_pids[i], info->balances[i], info->wallets_stats[i]);
+    {   
+        char* balances = malloc(20 * sizeof(char));
+        sprintf(balances,"%.2f SOT", info->balances[i]);
+        printf("%s%-16d%-16d%-16s%-12d\n", tabulation, i, info->wallets_pids[i], balances ,info->wallets_stats[i]);
+        free(balances);
     }
     printf("- Informações sobre os servidores:\n");
     printf("%sServidor        PID             Transações Processadas\n", tabulation);
     for (int i = 0; i < info->n_servers; i++)
-    {   // TODO fix
-        // printf("%s%-15d%-15d%-15d\n", tabulation, i, info->servers_pids[i], info->servers_stats[i]);
+    {   
+        printf("%s%-16d%-16d%-16d\n", tabulation, i, info->servers_pids[i], info->servers_stats[i]);
     }
 }
 
