@@ -5,41 +5,41 @@
 
 int execute_server(int server_id, struct info_container *info, struct buffers *buffs)
 {
-    int trx_remaining = info->max_txs;
-    while (*info->terminate == 0 && trx_remaining > 0)
+    int trxs = 0;
+    while (*info->terminate == 0 )
     {
-        server_receive_transaction(buffs->buff_wallets_servers->buffer, info, buffs);
-        if(buffs->buff_wallets_servers->buffer->id == -1){
+        struct transaction tx;
+        server_receive_transaction(&tx, info, buffs);
+        if(tx.id == -1){
             usleep(10000);
         }
-        if (server_id == buffs->buff_wallets_servers->buffer->id)
+        if (tx.id >= 0)
         {
-            server_process_transaction(buffs->buff_wallets_servers->buffer, server_id, info);
+            server_process_transaction(&tx, server_id, info);
             server_send_transaction(buffs->buff_servers_main->buffer, info, buffs);
-            trx_remaining--;
+            trxs++;
         }
     }
-    return trx_remaining;
+    return trxs;
 }
 
 void server_receive_transaction(struct transaction* tx, struct info_container* info, struct buffers* buffs)
 {
     if (*info->terminate == 1)
         return;
+
     read_wallets_servers_buffer(buffs->buff_wallets_servers, info->buffers_size, tx);
 }
 
 void server_process_transaction(struct transaction* tx, int server_id, struct info_container* info)
 {
     if(tx->src_id < 0 || tx->src_id > info->n_wallets || tx->dest_id < 0 || tx->dest_id > info->n_wallets
-       || info->balances[tx->src_id] >= tx->amount){ /*verificar tbm a assinatura da carteira de origem (src wallet)*/ 
+       || info->balances[tx->src_id] <= tx->amount){ /*verificar tbm a assinatura da carteira de origem (src wallet)*/ 
         return;
     }
-    printf("exchanging cash\n");
     info->balances[tx->src_id] -= tx->amount;
     info->balances[tx->dest_id] += tx->amount;
     tx->server_signature = server_id;
-    wallet_process_transaction(tx, tx->src_id, info);
     info->servers_stats[server_id]++;
 
 }

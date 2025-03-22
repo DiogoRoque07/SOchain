@@ -18,7 +18,8 @@ int launch_wallet(int wallet_id, struct info_container *info, struct buffers *bu
     }
     else if (pid == 0)
     {   
-        return execute_wallet(wallet_id, info, buffs);
+        execute_wallet(wallet_id, info, buffs);
+        exit(0);
     }
     else
     {
@@ -38,7 +39,8 @@ int launch_server(int server_id, struct info_container *info, struct buffers *bu
     }
     else if (pid == 0)
     {
-        return execute_server(server_id, info, buffs);
+        execute_server(server_id, info, buffs);
+        exit(0);
     }
     else
     {
@@ -50,5 +52,15 @@ int launch_server(int server_id, struct info_container *info, struct buffers *bu
 int wait_process(int process_id)
 {
     int status;
-    return waitpid(process_id, &status, 0);
+    if (waitpid(process_id, &status, 0) == -1) {
+        perror("waitpid failed");
+        return -1;
+    }
+
+    if (WIFEXITED(status)) {
+        return WEXITSTATUS(status);
+    } else {
+        printf("Process %d did not terminate normally.\n", process_id);
+        return -1;
+    }
 }

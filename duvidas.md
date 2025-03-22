@@ -82,10 +82,15 @@
 
 
 # Como limpar a memória dos buffers alocados no `main`?
-A função `main_args` só recebe o parâmetro `info`. Como é que é suposto limpar a memória dos buffers alocados no `main`?
+A função `main_args` só recebe o parâmetro `info`. Como é que é suposto limpar a memória dos buffers alocados no `main` caso os argumentos nao foram dados corretamente?
 
-# Como buscar a informação de uma transação do user interaction 
-Nos criamos variaveis globais que guardam essa informação e que podem depois ser usados no create transaction
+# Uso de variaveis globais
+Nos usamos uma variavel global para que os processos do servidor e wallet nao entrarem no user interaction
 
 # Criação de processos
 Nos criamos os processos a partir do main (um fork por processos de server e wallet), é suposto arranjaremos uma forma mais eficiente?
+
+# handle memory loss when quiting with CTRL-C or other signals
+maybe use libx or simillar to capture the event
+
+# rever logica do read e write circ buffer 

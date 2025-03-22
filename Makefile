@@ -6,7 +6,7 @@ NAME        := SOchain
 CC          := gcc
 FLAGS       := -g #-Wall -Wextra -Werror 
 RUN			:= ./bin/$(NAME)
-RUN_ARGS    := 200 2 4 5 10 
+RUN_ARGS    := 200 3 1 5 10 
 ################################################################################
 #                                 PROGRAM'S SRCS                               #
 ################################################################################
@@ -58,7 +58,7 @@ run: all
 	@$(RUN) $(RUN_ARGS) 
 
 mem: all
-	@valgrind --leak-check=full --show-leak-kinds=all --log-file=val.log $(RUN) $(RUN_ARGS)
+	@valgrind --leak-check=full --show-leak-kinds=all --track-origins=yes --log-file=val.log $(RUN) $(RUN_ARGS)
 
 debug: all
 	@gdbtui --args $(RUN) $(RUN_ARGS)

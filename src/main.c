@@ -99,8 +99,11 @@ int check_args(int argc, char *argv[])
 args usage: progam_name init_balance n_wallets n_servers buff_size max_txs
 */
 
+
 void main_args(int argc, char *argv[], struct info_container *info)
 {
+    printf(BLUE " EU SOU O MAIN: %d"  "\n", getpid());
+
     if (check_args(argc, argv) == -1)
     {
         printf("[" BLUE"%d" RESET "]" RED " Parâmetros incorretos!\n" RESET, getpid());
@@ -109,7 +112,6 @@ void main_args(int argc, char *argv[], struct info_container *info)
         exit(-1);
     }
 
-    printf(BLUE " EU SOU O MAIN: %d" RESET "\n", getpid());
     if (check_args(argc, argv) == 0)
     {
         printf("[" BLUE"%d" RESET "]" GREEN " Parâmetros corretos!\n" RESET, getpid());
@@ -134,13 +136,16 @@ void create_dynamic_memory_structs(struct info_container *info, struct buffers *
 
 void create_shared_memory_structs(struct info_container *info, struct buffers *buffs)
 {
-    buffs->buff_main_wallets = create_shared_memory(ID_SHM_MAIN_WALLETS_BUFFER, info->buffers_size * sizeof(struct transaction));
+    buffs->buff_main_wallets = create_shared_memory(ID_SHM_MAIN_WALLETS_BUFFER, info->buffers_size * sizeof(struct ra_buffer));
+    buffs->buff_main_wallets->buffer = create_shared_memory(ID_SHM_MAIN_WALLETS_BUFFER, info->buffers_size * sizeof(struct transaction));
     buffs->buff_main_wallets->ptrs = create_shared_memory(ID_SHM_MAIN_WALLETS_PTR, info->buffers_size *  sizeof(int));
    
-    buffs->buff_wallets_servers = create_shared_memory(ID_SHM_WALLETS_SERVERS_BUFFER, info->buffers_size * sizeof(struct transaction));
+    buffs->buff_wallets_servers = create_shared_memory(ID_SHM_WALLETS_SERVERS_BUFFER, info->buffers_size * sizeof(struct ra_buffer));
+    buffs->buff_wallets_servers->buffer = create_shared_memory(ID_SHM_WALLETS_SERVERS_BUFFER, info->buffers_size * sizeof(struct transaction));
     buffs->buff_wallets_servers->ptrs = create_shared_memory(ID_SHM_WALLETS_SERVERS_PTR, sizeof(struct pointers));
-   
-    buffs->buff_servers_main = create_shared_memory(ID_SHM_SERVERS_MAIN_BUFFER, info->buffers_size * sizeof(struct transaction));
+
+    buffs->buff_servers_main = create_shared_memory(ID_SHM_SERVERS_MAIN_BUFFER, info->buffers_size * sizeof(struct ra_buffer));
+    buffs->buff_servers_main->buffer = create_shared_memory(ID_SHM_SERVERS_MAIN_BUFFER, info->buffers_size * sizeof(struct transaction));
     buffs->buff_servers_main->ptrs = create_shared_memory(ID_SHM_SERVERS_MAIN_PTR, info->buffers_size *  sizeof(int));
     
     info->wallets_stats = create_shared_memory(ID_SHM_WALLETS_STATS, sizeof(int) * info->n_wallets);
@@ -148,12 +153,14 @@ void create_shared_memory_structs(struct info_container *info, struct buffers *b
     
     info->balances = create_shared_memory(ID_SHM_BALANCES, sizeof(int) * info->n_wallets);
     info->terminate = create_shared_memory(ID_SHM_TERMINATE, sizeof(int));
+
+    *info->terminate = 0;
 }
 
 void destroy_dynamic_memory_structs(struct info_container *info, struct buffers *buffs)
 {
-    deallocate_dynamic_memory(info->wallets_pids);
     deallocate_dynamic_memory(info->servers_pids);
+    deallocate_dynamic_memory(info->wallets_pids);
 
     deallocate_dynamic_memory(info);
     deallocate_dynamic_memory(buffs);
@@ -162,14 +169,17 @@ void destroy_dynamic_memory_structs(struct info_container *info, struct buffers 
 
 void destroy_shared_memory_structs(struct info_container *info, struct buffers *buffs)
 {
+    destroy_shared_memory(ID_SHM_MAIN_WALLETS_BUFFER, buffs->buff_main_wallets->buffer,  info->buffers_size * sizeof(struct transaction));
     destroy_shared_memory(ID_SHM_MAIN_WALLETS_PTR, buffs->buff_main_wallets->ptrs, info->buffers_size *  sizeof(int));
-    destroy_shared_memory(ID_SHM_MAIN_WALLETS_BUFFER, buffs->buff_main_wallets, info->buffers_size * sizeof(struct transaction));
+    destroy_shared_memory(ID_SHM_MAIN_WALLETS_BUFFER, buffs->buff_main_wallets, info->buffers_size * sizeof(struct ra_buffer));
 
+    destroy_shared_memory(ID_SHM_WALLETS_SERVERS_BUFFER,buffs->buff_wallets_servers->buffer, info->buffers_size * sizeof(struct ra_buffer));
     destroy_shared_memory(ID_SHM_WALLETS_SERVERS_PTR, buffs->buff_wallets_servers->ptrs, sizeof(struct pointers));
-    destroy_shared_memory(ID_SHM_WALLETS_SERVERS_BUFFER, buffs->buff_wallets_servers, info->buffers_size * sizeof(struct transaction));
+    destroy_shared_memory(ID_SHM_WALLETS_SERVERS_BUFFER, buffs->buff_wallets_servers, info->buffers_size * sizeof(struct ra_buffer));
 
+    destroy_shared_memory(ID_SHM_SERVERS_MAIN_BUFFER, buffs->buff_servers_main->buffer, info->buffers_size * sizeof(struct transaction));
     destroy_shared_memory(ID_SHM_SERVERS_MAIN_PTR, buffs->buff_servers_main->ptrs, info->buffers_size *  sizeof(int));
-    destroy_shared_memory(ID_SHM_SERVERS_MAIN_BUFFER, buffs->buff_servers_main,  info->buffers_size * sizeof(struct transaction));
+    destroy_shared_memory(ID_SHM_SERVERS_MAIN_BUFFER, buffs->buff_servers_main,  info->buffers_size * sizeof(struct ra_buffer));
 
     destroy_shared_memory(ID_SHM_WALLETS_STATS, info->wallets_stats, sizeof(int) * info->n_wallets );
     destroy_shared_memory(ID_SHM_SERVERS_STATS, info->servers_stats, sizeof(int) * info->n_servers);
@@ -225,11 +235,13 @@ int user_hash(char op[])
 
 void user_interaction(struct info_container *info, struct buffers *buffs)
 {
+    if(*info->terminate == 1)
+        return;
     int *tx_counter = malloc(sizeof(int));
     *tx_counter = -1;
     while (1)
     {
-        char *input = malloc(50);
+        char *input = malloc(sizeof(int));
         printf("[" BLUE "%d" RESET"] Introduzir operação: " PINK, getpid());
         scanf( "%s", input);
         printf(RESET"\n");
@@ -257,18 +269,24 @@ void user_interaction(struct info_container *info, struct buffers *buffs)
             print_stat(*tx_counter, info);
             break;
         case 6: // "end" command
+        
+            if(input)
+                free(input);
+            if(tx_counter)
+                free(tx_counter);
             end_execution(info, buffs);
-            break;
+
+            return;
         default:
             printf("["BLUE "MAIN" RESET "] Introduzir operação: ["BLUE "MAIN" RESET "] Operação:"RED " %s" RESET  " não reconhecida, insira 'help' para assistência.\n", input);
             break;
         }
+
         if(input)
             free(input);
-        if(tx_counter)
-            free(tx_counter);
     }
-    
+    if(tx_counter)
+        free(tx_counter); // Free tx_counter only once after the loop
 }
 
 void write_final_statistics(struct info_container *info)
@@ -288,14 +306,14 @@ void end_execution(struct info_container *info, struct buffers *buffs)
     write_final_statistics(info);
 }
 
+//resets stats find out why
 void wait_processes(struct info_container *info)
 {
-    // ver se é para esperar para todos os processos ou so um dos seguintes servers
+    for (int i = 0; i < info->n_wallets; i++)
+        wait_process(info->wallets_pids[i]);
     for (int i = 0; i < info->n_servers; i++)
         wait_process(info->servers_pids[i]);
 
-    for (int i = 0; i < info->n_wallets; i++)
-        wait_process(info->wallets_pids[i]);
 }
 
 void print_balance(struct info_container *info)
@@ -319,14 +337,12 @@ void print_balance(struct info_container *info)
 
 void create_transaction(int *tx_counter, struct info_container *info, struct buffers *buffs)
 {
-    printf("entered create transaction\n");
     if (*tx_counter >= info->max_txs) {
         printf("["BLUE "MAIN" RESET "] Número máximo de transações (%d) atingido. Não é possível criar uma nova transação.\n", info->max_txs);
         return;
     }
     struct transaction tx;// = malloc(sizeof(struct transaction));
-    *tx_counter++;
-    
+    (*tx_counter)++;
     
     tx.id = *tx_counter;
     scanf("%d", &tx.src_id);
@@ -335,14 +351,14 @@ void create_transaction(int *tx_counter, struct info_container *info, struct buf
 
     if (tx.src_id < 0 || tx.dest_id < 0 || !tx.amount) {
         printf("[Main] Argumentos insuficientes para criar uma transação. Use: trx src_id dest_id amount\n");
-        // printf("src_id: %d, dest_id: %d, amount: %f", tx.src_id, tx.dest_id, tx.amount);
         return;
     }
-
-
-    // buffs->buff_main_wallets->buffer = &tx;
     write_main_wallets_buffer(buffs->buff_main_wallets, info->buffers_size, &tx);
+    usleep(20000);
+    printf("wallet[%d] new balance: %f\nwallet[%d] new balance: %f\n", tx.src_id, info->balances[tx.src_id], tx.dest_id, info->balances[tx.dest_id]);
 }
+
+
 // Falta
 void receive_receipt(struct info_container *info, struct buffers *buffs)
 {

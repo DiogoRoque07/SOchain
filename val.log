@@ -1,1043 +1,159 @@
-==37147== Memcheck, a memory error detector
-==37147== Copyright (C) 2002-2022, and GNU GPL'd, by Julian Seward et al.
-==37147== Using Valgrind-3.22.0 and LibVEX; rerun with -h for copyright info
-==37147== Command: ./bin/SOchain 200 2 4 5 10
-==37147== Parent PID: 37110
-==37147== 
-==37148== Invalid write of size 4
-==37148==    at 0x10AB22: read_main_wallets_buffer (memory.c:96)
-==37148==    by 0x10B1B1: wallet_receive_transaction (wallet.c:29)
-==37148==    by 0x10B0E7: execute_wallet (wallet.c:9)
-==37148==    by 0x10ACF6: launch_wallet (process.c:21)
-==37148==    by 0x109C9F: create_processes (main.c:185)
-==37148==    by 0x1094E5: main (main.c:38)
-==37148==  Address 0x0 is not stack'd, malloc'd or (recently) free'd
-==37148== 
-==37148== 
-==37148== Process terminating with default action of signal 11 (SIGSEGV)
-==37148==  Access not within mapped region at address 0x0
-==37148==    at 0x10AB22: read_main_wallets_buffer (memory.c:96)
-==37148==    by 0x10B1B1: wallet_receive_transaction (wallet.c:29)
-==37148==    by 0x10B0E7: execute_wallet (wallet.c:9)
-==37148==    by 0x10ACF6: launch_wallet (process.c:21)
-==37148==    by 0x109C9F: create_processes (main.c:185)
-==37148==    by 0x1094E5: main (main.c:38)
-==37148==  If you believe this happened as a result of a stack
-==37148==  overflow in your program's main thread (unlikely but
-==37148==  possible), you can try to increase the size of the
-==37148==  main thread stack using the --main-stacksize= flag.
-==37148==  The main thread stack size used in this run was 8388608.
-==37148== 
-==37148== HEAP SUMMARY:
-==37148==     in use at exit: 1,388 bytes in 15 blocks
-==37148==   total heap usage: 15 allocs, 0 frees, 1,388 bytes allocated
-==37148== 
-==37148== 8 bytes in 1 blocks are still reachable in loss record 1 of 15
-==37148==    at 0x4846828: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
-==37148==    by 0x10A77B: allocate_dynamic_memory (memory.c:10)
-==37148==    by 0x10988E: create_dynamic_memory_structs (main.c:131)
-==37148==    by 0x1094BF: main (main.c:36)
-==37148== 
-==37148== 16 bytes in 1 blocks are still reachable in loss record 2 of 15
-==37148==    at 0x4846828: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
-==37148==    by 0x10A77B: allocate_dynamic_memory (memory.c:10)
-==37148==    by 0x1098A9: create_dynamic_memory_structs (main.c:132)
-==37148==    by 0x1094BF: main (main.c:36)
-==37148== 
-==37148== 17 bytes in 1 blocks are definitely lost in loss record 3 of 15
-==37148==    at 0x4846828: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
-==37148==    by 0x491535E: strdup (strdup.c:42)
-==37148==    by 0x10A851: create_shared_memory (memory.c:26)
-==37148==    by 0x109A28: create_shared_memory_structs (main.c:149)
-==37148==    by 0x1094D2: main (main.c:37)
-==37148== 
-==37148== 18 bytes in 1 blocks are definitely lost in loss record 4 of 15
-==37148==    at 0x4846828: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
-==37148==    by 0x491535E: strdup (strdup.c:42)
-==37148==    by 0x10A851: create_shared_memory (memory.c:26)
-==37148==    by 0x109A44: create_shared_memory_structs (main.c:150)
-==37148==    by 0x1094D2: main (main.c:37)
-==37148== 
-==37148== 22 bytes in 1 blocks are definitely lost in loss record 5 of 15
-==37148==    at 0x4846828: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
-==37148==    by 0x491535E: strdup (strdup.c:42)
-==37148==    by 0x10A851: create_shared_memory (memory.c:26)
-==37148==    by 0x1099DE: create_shared_memory_structs (main.c:146)
-==37148==    by 0x1094D2: main (main.c:37)
-==37148== 
-==37148== 22 bytes in 1 blocks are definitely lost in loss record 6 of 15
-==37148==    at 0x4846828: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
-==37148==    by 0x491535E: strdup (strdup.c:42)
-==37148==    by 0x10A851: create_shared_memory (memory.c:26)
-==37148==    by 0x109A03: create_shared_memory_structs (main.c:147)
-==37148==    by 0x1094D2: main (main.c:37)
-==37148== 
-==37148== 24 bytes in 1 blocks are still reachable in loss record 7 of 15
-==37148==    at 0x4846828: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
-==37148==    by 0x10A77B: allocate_dynamic_memory (memory.c:10)
-==37148==    by 0x109493: main (main.c:32)
-==37148== 
-==37148== 25 bytes in 1 blocks are definitely lost in loss record 8 of 15
-==37148==    at 0x4846828: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
-==37148==    by 0x491535E: strdup (strdup.c:42)
-==37148==    by 0x10A851: create_shared_memory (memory.c:26)
-==37148==    by 0x10991B: create_shared_memory_structs (main.c:138)
-==37148==    by 0x1094D2: main (main.c:37)
-==37148== 
-==37148== 25 bytes in 1 blocks are definitely lost in loss record 9 of 15
-==37148==    at 0x4846828: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
-==37148==    by 0x491535E: strdup (strdup.c:42)
-==37148==    by 0x10A851: create_shared_memory (memory.c:26)
-==37148==    by 0x1099BE: create_shared_memory_structs (main.c:144)
-==37148==    by 0x1094D2: main (main.c:37)
-==37148== 
-==37148== 28 bytes in 1 blocks are definitely lost in loss record 10 of 15
-==37148==    at 0x4846828: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
-==37148==    by 0x491535E: strdup (strdup.c:42)
-==37148==    by 0x10A851: create_shared_memory (memory.c:26)
-==37148==    by 0x1098EE: create_shared_memory_structs (main.c:137)
-==37148==    by 0x1094D2: main (main.c:37)
-==37148== 
-==37148== 28 bytes in 1 blocks are definitely lost in loss record 11 of 15
-==37148==    at 0x4846828: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
-==37148==    by 0x491535E: strdup (strdup.c:42)
-==37148==    by 0x10A851: create_shared_memory (memory.c:26)
-==37148==    by 0x109967: create_shared_memory_structs (main.c:141)
-==37148==    by 0x1094D2: main (main.c:37)
-==37148== 
-==37148== 28 bytes in 1 blocks are definitely lost in loss record 12 of 15
-==37148==    at 0x4846828: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
-==37148==    by 0x491535E: strdup (strdup.c:42)
-==37148==    by 0x10A851: create_shared_memory (memory.c:26)
-==37148==    by 0x10998F: create_shared_memory_structs (main.c:143)
-==37148==    by 0x1094D2: main (main.c:37)
-==37148== 
-==37148== 31 bytes in 1 blocks are definitely lost in loss record 13 of 15
-==37148==    at 0x4846828: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
-==37148==    by 0x491535E: strdup (strdup.c:42)
-==37148==    by 0x10A851: create_shared_memory (memory.c:26)
-==37148==    by 0x109943: create_shared_memory_structs (main.c:140)
-==37148==    by 0x1094D2: main (main.c:37)
-==37148== 
-==37148== 72 bytes in 1 blocks are still reachable in loss record 14 of 15
-==37148==    at 0x4846828: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
-==37148==    by 0x10A77B: allocate_dynamic_memory (memory.c:10)
-==37148==    by 0x109485: main (main.c:31)
-==37148== 
-==37148== 1,024 bytes in 1 blocks are still reachable in loss record 15 of 15
-==37148==    at 0x4846828: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
-==37148==    by 0x48E61B4: _IO_file_doallocate (filedoalloc.c:101)
-==37148==    by 0x48F6523: _IO_doallocbuf (genops.c:347)
-==37148==    by 0x48F3F8F: _IO_file_overflow@@GLIBC_2.2.5 (fileops.c:745)
-==37148==    by 0x48F4AAE: _IO_new_file_xsputn (fileops.c:1244)
-==37148==    by 0x48F4AAE: _IO_file_xsputn@@GLIBC_2.2.5 (fileops.c:1197)
-==37148==    by 0x48C1CC8: __printf_buffer_flush_to_file (printf_buffer_to_file.c:59)
-==37148==    by 0x48C1CC8: __printf_buffer_to_file_done (printf_buffer_to_file.c:120)
-==37148==    by 0x48CC742: __vfprintf_internal (vfprintf-internal.c:1545)
-==37148==    by 0x48C11B2: printf (printf.c:33)
-==37148==    by 0x10973B: main_args (main.c:112)
-==37148==    by 0x1094AC: main (main.c:35)
-==37148== 
-==37148== LEAK SUMMARY:
-==37148==    definitely lost: 244 bytes in 10 blocks
-==37148==    indirectly lost: 0 bytes in 0 blocks
-==37148==      possibly lost: 0 bytes in 0 blocks
-==37148==    still reachable: 1,144 bytes in 5 blocks
-==37148==         suppressed: 0 bytes in 0 blocks
-==37148== 
-==37148== For lists of detected and suppressed errors, rerun with: -s
-==37148== ERROR SUMMARY: 11 errors from 11 contexts (suppressed: 0 from 0)
-==37149== Invalid write of size 4
-==37149==    at 0x10AB22: read_main_wallets_buffer (memory.c:96)
-==37149==    by 0x10B1B1: wallet_receive_transaction (wallet.c:29)
-==37149==    by 0x10B0E7: execute_wallet (wallet.c:9)
-==37149==    by 0x10ACF6: launch_wallet (process.c:21)
-==37149==    by 0x109C9F: create_processes (main.c:185)
-==37149==    by 0x1094E5: main (main.c:38)
-==37149==  Address 0x0 is not stack'd, malloc'd or (recently) free'd
-==37149== 
-==37149== 
-==37149== Process terminating with default action of signal 11 (SIGSEGV)
-==37149==  Access not within mapped region at address 0x0
-==37149==    at 0x10AB22: read_main_wallets_buffer (memory.c:96)
-==37149==    by 0x10B1B1: wallet_receive_transaction (wallet.c:29)
-==37149==    by 0x10B0E7: execute_wallet (wallet.c:9)
-==37149==    by 0x10ACF6: launch_wallet (process.c:21)
-==37149==    by 0x109C9F: create_processes (main.c:185)
-==37149==    by 0x1094E5: main (main.c:38)
-==37149==  If you believe this happened as a result of a stack
-==37149==  overflow in your program's main thread (unlikely but
-==37149==  possible), you can try to increase the size of the
-==37149==  main thread stack using the --main-stacksize= flag.
-==37149==  The main thread stack size used in this run was 8388608.
-==37149== 
-==37149== HEAP SUMMARY:
-==37149==     in use at exit: 1,388 bytes in 15 blocks
-==37149==   total heap usage: 15 allocs, 0 frees, 1,388 bytes allocated
-==37149== 
-==37149== 8 bytes in 1 blocks are still reachable in loss record 1 of 15
-==37149==    at 0x4846828: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
-==37149==    by 0x10A77B: allocate_dynamic_memory (memory.c:10)
-==37149==    by 0x10988E: create_dynamic_memory_structs (main.c:131)
-==37150== Invalid write of size 4
-==37149==    by 0x1094BF: main (main.c:36)
-==37149== 
-==37149== 16 bytes in 1 blocks are still reachable in loss record 2 of 15
-==37150==    at 0x10AB76: read_wallets_servers_buffer (memory.c:107)
-==37149==    at 0x4846828: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
-==37150==    by 0x10AEE4: server_receive_transaction (server.c:29)
-==37149==    by 0x10A77B: allocate_dynamic_memory (memory.c:10)
-==37150==    by 0x10AE13: execute_server (server.c:11)
-==37149==    by 0x1098A9: create_dynamic_memory_structs (main.c:132)
-==37150==    by 0x10AD67: launch_server (process.c:41)
-==37149==    by 0x1094BF: main (main.c:36)
-==37149== 
-==37150==    by 0x109D1F: create_processes (main.c:192)
-==37150==    by 0x1094E5: main (main.c:38)
-==37149== 17 bytes in 1 blocks are definitely lost in loss record 3 of 15
-==37150==  Address 0x0 is not stack'd, malloc'd or (recently) free'd
-==37149==    at 0x4846828: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
-==37150== 
-==37149==    by 0x491535E: strdup (strdup.c:42)
-==37150== 
-==37150== Process terminating with default action of signal 11 (SIGSEGV)
-==37149==    by 0x10A851: create_shared_memory (memory.c:26)
-==37150==  Access not within mapped region at address 0x0
-==37149==    by 0x109A28: create_shared_memory_structs (main.c:149)
-==37149==    by 0x1094D2: main (main.c:37)
-==37150==    at 0x10AB76: read_wallets_servers_buffer (memory.c:107)
-==37149== 
-==37150==    by 0x10AEE4: server_receive_transaction (server.c:29)
-==37150==    by 0x10AE13: execute_server (server.c:11)
-==37149== 18 bytes in 1 blocks are definitely lost in loss record 4 of 15
-==37150==    by 0x10AD67: launch_server (process.c:41)
-==37149==    at 0x4846828: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
-==37150==    by 0x109D1F: create_processes (main.c:192)
-==37149==    by 0x491535E: strdup (strdup.c:42)
-==37150==    by 0x1094E5: main (main.c:38)
-==37149==    by 0x10A851: create_shared_memory (memory.c:26)
-==37150==  If you believe this happened as a result of a stack
-==37149==    by 0x109A44: create_shared_memory_structs (main.c:150)
-==37150==  overflow in your program's main thread (unlikely but
-==37149==    by 0x1094D2: main (main.c:37)
-==37150==  possible), you can try to increase the size of the
-==37149== 
-==37150==  main thread stack using the --main-stacksize= flag.
-==37150==  The main thread stack size used in this run was 8388608.
-==37149== 22 bytes in 1 blocks are definitely lost in loss record 5 of 15
-==37149==    at 0x4846828: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
-==37149==    by 0x491535E: strdup (strdup.c:42)
-==37149==    by 0x10A851: create_shared_memory (memory.c:26)
-==37149==    by 0x1099DE: create_shared_memory_structs (main.c:146)
-==37149==    by 0x1094D2: main (main.c:37)
-==37150== 
-==37149== 
-==37149== 22 bytes in 1 blocks are definitely lost in loss record 6 of 15
-==37150== HEAP SUMMARY:
-==37150==     in use at exit: 1,388 bytes in 15 blocks
-==37150==   total heap usage: 15 allocs, 0 frees, 1,388 bytes allocated
-==37150== 
-==37149==    at 0x4846828: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
-==37149==    by 0x491535E: strdup (strdup.c:42)
-==37149==    by 0x10A851: create_shared_memory (memory.c:26)
-==37149==    by 0x109A03: create_shared_memory_structs (main.c:147)
-==37149==    by 0x1094D2: main (main.c:37)
-==37149== 
-==37149== 24 bytes in 1 blocks are still reachable in loss record 7 of 15
-==37149==    at 0x4846828: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
-==37149==    by 0x10A77B: allocate_dynamic_memory (memory.c:10)
-==37149==    by 0x109493: main (main.c:32)
-==37149== 
-==37149== 25 bytes in 1 blocks are definitely lost in loss record 8 of 15
-==37149==    at 0x4846828: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
-==37149==    by 0x491535E: strdup (strdup.c:42)
-==37149==    by 0x10A851: create_shared_memory (memory.c:26)
-==37149==    by 0x10991B: create_shared_memory_structs (main.c:138)
-==37149==    by 0x1094D2: main (main.c:37)
-==37149== 
-==37149== 25 bytes in 1 blocks are definitely lost in loss record 9 of 15
-==37149==    at 0x4846828: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
-==37149==    by 0x491535E: strdup (strdup.c:42)
-==37149==    by 0x10A851: create_shared_memory (memory.c:26)
-==37149==    by 0x1099BE: create_shared_memory_structs (main.c:144)
-==37149==    by 0x1094D2: main (main.c:37)
-==37149== 
-==37149== 28 bytes in 1 blocks are definitely lost in loss record 10 of 15
-==37149==    at 0x4846828: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
-==37149==    by 0x491535E: strdup (strdup.c:42)
-==37149==    by 0x10A851: create_shared_memory (memory.c:26)
-==37149==    by 0x1098EE: create_shared_memory_structs (main.c:137)
-==37149==    by 0x1094D2: main (main.c:37)
-==37149== 
-==37149== 28 bytes in 1 blocks are definitely lost in loss record 11 of 15
-==37149==    at 0x4846828: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
-==37149==    by 0x491535E: strdup (strdup.c:42)
-==37149==    by 0x10A851: create_shared_memory (memory.c:26)
-==37149==    by 0x109967: create_shared_memory_structs (main.c:141)
-==37149==    by 0x1094D2: main (main.c:37)
-==37151== Invalid write of size 4
-==37149== 
-==37149== 28 bytes in 1 blocks are definitely lost in loss record 12 of 15
-==37149==    at 0x4846828: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
-==37149==    by 0x491535E: strdup (strdup.c:42)
-==37151==    at 0x10AB76: read_wallets_servers_buffer (memory.c:107)
-==37149==    by 0x10A851: create_shared_memory (memory.c:26)
-==37151==    by 0x10AEE4: server_receive_transaction (server.c:29)
-==37149==    by 0x10998F: create_shared_memory_structs (main.c:143)
-==37151==    by 0x10AE13: execute_server (server.c:11)
-==37149==    by 0x1094D2: main (main.c:37)
-==37151==    by 0x10AD67: launch_server (process.c:41)
-==37149== 
-==37151==    by 0x109D1F: create_processes (main.c:192)
-==37149== 31 bytes in 1 blocks are definitely lost in loss record 13 of 15
-==37151==    by 0x1094E5: main (main.c:38)
-==37149==    at 0x4846828: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
-==37151==  Address 0x0 is not stack'd, malloc'd or (recently) free'd
-==37149==    by 0x491535E: strdup (strdup.c:42)
-==37151== 
-==37149==    by 0x10A851: create_shared_memory (memory.c:26)
-==37149==    by 0x109943: create_shared_memory_structs (main.c:140)
-==37149==    by 0x1094D2: main (main.c:37)
-==37151== 
-==37151== Process terminating with default action of signal 11 (SIGSEGV)
-==37149== 
-==37151==  Access not within mapped region at address 0x0
-==37149== 72 bytes in 1 blocks are still reachable in loss record 14 of 15
-==37151==    at 0x10AB76: read_wallets_servers_buffer (memory.c:107)
-==37149==    at 0x4846828: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
-==37151==    by 0x10AEE4: server_receive_transaction (server.c:29)
-==37149==    by 0x10A77B: allocate_dynamic_memory (memory.c:10)
-==37151==    by 0x10AE13: execute_server (server.c:11)
-==37149==    by 0x109485: main (main.c:31)
-==37151==    by 0x10AD67: launch_server (process.c:41)
-==37149== 
-==37151==    by 0x109D1F: create_processes (main.c:192)
-==37151==    by 0x1094E5: main (main.c:38)
-==37151==  If you believe this happened as a result of a stack
-==37151==  overflow in your program's main thread (unlikely but
-==37149== 1,024 bytes in 1 blocks are still reachable in loss record 15 of 15
-==37151==  possible), you can try to increase the size of the
-==37149==    at 0x4846828: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
-==37151==  main thread stack using the --main-stacksize= flag.
-==37151==  The main thread stack size used in this run was 8388608.
-==37149==    by 0x48E61B4: _IO_file_doallocate (filedoalloc.c:101)
-==37149==    by 0x48F6523: _IO_doallocbuf (genops.c:347)
-==37149==    by 0x48F3F8F: _IO_file_overflow@@GLIBC_2.2.5 (fileops.c:745)
-==37151== 
-==37151== HEAP SUMMARY:
-==37151==     in use at exit: 1,388 bytes in 15 blocks
-==37151==   total heap usage: 15 allocs, 0 frees, 1,388 bytes allocated
-==37151== 
-==37149==    by 0x48F4AAE: _IO_new_file_xsputn (fileops.c:1244)
-==37149==    by 0x48F4AAE: _IO_file_xsputn@@GLIBC_2.2.5 (fileops.c:1197)
-==37149==    by 0x48C1CC8: __printf_buffer_flush_to_file (printf_buffer_to_file.c:59)
-==37149==    by 0x48C1CC8: __printf_buffer_to_file_done (printf_buffer_to_file.c:120)
-==37149==    by 0x48CC742: __vfprintf_internal (vfprintf-internal.c:1545)
-==37149==    by 0x48C11B2: printf (printf.c:33)
-==37149==    by 0x10973B: main_args (main.c:112)
-==37149==    by 0x1094AC: main (main.c:35)
-==37149== 
-==37149== LEAK SUMMARY:
-==37149==    definitely lost: 244 bytes in 10 blocks
-==37149==    indirectly lost: 0 bytes in 0 blocks
-==37149==      possibly lost: 0 bytes in 0 blocks
-==37149==    still reachable: 1,144 bytes in 5 blocks
-==37149==         suppressed: 0 bytes in 0 blocks
-==37149== 
-==37149== For lists of detected and suppressed errors, rerun with: -s
-==37149== ERROR SUMMARY: 11 errors from 11 contexts (suppressed: 0 from 0)
-==37150== 8 bytes in 1 blocks are still reachable in loss record 1 of 15
-==37150==    at 0x4846828: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
-==37150==    by 0x10A77B: allocate_dynamic_memory (memory.c:10)
-==37150==    by 0x10988E: create_dynamic_memory_structs (main.c:131)
-==37150==    by 0x1094BF: main (main.c:36)
-==37150== 
-==37150== 16 bytes in 1 blocks are still reachable in loss record 2 of 15
-==37150==    at 0x4846828: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
-==37150==    by 0x10A77B: allocate_dynamic_memory (memory.c:10)
-==37150==    by 0x1098A9: create_dynamic_memory_structs (main.c:132)
-==37150==    by 0x1094BF: main (main.c:36)
-==37150== 
-==37150== 17 bytes in 1 blocks are definitely lost in loss record 3 of 15
-==37150==    at 0x4846828: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
-==37150==    by 0x491535E: strdup (strdup.c:42)
-==37150==    by 0x10A851: create_shared_memory (memory.c:26)
-==37150==    by 0x109A28: create_shared_memory_structs (main.c:149)
-==37150==    by 0x1094D2: main (main.c:37)
-==37150== 
-==37150== 18 bytes in 1 blocks are definitely lost in loss record 4 of 15
-==37150==    at 0x4846828: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
-==37152== Invalid write of size 4
-==37150==    by 0x491535E: strdup (strdup.c:42)
-==37150==    by 0x10A851: create_shared_memory (memory.c:26)
-==37150==    by 0x109A44: create_shared_memory_structs (main.c:150)
-==37150==    by 0x1094D2: main (main.c:37)
-==37150== 
-==37150== 22 bytes in 1 blocks are definitely lost in loss record 5 of 15
-==37152==    at 0x10AB76: read_wallets_servers_buffer (memory.c:107)
-==37150==    at 0x4846828: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
-==37152==    by 0x10AEE4: server_receive_transaction (server.c:29)
-==37150==    by 0x491535E: strdup (strdup.c:42)
-==37152==    by 0x10AE13: execute_server (server.c:11)
-==37150==    by 0x10A851: create_shared_memory (memory.c:26)
-==37152==    by 0x10AD67: launch_server (process.c:41)
-==37150==    by 0x1099DE: create_shared_memory_structs (main.c:146)
-==37152==    by 0x109D1F: create_processes (main.c:192)
-==37150==    by 0x1094D2: main (main.c:37)
-==37152==    by 0x1094E5: main (main.c:38)
-==37150== 
-==37152==  Address 0x0 is not stack'd, malloc'd or (recently) free'd
-==37150== 22 bytes in 1 blocks are definitely lost in loss record 6 of 15
-==37152== 
-==37150==    at 0x4846828: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
-==37150==    by 0x491535E: strdup (strdup.c:42)
-==37150==    by 0x10A851: create_shared_memory (memory.c:26)
-==37152== 
-==37152== Process terminating with default action of signal 11 (SIGSEGV)
-==37150==    by 0x109A03: create_shared_memory_structs (main.c:147)
-==37152==  Access not within mapped region at address 0x0
-==37150==    by 0x1094D2: main (main.c:37)
-==37150== 
-==37152==    at 0x10AB76: read_wallets_servers_buffer (memory.c:107)
-==37152==    by 0x10AEE4: server_receive_transaction (server.c:29)
-==37150== 24 bytes in 1 blocks are still reachable in loss record 7 of 15
-==37152==    by 0x10AE13: execute_server (server.c:11)
-==37150==    at 0x4846828: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
-==37152==    by 0x10AD67: launch_server (process.c:41)
-==37150==    by 0x10A77B: allocate_dynamic_memory (memory.c:10)
-==37152==    by 0x109D1F: create_processes (main.c:192)
-==37150==    by 0x109493: main (main.c:32)
-==37152==    by 0x1094E5: main (main.c:38)
-==37150== 
-==37152==  If you believe this happened as a result of a stack
-==37150== 25 bytes in 1 blocks are definitely lost in loss record 8 of 15
-==37152==  overflow in your program's main thread (unlikely but
-==37150==    at 0x4846828: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
-==37152==  possible), you can try to increase the size of the
-==37151== 8 bytes in 1 blocks are still reachable in loss record 1 of 15
-==37150==    by 0x491535E: strdup (strdup.c:42)
-==37152==  main thread stack using the --main-stacksize= flag.
-==37150==    by 0x10A851: create_shared_memory (memory.c:26)
-==37151==    at 0x4846828: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
-==37152==  The main thread stack size used in this run was 8388608.
-==37150==    by 0x10991B: create_shared_memory_structs (main.c:138)
-==37151==    by 0x10A77B: allocate_dynamic_memory (memory.c:10)
-==37151==    by 0x10988E: create_dynamic_memory_structs (main.c:131)
-==37150==    by 0x1094D2: main (main.c:37)
-==37150== 
-==37150== 25 bytes in 1 blocks are definitely lost in loss record 9 of 15
-==37152== 
-==37151==    by 0x1094BF: main (main.c:36)
-==37150==    at 0x4846828: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
-==37151== 
-==37152== HEAP SUMMARY:
-==37152==     in use at exit: 1,388 bytes in 15 blocks
-==37152==   total heap usage: 15 allocs, 0 frees, 1,388 bytes allocated
-==37152== 
-==37150==    by 0x491535E: strdup (strdup.c:42)
-==37150==    by 0x10A851: create_shared_memory (memory.c:26)
-==37151== 16 bytes in 1 blocks are still reachable in loss record 2 of 15
-==37150==    by 0x1099BE: create_shared_memory_structs (main.c:144)
-==37151==    at 0x4846828: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
-==37150==    by 0x1094D2: main (main.c:37)
-==37153== Invalid write of size 4
-==37151==    by 0x10A77B: allocate_dynamic_memory (memory.c:10)
-==37150== 
-==37151==    by 0x1098A9: create_dynamic_memory_structs (main.c:132)
-==37150== 28 bytes in 1 blocks are definitely lost in loss record 10 of 15
-==37151==    by 0x1094BF: main (main.c:36)
-==37150==    at 0x4846828: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
-==37151== 
-==37150==    by 0x491535E: strdup (strdup.c:42)
-==37151== 17 bytes in 1 blocks are definitely lost in loss record 3 of 15
-==37150==    by 0x10A851: create_shared_memory (memory.c:26)
-==37153==    at 0x10AB76: read_wallets_servers_buffer (memory.c:107)
-==37151==    at 0x4846828: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
-==37150==    by 0x1098EE: create_shared_memory_structs (main.c:137)
-==37153==    by 0x10AEE4: server_receive_transaction (server.c:29)
-==37150==    by 0x1094D2: main (main.c:37)
-==37153==    by 0x10AE13: execute_server (server.c:11)
-==37150== 
-==37151==    by 0x491535E: strdup (strdup.c:42)
-==37153==    by 0x10AD67: launch_server (process.c:41)
-==37150== 28 bytes in 1 blocks are definitely lost in loss record 11 of 15
-==37151==    by 0x10A851: create_shared_memory (memory.c:26)
-==37153==    by 0x109D1F: create_processes (main.c:192)
-==37150==    at 0x4846828: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
-==37151==    by 0x109A28: create_shared_memory_structs (main.c:149)
-==37153==    by 0x1094E5: main (main.c:38)
-==37150==    by 0x491535E: strdup (strdup.c:42)
-==37151==    by 0x1094D2: main (main.c:37)
-==37153==  Address 0x0 is not stack'd, malloc'd or (recently) free'd
-==37150==    by 0x10A851: create_shared_memory (memory.c:26)
-==37151== 
-==37153== 
-==37150==    by 0x109967: create_shared_memory_structs (main.c:141)
-==37151== 18 bytes in 1 blocks are definitely lost in loss record 4 of 15
-==37150==    by 0x1094D2: main (main.c:37)
-==37151==    at 0x4846828: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
-==37153== 
-==37153== Process terminating with default action of signal 11 (SIGSEGV)
-==37151==    by 0x491535E: strdup (strdup.c:42)
-==37150== 
-==37153==  Access not within mapped region at address 0x0
-==37151==    by 0x10A851: create_shared_memory (memory.c:26)
-==37150== 28 bytes in 1 blocks are definitely lost in loss record 12 of 15
-==37151==    by 0x109A44: create_shared_memory_structs (main.c:150)
-==37153==    at 0x10AB76: read_wallets_servers_buffer (memory.c:107)
-==37151==    by 0x1094D2: main (main.c:37)
-==37150==    at 0x4846828: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
-==37153==    by 0x10AEE4: server_receive_transaction (server.c:29)
-==37151== 
-==37150==    by 0x491535E: strdup (strdup.c:42)
-==37153==    by 0x10AE13: execute_server (server.c:11)
-==37150==    by 0x10A851: create_shared_memory (memory.c:26)
-==37151== 22 bytes in 1 blocks are definitely lost in loss record 5 of 15
-==37153==    by 0x10AD67: launch_server (process.c:41)
-==37150==    by 0x10998F: create_shared_memory_structs (main.c:143)
-==37151==    at 0x4846828: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
-==37153==    by 0x109D1F: create_processes (main.c:192)
-==37150==    by 0x1094D2: main (main.c:37)
-==37151==    by 0x491535E: strdup (strdup.c:42)
-==37153==    by 0x1094E5: main (main.c:38)
-==37150== 
-==37151==    by 0x10A851: create_shared_memory (memory.c:26)
-==37153==  If you believe this happened as a result of a stack
-==37150== 31 bytes in 1 blocks are definitely lost in loss record 13 of 15
-==37151==    by 0x1099DE: create_shared_memory_structs (main.c:146)
-==37153==  overflow in your program's main thread (unlikely but
-==37150==    at 0x4846828: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
-==37151==    by 0x1094D2: main (main.c:37)
-==37153==  possible), you can try to increase the size of the
-==37150==    by 0x491535E: strdup (strdup.c:42)
-==37151== 
-==37153==  main thread stack using the --main-stacksize= flag.
-==37150==    by 0x10A851: create_shared_memory (memory.c:26)
-==37151== 22 bytes in 1 blocks are definitely lost in loss record 6 of 15
-==37153==  The main thread stack size used in this run was 8388608.
-==37150==    by 0x109943: create_shared_memory_structs (main.c:140)
-==37151==    at 0x4846828: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
-==37150==    by 0x1094D2: main (main.c:37)
-==37151==    by 0x491535E: strdup (strdup.c:42)
-==37150== 
-==37151==    by 0x10A851: create_shared_memory (memory.c:26)
-==37151==    by 0x109A03: create_shared_memory_structs (main.c:147)
-==37150== 72 bytes in 1 blocks are still reachable in loss record 14 of 15
-==37151==    by 0x1094D2: main (main.c:37)
-==37151== 
-==37150==    at 0x4846828: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
-==37153== 
-==37150==    by 0x10A77B: allocate_dynamic_memory (memory.c:10)
-==37151== 24 bytes in 1 blocks are still reachable in loss record 7 of 15
-==37150==    by 0x109485: main (main.c:31)
-==37153== HEAP SUMMARY:
-==37153==     in use at exit: 1,388 bytes in 15 blocks
-==37153==   total heap usage: 15 allocs, 0 frees, 1,388 bytes allocated
-==37153== 
-==37151==    at 0x4846828: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
-==37150== 
-==37151==    by 0x10A77B: allocate_dynamic_memory (memory.c:10)
-==37151==    by 0x109493: main (main.c:32)
-==37151== 
-==37150== 1,024 bytes in 1 blocks are still reachable in loss record 15 of 15
-==37151== 25 bytes in 1 blocks are definitely lost in loss record 8 of 15
-==37150==    at 0x4846828: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
-==37151==    at 0x4846828: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
-==37150==    by 0x48E61B4: _IO_file_doallocate (filedoalloc.c:101)
-==37151==    by 0x491535E: strdup (strdup.c:42)
-==37151==    by 0x10A851: create_shared_memory (memory.c:26)
-==37150==    by 0x48F6523: _IO_doallocbuf (genops.c:347)
-==37151==    by 0x10991B: create_shared_memory_structs (main.c:138)
-==37150==    by 0x48F3F8F: _IO_file_overflow@@GLIBC_2.2.5 (fileops.c:745)
-==37151==    by 0x1094D2: main (main.c:37)
-==37151== 
-==37150==    by 0x48F4AAE: _IO_new_file_xsputn (fileops.c:1244)
-==37151== 25 bytes in 1 blocks are definitely lost in loss record 9 of 15
-==37150==    by 0x48F4AAE: _IO_file_xsputn@@GLIBC_2.2.5 (fileops.c:1197)
-==37151==    at 0x4846828: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
-==37151==    by 0x491535E: strdup (strdup.c:42)
-==37150==    by 0x48C1CC8: __printf_buffer_flush_to_file (printf_buffer_to_file.c:59)
-==37151==    by 0x10A851: create_shared_memory (memory.c:26)
-==37150==    by 0x48C1CC8: __printf_buffer_to_file_done (printf_buffer_to_file.c:120)
-==37151==    by 0x1099BE: create_shared_memory_structs (main.c:144)
-==37151==    by 0x1094D2: main (main.c:37)
-==37150==    by 0x48CC742: __vfprintf_internal (vfprintf-internal.c:1545)
-==37151== 
-==37151== 28 bytes in 1 blocks are definitely lost in loss record 10 of 15
-==37150==    by 0x48C11B2: printf (printf.c:33)
-==37151==    at 0x4846828: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
-==37150==    by 0x10973B: main_args (main.c:112)
-==37151==    by 0x491535E: strdup (strdup.c:42)
-==37150==    by 0x1094AC: main (main.c:35)
-==37151==    by 0x10A851: create_shared_memory (memory.c:26)
-==37150== 
-==37151==    by 0x1098EE: create_shared_memory_structs (main.c:137)
-==37150== LEAK SUMMARY:
-==37151==    by 0x1094D2: main (main.c:37)
-==37150==    definitely lost: 244 bytes in 10 blocks
-==37151== 
-==37150==    indirectly lost: 0 bytes in 0 blocks
-==37150==      possibly lost: 0 bytes in 0 blocks
-==37151== 28 bytes in 1 blocks are definitely lost in loss record 11 of 15
-==37150==    still reachable: 1,144 bytes in 5 blocks
-==37151==    at 0x4846828: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
-==37150==         suppressed: 0 bytes in 0 blocks
-==37151==    by 0x491535E: strdup (strdup.c:42)
-==37150== 
-==37151==    by 0x10A851: create_shared_memory (memory.c:26)
-==37150== For lists of detected and suppressed errors, rerun with: -s
-==37151==    by 0x109967: create_shared_memory_structs (main.c:141)
-==37150== ERROR SUMMARY: 11 errors from 11 contexts (suppressed: 0 from 0)
-==37151==    by 0x1094D2: main (main.c:37)
-==37151== 
-==37151== 28 bytes in 1 blocks are definitely lost in loss record 12 of 15
-==37151==    at 0x4846828: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
-==37151==    by 0x491535E: strdup (strdup.c:42)
-==37151==    by 0x10A851: create_shared_memory (memory.c:26)
-==37151==    by 0x10998F: create_shared_memory_structs (main.c:143)
-==37151==    by 0x1094D2: main (main.c:37)
-==37151== 
-==37151== 31 bytes in 1 blocks are definitely lost in loss record 13 of 15
-==37151==    at 0x4846828: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
-==37151==    by 0x491535E: strdup (strdup.c:42)
-==37151==    by 0x10A851: create_shared_memory (memory.c:26)
-==37151==    by 0x109943: create_shared_memory_structs (main.c:140)
-==37151==    by 0x1094D2: main (main.c:37)
-==37151== 
-==37151== 72 bytes in 1 blocks are still reachable in loss record 14 of 15
-==37151==    at 0x4846828: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
-==37151==    by 0x10A77B: allocate_dynamic_memory (memory.c:10)
-==37151==    by 0x109485: main (main.c:31)
-==37151== 
-==37151== 1,024 bytes in 1 blocks are still reachable in loss record 15 of 15
-==37151==    at 0x4846828: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
-==37151==    by 0x48E61B4: _IO_file_doallocate (filedoalloc.c:101)
-==37151==    by 0x48F6523: _IO_doallocbuf (genops.c:347)
-==37151==    by 0x48F3F8F: _IO_file_overflow@@GLIBC_2.2.5 (fileops.c:745)
-==37151==    by 0x48F4AAE: _IO_new_file_xsputn (fileops.c:1244)
-==37152== 8 bytes in 1 blocks are still reachable in loss record 1 of 15
-==37151==    by 0x48F4AAE: _IO_file_xsputn@@GLIBC_2.2.5 (fileops.c:1197)
-==37152==    at 0x4846828: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
-==37151==    by 0x48C1CC8: __printf_buffer_flush_to_file (printf_buffer_to_file.c:59)
-==37152==    by 0x10A77B: allocate_dynamic_memory (memory.c:10)
-==37151==    by 0x48C1CC8: __printf_buffer_to_file_done (printf_buffer_to_file.c:120)
-==37152==    by 0x10988E: create_dynamic_memory_structs (main.c:131)
-==37151==    by 0x48CC742: __vfprintf_internal (vfprintf-internal.c:1545)
-==37151==    by 0x48C11B2: printf (printf.c:33)
-==37152==    by 0x1094BF: main (main.c:36)
-==37151==    by 0x10973B: main_args (main.c:112)
-==37152== 
-==37151==    by 0x1094AC: main (main.c:35)
-==37151== 
-==37151== LEAK SUMMARY:
-==37152== 16 bytes in 1 blocks are still reachable in loss record 2 of 15
-==37151==    definitely lost: 244 bytes in 10 blocks
-==37152==    at 0x4846828: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
-==37151==    indirectly lost: 0 bytes in 0 blocks
-==37152==    by 0x10A77B: allocate_dynamic_memory (memory.c:10)
-==37151==      possibly lost: 0 bytes in 0 blocks
-==37152==    by 0x1098A9: create_dynamic_memory_structs (main.c:132)
-==37151==    still reachable: 1,144 bytes in 5 blocks
-==37152==    by 0x1094BF: main (main.c:36)
-==37151==         suppressed: 0 bytes in 0 blocks
-==37152== 
-==37151== 
-==37152== 17 bytes in 1 blocks are definitely lost in loss record 3 of 15
-==37152==    at 0x4846828: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
-==37151== For lists of detected and suppressed errors, rerun with: -s
-==37151== ERROR SUMMARY: 11 errors from 11 contexts (suppressed: 0 from 0)
-==37152==    by 0x491535E: strdup (strdup.c:42)
-==37152==    by 0x10A851: create_shared_memory (memory.c:26)
-==37152==    by 0x109A28: create_shared_memory_structs (main.c:149)
-==37152==    by 0x1094D2: main (main.c:37)
-==37152== 
-==37152== 18 bytes in 1 blocks are definitely lost in loss record 4 of 15
-==37152==    at 0x4846828: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
-==37152==    by 0x491535E: strdup (strdup.c:42)
-==37153== 8 bytes in 1 blocks are still reachable in loss record 1 of 15
-==37152==    by 0x10A851: create_shared_memory (memory.c:26)
-==37153==    at 0x4846828: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
-==37152==    by 0x109A44: create_shared_memory_structs (main.c:150)
-==37152==    by 0x1094D2: main (main.c:37)
-==37153==    by 0x10A77B: allocate_dynamic_memory (memory.c:10)
-==37152== 
-==37153==    by 0x10988E: create_dynamic_memory_structs (main.c:131)
-==37152== 22 bytes in 1 blocks are definitely lost in loss record 5 of 15
-==37152==    at 0x4846828: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
-==37152==    by 0x491535E: strdup (strdup.c:42)
-==37153==    by 0x1094BF: main (main.c:36)
-==37152==    by 0x10A851: create_shared_memory (memory.c:26)
-==37153== 
-==37152==    by 0x1099DE: create_shared_memory_structs (main.c:146)
-==37152==    by 0x1094D2: main (main.c:37)
-==37152== 
-==37153== 16 bytes in 1 blocks are still reachable in loss record 2 of 15
-==37152== 22 bytes in 1 blocks are definitely lost in loss record 6 of 15
-==37153==    at 0x4846828: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
-==37152==    at 0x4846828: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
-==37153==    by 0x10A77B: allocate_dynamic_memory (memory.c:10)
-==37152==    by 0x491535E: strdup (strdup.c:42)
-==37153==    by 0x1098A9: create_dynamic_memory_structs (main.c:132)
-==37152==    by 0x10A851: create_shared_memory (memory.c:26)
-==37153==    by 0x1094BF: main (main.c:36)
-==37152==    by 0x109A03: create_shared_memory_structs (main.c:147)
-==37153== 
-==37152==    by 0x1094D2: main (main.c:37)
-==37152== 
-==37153== 17 bytes in 1 blocks are definitely lost in loss record 3 of 15
-==37153==    at 0x4846828: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
-==37152== 24 bytes in 1 blocks are still reachable in loss record 7 of 15
-==37152==    at 0x4846828: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
-==37153==    by 0x491535E: strdup (strdup.c:42)
-==37152==    by 0x10A77B: allocate_dynamic_memory (memory.c:10)
-==37153==    by 0x10A851: create_shared_memory (memory.c:26)
-==37152==    by 0x109493: main (main.c:32)
-==37153==    by 0x109A28: create_shared_memory_structs (main.c:149)
-==37152== 
-==37153==    by 0x1094D2: main (main.c:37)
-==37152== 25 bytes in 1 blocks are definitely lost in loss record 8 of 15
-==37153== 
-==37152==    at 0x4846828: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
-==37153== 18 bytes in 1 blocks are definitely lost in loss record 4 of 15
-==37152==    by 0x491535E: strdup (strdup.c:42)
-==37153==    at 0x4846828: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
-==37152==    by 0x10A851: create_shared_memory (memory.c:26)
-==37153==    by 0x491535E: strdup (strdup.c:42)
-==37152==    by 0x10991B: create_shared_memory_structs (main.c:138)
-==37153==    by 0x10A851: create_shared_memory (memory.c:26)
-==37153==    by 0x109A44: create_shared_memory_structs (main.c:150)
-==37152==    by 0x1094D2: main (main.c:37)
-==37153==    by 0x1094D2: main (main.c:37)
-==37152== 
-==37153== 
-==37152== 25 bytes in 1 blocks are definitely lost in loss record 9 of 15
-==37153== 22 bytes in 1 blocks are definitely lost in loss record 5 of 15
-==37152==    at 0x4846828: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
-==37152==    by 0x491535E: strdup (strdup.c:42)
-==37153==    at 0x4846828: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
-==37152==    by 0x10A851: create_shared_memory (memory.c:26)
-==37153==    by 0x491535E: strdup (strdup.c:42)
-==37152==    by 0x1099BE: create_shared_memory_structs (main.c:144)
-==37153==    by 0x10A851: create_shared_memory (memory.c:26)
-==37152==    by 0x1094D2: main (main.c:37)
-==37153==    by 0x1099DE: create_shared_memory_structs (main.c:146)
-==37152== 
-==37153==    by 0x1094D2: main (main.c:37)
-==37152== 28 bytes in 1 blocks are definitely lost in loss record 10 of 15
-==37153== 
-==37152==    at 0x4846828: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
-==37153== 22 bytes in 1 blocks are definitely lost in loss record 6 of 15
-==37152==    by 0x491535E: strdup (strdup.c:42)
-==37153==    at 0x4846828: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
-==37152==    by 0x10A851: create_shared_memory (memory.c:26)
-==37153==    by 0x491535E: strdup (strdup.c:42)
-==37152==    by 0x1098EE: create_shared_memory_structs (main.c:137)
-==37153==    by 0x10A851: create_shared_memory (memory.c:26)
-==37152==    by 0x1094D2: main (main.c:37)
-==37152== 
-==37153==    by 0x109A03: create_shared_memory_structs (main.c:147)
-==37152== 28 bytes in 1 blocks are definitely lost in loss record 11 of 15
-==37152==    at 0x4846828: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
-==37152==    by 0x491535E: strdup (strdup.c:42)
-==37152==    by 0x10A851: create_shared_memory (memory.c:26)
-==37152==    by 0x109967: create_shared_memory_structs (main.c:141)
-==37152==    by 0x1094D2: main (main.c:37)
-==37152== 
-==37152== 28 bytes in 1 blocks are definitely lost in loss record 12 of 15
-==37152==    at 0x4846828: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
-==37152==    by 0x491535E: strdup (strdup.c:42)
-==37152==    by 0x10A851: create_shared_memory (memory.c:26)
-==37153==    by 0x1094D2: main (main.c:37)
-==37152==    by 0x10998F: create_shared_memory_structs (main.c:143)
-==37153== 
-==37152==    by 0x1094D2: main (main.c:37)
-==37152== 
-==37152== 31 bytes in 1 blocks are definitely lost in loss record 13 of 15
-==37153== 24 bytes in 1 blocks are still reachable in loss record 7 of 15
-==37152==    at 0x4846828: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
-==37152==    by 0x491535E: strdup (strdup.c:42)
-==37153==    at 0x4846828: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
-==37152==    by 0x10A851: create_shared_memory (memory.c:26)
-==37153==    by 0x10A77B: allocate_dynamic_memory (memory.c:10)
-==37152==    by 0x109943: create_shared_memory_structs (main.c:140)
-==37153==    by 0x109493: main (main.c:32)
-==37152==    by 0x1094D2: main (main.c:37)
-==37153== 
-==37152== 
-==37153== 25 bytes in 1 blocks are definitely lost in loss record 8 of 15
-==37152== 72 bytes in 1 blocks are still reachable in loss record 14 of 15
-==37153==    at 0x4846828: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
-==37152==    at 0x4846828: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
-==37153==    by 0x491535E: strdup (strdup.c:42)
-==37152==    by 0x10A77B: allocate_dynamic_memory (memory.c:10)
-==37153==    by 0x10A851: create_shared_memory (memory.c:26)
-==37152==    by 0x109485: main (main.c:31)
-==37153==    by 0x10991B: create_shared_memory_structs (main.c:138)
-==37152== 
-==37153==    by 0x1094D2: main (main.c:37)
-==37152== 1,024 bytes in 1 blocks are still reachable in loss record 15 of 15
-==37153== 
-==37152==    at 0x4846828: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
-==37153== 25 bytes in 1 blocks are definitely lost in loss record 9 of 15
-==37152==    by 0x48E61B4: _IO_file_doallocate (filedoalloc.c:101)
-==37153==    at 0x4846828: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
-==37153==    by 0x491535E: strdup (strdup.c:42)
-==37152==    by 0x48F6523: _IO_doallocbuf (genops.c:347)
-==37153==    by 0x10A851: create_shared_memory (memory.c:26)
-==37153==    by 0x1099BE: create_shared_memory_structs (main.c:144)
-==37152==    by 0x48F3F8F: _IO_file_overflow@@GLIBC_2.2.5 (fileops.c:745)
-==37153==    by 0x1094D2: main (main.c:37)
-==37153== 
-==37153== 28 bytes in 1 blocks are definitely lost in loss record 10 of 15
-==37152==    by 0x48F4AAE: _IO_new_file_xsputn (fileops.c:1244)
-==37153==    at 0x4846828: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
-==37152==    by 0x48F4AAE: _IO_file_xsputn@@GLIBC_2.2.5 (fileops.c:1197)
-==37153==    by 0x491535E: strdup (strdup.c:42)
-==37153==    by 0x10A851: create_shared_memory (memory.c:26)
-==37152==    by 0x48C1CC8: __printf_buffer_flush_to_file (printf_buffer_to_file.c:59)
-==37153==    by 0x1098EE: create_shared_memory_structs (main.c:137)
-==37152==    by 0x48C1CC8: __printf_buffer_to_file_done (printf_buffer_to_file.c:120)
-==37153==    by 0x1094D2: main (main.c:37)
-==37153== 
-==37152==    by 0x48CC742: __vfprintf_internal (vfprintf-internal.c:1545)
-==37153== 28 bytes in 1 blocks are definitely lost in loss record 11 of 15
-==37152==    by 0x48C11B2: printf (printf.c:33)
-==37153==    at 0x4846828: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
-==37152==    by 0x10973B: main_args (main.c:112)
-==37153==    by 0x491535E: strdup (strdup.c:42)
-==37152==    by 0x1094AC: main (main.c:35)
-==37153==    by 0x10A851: create_shared_memory (memory.c:26)
-==37152== 
-==37153==    by 0x109967: create_shared_memory_structs (main.c:141)
-==37152== LEAK SUMMARY:
-==37153==    by 0x1094D2: main (main.c:37)
-==37152==    definitely lost: 244 bytes in 10 blocks
-==37153== 
-==37152==    indirectly lost: 0 bytes in 0 blocks
-==37153== 28 bytes in 1 blocks are definitely lost in loss record 12 of 15
-==37152==      possibly lost: 0 bytes in 0 blocks
-==37152==    still reachable: 1,144 bytes in 5 blocks
-==37152==         suppressed: 0 bytes in 0 blocks
-==37153==    at 0x4846828: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
-==37152== 
-==37153==    by 0x491535E: strdup (strdup.c:42)
-==37153==    by 0x10A851: create_shared_memory (memory.c:26)
-==37152== For lists of detected and suppressed errors, rerun with: -s
-==37153==    by 0x10998F: create_shared_memory_structs (main.c:143)
-==37152== ERROR SUMMARY: 11 errors from 11 contexts (suppressed: 0 from 0)
-==37153==    by 0x1094D2: main (main.c:37)
-==37153== 
-==37153== 31 bytes in 1 blocks are definitely lost in loss record 13 of 15
-==37153==    at 0x4846828: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
-==37153==    by 0x491535E: strdup (strdup.c:42)
-==37153==    by 0x10A851: create_shared_memory (memory.c:26)
-==37153==    by 0x109943: create_shared_memory_structs (main.c:140)
-==37153==    by 0x1094D2: main (main.c:37)
-==37153== 
-==37153== 72 bytes in 1 blocks are still reachable in loss record 14 of 15
-==37153==    at 0x4846828: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
-==37153==    by 0x10A77B: allocate_dynamic_memory (memory.c:10)
-==37153==    by 0x109485: main (main.c:31)
-==37153== 
-==37153== 1,024 bytes in 1 blocks are still reachable in loss record 15 of 15
-==37153==    at 0x4846828: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
-==37153==    by 0x48E61B4: _IO_file_doallocate (filedoalloc.c:101)
-==37153==    by 0x48F6523: _IO_doallocbuf (genops.c:347)
-==37153==    by 0x48F3F8F: _IO_file_overflow@@GLIBC_2.2.5 (fileops.c:745)
-==37153==    by 0x48F4AAE: _IO_new_file_xsputn (fileops.c:1244)
-==37153==    by 0x48F4AAE: _IO_file_xsputn@@GLIBC_2.2.5 (fileops.c:1197)
-==37153==    by 0x48C1CC8: __printf_buffer_flush_to_file (printf_buffer_to_file.c:59)
-==37153==    by 0x48C1CC8: __printf_buffer_to_file_done (printf_buffer_to_file.c:120)
-==37153==    by 0x48CC742: __vfprintf_internal (vfprintf-internal.c:1545)
-==37153==    by 0x48C11B2: printf (printf.c:33)
-==37153==    by 0x10973B: main_args (main.c:112)
-==37153==    by 0x1094AC: main (main.c:35)
-==37153== 
-==37153== LEAK SUMMARY:
-==37153==    definitely lost: 244 bytes in 10 blocks
-==37153==    indirectly lost: 0 bytes in 0 blocks
-==37153==      possibly lost: 0 bytes in 0 blocks
-==37153==    still reachable: 1,144 bytes in 5 blocks
-==37153==         suppressed: 0 bytes in 0 blocks
-==37153== 
-==37153== For lists of detected and suppressed errors, rerun with: -s
-==37153== ERROR SUMMARY: 11 errors from 11 contexts (suppressed: 0 from 0)
-==37147== Invalid read of size 4
-==37147==    at 0x10A2A5: create_transaction (main.c:331)
-==37147==    by 0x109F28: user_interaction (main.c:248)
-==37147==    by 0x1094F8: main (main.c:41)
-==37147==  Address 0x4a769d4 is 0 bytes after a block of size 4 alloc'd
-==37147==    at 0x4846828: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
-==37147==    by 0x109E3A: user_interaction (main.c:228)
-==37147==    by 0x1094F8: main (main.c:41)
-==37147== 
-==37147== Invalid read of size 4
-==37147==    at 0x109F50: user_interaction (main.c:257)
-==37147==    by 0x1094F8: main (main.c:41)
-==37147==  Address 0x4a769d0 is 0 bytes inside a block of size 4 free'd
-==37147==    at 0x484988F: free (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
-==37147==    by 0x109FBC: user_interaction (main.c:269)
-==37147==    by 0x1094F8: main (main.c:41)
-==37147==  Block was alloc'd at
-==37147==    at 0x4846828: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
-==37147==    by 0x109E3A: user_interaction (main.c:228)
-==37147==    by 0x1094F8: main (main.c:41)
-==37147== 
-==37147== Invalid free() / delete / delete[] / realloc()
-==37147==    at 0x484988F: free (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
-==37147==    by 0x109FBC: user_interaction (main.c:269)
-==37147==    by 0x1094F8: main (main.c:41)
-==37147==  Address 0x4a769d0 is 0 bytes inside a block of size 4 free'd
-==37147==    at 0x484988F: free (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
-==37147==    by 0x109FBC: user_interaction (main.c:269)
-==37147==    by 0x1094F8: main (main.c:41)
-==37147==  Block was alloc'd at
-==37147==    at 0x4846828: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
-==37147==    by 0x109E3A: user_interaction (main.c:228)
-==37147==    by 0x1094F8: main (main.c:41)
-==37147== 
-==37147== 
-==37147== Process terminating with default action of signal 2 (SIGINT)
-==37147==    at 0x497CA61: read (read.c:26)
-==37147==    by 0x48F37A4: _IO_file_underflow@@GLIBC_2.2.5 (fileops.c:517)
-==37147==    by 0x48F65D1: _IO_default_uflow (genops.c:362)
-==37147==    by 0x48CD1C3: __vfscanf_internal (vfscanf-internal.c:676)
-==37147==    by 0x48C0EC5: __isoc99_scanf (isoc99_scanf.c:30)
-==37147==    by 0x109E8C: user_interaction (main.c:234)
-==37147==    by 0x1094F8: main (main.c:41)
-==37147== 
-==37147== HEAP SUMMARY:
-==37147==     in use at exit: 2,462 bytes in 17 blocks
-==37147==   total heap usage: 22 allocs, 6 frees, 2,606 bytes allocated
-==37147== 
-==37147== 8 bytes in 1 blocks are still reachable in loss record 1 of 17
-==37147==    at 0x4846828: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
-==37147==    by 0x10A77B: allocate_dynamic_memory (memory.c:10)
-==37147==    by 0x10988E: create_dynamic_memory_structs (main.c:131)
-==37147==    by 0x1094BF: main (main.c:36)
-==37147== 
-==37147== 16 bytes in 1 blocks are still reachable in loss record 2 of 17
-==37147==    at 0x4846828: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
-==37147==    by 0x10A77B: allocate_dynamic_memory (memory.c:10)
-==37147==    by 0x1098A9: create_dynamic_memory_structs (main.c:132)
-==37147==    by 0x1094BF: main (main.c:36)
-==37147== 
-==37147== 17 bytes in 1 blocks are definitely lost in loss record 3 of 17
-==37147==    at 0x4846828: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
-==37147==    by 0x491535E: strdup (strdup.c:42)
-==37147==    by 0x10A851: create_shared_memory (memory.c:26)
-==37147==    by 0x109A28: create_shared_memory_structs (main.c:149)
-==37147==    by 0x1094D2: main (main.c:37)
-==37147== 
-==37147== 18 bytes in 1 blocks are definitely lost in loss record 4 of 17
-==37147==    at 0x4846828: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
-==37147==    by 0x491535E: strdup (strdup.c:42)
-==37147==    by 0x10A851: create_shared_memory (memory.c:26)
-==37147==    by 0x109A44: create_shared_memory_structs (main.c:150)
-==37147==    by 0x1094D2: main (main.c:37)
-==37147== 
-==37147== 22 bytes in 1 blocks are definitely lost in loss record 5 of 17
-==37147==    at 0x4846828: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
-==37147==    by 0x491535E: strdup (strdup.c:42)
-==37147==    by 0x10A851: create_shared_memory (memory.c:26)
-==37147==    by 0x1099DE: create_shared_memory_structs (main.c:146)
-==37147==    by 0x1094D2: main (main.c:37)
-==37147== 
-==37147== 22 bytes in 1 blocks are definitely lost in loss record 6 of 17
-==37147==    at 0x4846828: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
-==37147==    by 0x491535E: strdup (strdup.c:42)
-==37147==    by 0x10A851: create_shared_memory (memory.c:26)
-==37147==    by 0x109A03: create_shared_memory_structs (main.c:147)
-==37147==    by 0x1094D2: main (main.c:37)
-==37147== 
-==37147== 24 bytes in 1 blocks are still reachable in loss record 7 of 17
-==37147==    at 0x4846828: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
-==37147==    by 0x10A77B: allocate_dynamic_memory (memory.c:10)
-==37147==    by 0x109493: main (main.c:32)
-==37147== 
-==37147== 25 bytes in 1 blocks are definitely lost in loss record 8 of 17
-==37147==    at 0x4846828: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
-==37147==    by 0x491535E: strdup (strdup.c:42)
-==37147==    by 0x10A851: create_shared_memory (memory.c:26)
-==37147==    by 0x10991B: create_shared_memory_structs (main.c:138)
-==37147==    by 0x1094D2: main (main.c:37)
-==37147== 
-==37147== 25 bytes in 1 blocks are definitely lost in loss record 9 of 17
-==37147==    at 0x4846828: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
-==37147==    by 0x491535E: strdup (strdup.c:42)
-==37147==    by 0x10A851: create_shared_memory (memory.c:26)
-==37147==    by 0x1099BE: create_shared_memory_structs (main.c:144)
-==37147==    by 0x1094D2: main (main.c:37)
-==37147== 
-==37147== 28 bytes in 1 blocks are definitely lost in loss record 10 of 17
-==37147==    at 0x4846828: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
-==37147==    by 0x491535E: strdup (strdup.c:42)
-==37147==    by 0x10A851: create_shared_memory (memory.c:26)
-==37147==    by 0x1098EE: create_shared_memory_structs (main.c:137)
-==37147==    by 0x1094D2: main (main.c:37)
-==37147== 
-==37147== 28 bytes in 1 blocks are definitely lost in loss record 11 of 17
-==37147==    at 0x4846828: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
-==37147==    by 0x491535E: strdup (strdup.c:42)
-==37147==    by 0x10A851: create_shared_memory (memory.c:26)
-==37147==    by 0x109967: create_shared_memory_structs (main.c:141)
-==37147==    by 0x1094D2: main (main.c:37)
-==37147== 
-==37147== 28 bytes in 1 blocks are definitely lost in loss record 12 of 17
-==37147==    at 0x4846828: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
-==37147==    by 0x491535E: strdup (strdup.c:42)
-==37147==    by 0x10A851: create_shared_memory (memory.c:26)
-==37147==    by 0x10998F: create_shared_memory_structs (main.c:143)
-==37147==    by 0x1094D2: main (main.c:37)
-==37147== 
-==37147== 31 bytes in 1 blocks are definitely lost in loss record 13 of 17
-==37147==    at 0x4846828: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
-==37147==    by 0x491535E: strdup (strdup.c:42)
-==37147==    by 0x10A851: create_shared_memory (memory.c:26)
-==37147==    by 0x109943: create_shared_memory_structs (main.c:140)
-==37147==    by 0x1094D2: main (main.c:37)
-==37147== 
-==37147== 50 bytes in 1 blocks are still reachable in loss record 14 of 17
-==37147==    at 0x4846828: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
-==37147==    by 0x109E52: user_interaction (main.c:232)
-==37147==    by 0x1094F8: main (main.c:41)
-==37147== 
-==37147== 72 bytes in 1 blocks are still reachable in loss record 15 of 17
-==37147==    at 0x4846828: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
-==37147==    by 0x10A77B: allocate_dynamic_memory (memory.c:10)
-==37147==    by 0x109485: main (main.c:31)
-==37147== 
-==37147== 1,024 bytes in 1 blocks are still reachable in loss record 16 of 17
-==37147==    at 0x4846828: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
-==37147==    by 0x48E61B4: _IO_file_doallocate (filedoalloc.c:101)
-==37147==    by 0x48F6523: _IO_doallocbuf (genops.c:347)
-==37147==    by 0x48F3F8F: _IO_file_overflow@@GLIBC_2.2.5 (fileops.c:745)
-==37147==    by 0x48F4AAE: _IO_new_file_xsputn (fileops.c:1244)
-==37147==    by 0x48F4AAE: _IO_file_xsputn@@GLIBC_2.2.5 (fileops.c:1197)
-==37147==    by 0x48C1CC8: __printf_buffer_flush_to_file (printf_buffer_to_file.c:59)
-==37147==    by 0x48C1CC8: __printf_buffer_to_file_done (printf_buffer_to_file.c:120)
-==37147==    by 0x48CC742: __vfprintf_internal (vfprintf-internal.c:1545)
-==37147==    by 0x48C11B2: printf (printf.c:33)
-==37147==    by 0x10973B: main_args (main.c:112)
-==37147==    by 0x1094AC: main (main.c:35)
-==37147== 
-==37147== 1,024 bytes in 1 blocks are still reachable in loss record 17 of 17
-==37147==    at 0x4846828: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
-==37147==    by 0x48E61B4: _IO_file_doallocate (filedoalloc.c:101)
-==37147==    by 0x48F6523: _IO_doallocbuf (genops.c:347)
-==37147==    by 0x48F3883: _IO_file_underflow@@GLIBC_2.2.5 (fileops.c:486)
-==37147==    by 0x48F65D1: _IO_default_uflow (genops.c:362)
-==37147==    by 0x48CD1C3: __vfscanf_internal (vfscanf-internal.c:676)
-==37147==    by 0x48C0EC5: __isoc99_scanf (isoc99_scanf.c:30)
-==37147==    by 0x109E8C: user_interaction (main.c:234)
-==37147==    by 0x1094F8: main (main.c:41)
-==37147== 
-==37147== LEAK SUMMARY:
-==37147==    definitely lost: 244 bytes in 10 blocks
-==37147==    indirectly lost: 0 bytes in 0 blocks
-==37147==      possibly lost: 0 bytes in 0 blocks
-==37147==    still reachable: 2,218 bytes in 7 blocks
-==37147==         suppressed: 0 bytes in 0 blocks
-==37147== 
-==37147== For lists of detected and suppressed errors, rerun with: -s
-==37147== ERROR SUMMARY: 13 errors from 13 contexts (suppressed: 0 from 0)
+==61315== Memcheck, a memory error detector
+==61315== Copyright (C) 2002-2022, and GNU GPL'd, by Julian Seward et al.
+==61315== Using Valgrind-3.22.0 and LibVEX; rerun with -h for copyright info
+==61315== Command: ./bin/SOchain 200 3 1 5 10
+==61315== Parent PID: 61282
+==61315== 
+==61323== 
+==61323== HEAP SUMMARY:
+==61323==     in use at exit: 112 bytes in 4 blocks
+==61323==   total heap usage: 5 allocs, 1 frees, 1,136 bytes allocated
+==61323== 
+==61322== 
+==61322== HEAP SUMMARY:
+==61322==     in use at exit: 112 bytes in 4 blocks
+==61322==   total heap usage: 5 allocs, 1 frees, 1,136 bytes allocated
+==61322== 
+==61323== 4 bytes in 1 blocks are still reachable in loss record 1 of 4
+==61323==    at 0x4846828: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==61323==    by 0x10A89C: allocate_dynamic_memory (memory.c:10)
+==61323==    by 0x109829: create_dynamic_memory_structs (main.c:134)
+==61323==    by 0x10943F: main (main.c:36)
+==61323== 
+==61323== 12 bytes in 1 blocks are still reachable in loss record 2 of 4
+==61323==    at 0x4846828: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==61323==    by 0x10A89C: allocate_dynamic_memory (memory.c:10)
+==61322== 4 bytes in 1 blocks are still reachable in loss record 1 of 4
+==61323==    by 0x10980E: create_dynamic_memory_structs (main.c:133)
+==61323==    by 0x10943F: main (main.c:36)
+==61323== 
+==61322==    at 0x4846828: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==61323== 24 bytes in 1 blocks are still reachable in loss record 3 of 4
+==61322==    by 0x10A89C: allocate_dynamic_memory (memory.c:10)
+==61323==    at 0x4846828: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==61322==    by 0x109829: create_dynamic_memory_structs (main.c:134)
+==61323==    by 0x10A89C: allocate_dynamic_memory (memory.c:10)
+==61322==    by 0x10943F: main (main.c:36)
+==61323==    by 0x109413: main (main.c:32)
+==61322== 
+==61323== 
+==61323== 72 bytes in 1 blocks are still reachable in loss record 4 of 4
+==61322== 12 bytes in 1 blocks are still reachable in loss record 2 of 4
+==61323==    at 0x4846828: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==61322==    at 0x4846828: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==61323==    by 0x10A89C: allocate_dynamic_memory (memory.c:10)
+==61322==    by 0x10A89C: allocate_dynamic_memory (memory.c:10)
+==61323==    by 0x109405: main (main.c:31)
+==61322==    by 0x10980E: create_dynamic_memory_structs (main.c:133)
+==61323== 
+==61322==    by 0x10943F: main (main.c:36)
+==61323== LEAK SUMMARY:
+==61322== 
+==61323==    definitely lost: 0 bytes in 0 blocks
+==61323==    indirectly lost: 0 bytes in 0 blocks
+==61322== 24 bytes in 1 blocks are still reachable in loss record 3 of 4
+==61323==      possibly lost: 0 bytes in 0 blocks
+==61322==    at 0x4846828: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==61323==    still reachable: 112 bytes in 4 blocks
+==61322==    by 0x10A89C: allocate_dynamic_memory (memory.c:10)
+==61323==         suppressed: 0 bytes in 0 blocks
+==61322==    by 0x109413: main (main.c:32)
+==61323== 
+==61322== 
+==61322== 72 bytes in 1 blocks are still reachable in loss record 4 of 4
+==61323== For lists of detected and suppressed errors, rerun with: -s
+==61322==    at 0x4846828: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==61323== ERROR SUMMARY: 0 errors from 0 contexts (suppressed: 0 from 0)
+==61322==    by 0x10A89C: allocate_dynamic_memory (memory.c:10)
+==61322==    by 0x109405: main (main.c:31)
+==61322== 
+==61322== LEAK SUMMARY:
+==61322==    definitely lost: 0 bytes in 0 blocks
+==61322==    indirectly lost: 0 bytes in 0 blocks
+==61322==      possibly lost: 0 bytes in 0 blocks
+==61322==    still reachable: 112 bytes in 4 blocks
+==61322==         suppressed: 0 bytes in 0 blocks
+==61322== 
+==61322== For lists of detected and suppressed errors, rerun with: -s
+==61322== ERROR SUMMARY: 0 errors from 0 contexts (suppressed: 0 from 0)
+==61324== 
+==61324== HEAP SUMMARY:
+==61324==     in use at exit: 112 bytes in 4 blocks
+==61324==   total heap usage: 5 allocs, 1 frees, 1,136 bytes allocated
+==61324== 
+==61324== 4 bytes in 1 blocks are still reachable in loss record 1 of 4
+==61324==    at 0x4846828: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==61324==    by 0x10A89C: allocate_dynamic_memory (memory.c:10)
+==61324==    by 0x109829: create_dynamic_memory_structs (main.c:134)
+==61324==    by 0x10943F: main (main.c:36)
+==61324== 
+==61324== 12 bytes in 1 blocks are still reachable in loss record 2 of 4
+==61324==    at 0x4846828: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==61324==    by 0x10A89C: allocate_dynamic_memory (memory.c:10)
+==61324==    by 0x10980E: create_dynamic_memory_structs (main.c:133)
+==61324==    by 0x10943F: main (main.c:36)
+==61324== 
+==61324== 24 bytes in 1 blocks are still reachable in loss record 3 of 4
+==61324==    at 0x4846828: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==61324==    by 0x10A89C: allocate_dynamic_memory (memory.c:10)
+==61324==    by 0x109413: main (main.c:32)
+==61324== 
+==61324== 72 bytes in 1 blocks are still reachable in loss record 4 of 4
+==61324==    at 0x4846828: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==61324==    by 0x10A89C: allocate_dynamic_memory (memory.c:10)
+==61324==    by 0x109405: main (main.c:31)
+==61324== 
+==61324== LEAK SUMMARY:
+==61324==    definitely lost: 0 bytes in 0 blocks
+==61324==    indirectly lost: 0 bytes in 0 blocks
+==61324==      possibly lost: 0 bytes in 0 blocks
+==61324==    still reachable: 112 bytes in 4 blocks
+==61324==         suppressed: 0 bytes in 0 blocks
+==61324== 
+==61324== For lists of detected and suppressed errors, rerun with: -s
+==61324== ERROR SUMMARY: 0 errors from 0 contexts (suppressed: 0 from 0)
+==61325== 
+==61325== HEAP SUMMARY:
+==61325==     in use at exit: 112 bytes in 4 blocks
+==61325==   total heap usage: 5 allocs, 1 frees, 1,136 bytes allocated
+==61325== 
+==61325== 4 bytes in 1 blocks are still reachable in loss record 1 of 4
+==61325==    at 0x4846828: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==61325==    by 0x10A89C: allocate_dynamic_memory (memory.c:10)
+==61325==    by 0x109829: create_dynamic_memory_structs (main.c:134)
+==61325==    by 0x10943F: main (main.c:36)
+==61325== 
+==61325== 12 bytes in 1 blocks are still reachable in loss record 2 of 4
+==61325==    at 0x4846828: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==61325==    by 0x10A89C: allocate_dynamic_memory (memory.c:10)
+==61325==    by 0x10980E: create_dynamic_memory_structs (main.c:133)
+==61325==    by 0x10943F: main (main.c:36)
+==61325== 
+==61325== 24 bytes in 1 blocks are still reachable in loss record 3 of 4
+==61325==    at 0x4846828: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==61325==    by 0x10A89C: allocate_dynamic_memory (memory.c:10)
+==61325==    by 0x109413: main (main.c:32)
+==61325== 
+==61325== 72 bytes in 1 blocks are still reachable in loss record 4 of 4
+==61325==    at 0x4846828: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==61325==    by 0x10A89C: allocate_dynamic_memory (memory.c:10)
+==61325==    by 0x109405: main (main.c:31)
+==61325== 
+==61325== LEAK SUMMARY:
+==61325==    definitely lost: 0 bytes in 0 blocks
+==61325==    indirectly lost: 0 bytes in 0 blocks
+==61325==      possibly lost: 0 bytes in 0 blocks
+==61325==    still reachable: 112 bytes in 4 blocks
+==61325==         suppressed: 0 bytes in 0 blocks
+==61325== 
+==61325== For lists of detected and suppressed errors, rerun with: -s
+==61325== ERROR SUMMARY: 0 errors from 0 contexts (suppressed: 0 from 0)
+==61315== 
+==61315== HEAP SUMMARY:
+==61315==     in use at exit: 0 bytes in 0 blocks
+==61315==   total heap usage: 8 allocs, 8 frees, 2,168 bytes allocated
+==61315== 
+==61315== All heap blocks were freed -- no leaks are possible
+==61315== 
+==61315== For lists of detected and suppressed errors, rerun with: -s
+==61315== ERROR SUMMARY: 0 errors from 0 contexts (suppressed: 0 from 0)
