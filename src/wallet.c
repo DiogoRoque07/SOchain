@@ -5,15 +5,20 @@ int execute_wallet(int wallet_id, struct info_container* info, struct buffers* b
 {
     int num_transacs = 0;
     while(*info->terminate == 0){
+        // write(1, "\nprocess loop\n", 15);
         wallet_receive_transaction(buffs->buff_main_wallets->buffer, wallet_id, info, buffs);
-        if(buffs->buff_main_wallets->buffer->id == -1)
-            usleep(100000);
+        if(buffs->buff_main_wallets->buffer->id == -1){
+            // write(1, "\ngoing to sleep\n", 17);
+            sleep(1);
+        }
         if (buffs->buff_main_wallets->buffer->id == wallet_id){
             wallet_process_transaction(buffs->buff_main_wallets->buffer, wallet_id, info);
             wallet_send_transaction(buffs->buff_main_wallets->buffer, info, buffs);
             num_transacs++;
         }
     }
+    // printf("\nexiting wallet\n");
+    // write(1, "\nexiting wallet\n", 17);
     return num_transacs;
 }
 
@@ -41,6 +46,7 @@ void wallet_process_transaction(struct transaction* tx, int wallet_id, struct in
 
 void wallet_send_transaction(struct transaction* tx, struct info_container* info, struct buffers* buffs)
 {
+    printf("sending transaction\n");
     if(*info->terminate == 1){
         return;
     }

@@ -1,6 +1,8 @@
 #include <stdio.h>
 #include "../inc/main.h"
 #include "../inc/process.h"
+#include "../inc/wallet.h"
+#include "../inc/server.h"
 #include <stdlib.h>
 #include <unistd.h>
 #include <sys/types.h>
@@ -18,6 +20,10 @@
 #define PINK "\033[35m"
 #define ORANGE "\033[38;5;214m"
 
+// int g_src_id;
+// int g_dest_id;
+// float g_amount;
+
 
 int main(int argc, char *argv[])
 {
@@ -31,7 +37,7 @@ int main(int argc, char *argv[])
     create_shared_memory_structs(info, buffs);
     create_processes(info, buffs);
 
-    printf(BLUE " EU SOU O MAIN: %d" RESET "\n", getpid());
+
     user_interaction(info, buffs);
 
     // release memory before terminating
@@ -97,19 +103,25 @@ void main_args(int argc, char *argv[], struct info_container *info)
 {
     if (check_args(argc, argv) == -1)
     {
-        printf("[Main] Parâmetros incorretos!");
+        printf("[" BLUE"%d" RESET "]" RED " Parâmetros incorretos!\n" RESET, getpid());
+
         deallocate_dynamic_memory(info);
         exit(-1);
     }
 
+    printf(BLUE " EU SOU O MAIN: %d" RESET "\n", getpid());
     if (check_args(argc, argv) == 0)
     {
-        printf("[Main] Parâmetros corretos!");
+        printf("[" BLUE"%d" RESET "]" GREEN " Parâmetros corretos!\n" RESET, getpid());
         info->init_balance = atof(argv[1]);
         info->n_wallets = atoi(argv[2]);
         info->n_servers = atoi(argv[3]);
         info->buffers_size = atoi(argv[4]);
         info->max_txs = atoi(argv[5]);
+
+        
+        printf("[" BLUE "%d" RESET "]" GREEN " init_balance: %.2f, n_wallets: %d, n_servers: %d, buffers_size: %d, max_txs: %d\n" RESET, 
+               getpid(), info->init_balance, info->n_wallets, info->n_servers, info->buffers_size, info->max_txs);
     }
 }
 
@@ -136,7 +148,6 @@ void create_shared_memory_structs(struct info_container *info, struct buffers *b
     
     info->balances = create_shared_memory(ID_SHM_BALANCES, sizeof(int) * info->n_wallets);
     info->terminate = create_shared_memory(ID_SHM_TERMINATE, sizeof(int));
-
 }
 
 void destroy_dynamic_memory_structs(struct info_container *info, struct buffers *buffs)
@@ -173,6 +184,9 @@ void create_processes(struct info_container *info, struct buffers *buffs)
     {
         info->wallets_pids[i] = launch_wallet(i, info, buffs);
     }
+
+    for (int i = 0; i < info->n_wallets; i++)
+        info->balances[i] = info->init_balance;
 
     for (int i = 0; i < info->n_servers; i++){
         info->servers_pids[i] = launch_server(i, info, buffs);
@@ -211,7 +225,8 @@ int user_hash(char op[])
 
 void user_interaction(struct info_container *info, struct buffers *buffs)
 {
-    int tx_counter = -1;
+    int *tx_counter = malloc(sizeof(int));
+    *tx_counter = -1;
     while (1)
     {
         char *input = malloc(50);
@@ -226,35 +241,34 @@ void user_interaction(struct info_container *info, struct buffers *buffs)
 
         switch (user_hash(op))
         {
-        case 1: // "ball" command
+        case 1: // "bal" command
             print_balance(info);
             break;
         case 2: // "trx" command
-            create_transaction(&tx_counter, info, buffs);
+            create_transaction(tx_counter, info, buffs);
             break;
         case 3: // "rcp" command
             receive_receipt(info, buffs);
             break;
         case 4: // "help" command
-            printf("["BLUE "%d" RESET "]" ORANGE" Operações disponíveis:\n"RESET, getpid());
-            printf("["BLUE "%d" RESET "]" ORANGE"  bal id - consultar o saldo da carteira identifcada por id\n"RESET, getpid());
-            printf("["BLUE "%d" RESET "]" ORANGE"  trx src_id dest_id amount - criar uma nova transação\n"RESET, getpid());
-            printf("["BLUE "%d" RESET "]" ORANGE"  rcp id - obter o comprovativo da transação de número id\n"RESET, getpid());
-            printf("["BLUE "%d" RESET "]" ORANGE"  help - imprime a informação sobre as operações disponíveis\n"RESET, getpid());
-            printf("["BLUE "%d" RESET "]" ORANGE"  stat - imprime as estatísticas atuais do SOchain\n"RESET, getpid());
-            printf("["BLUE "%d" RESET "]" ORANGE"  end - termina a execução do SOchain\n"RESET, getpid());
+            help();
             break;
         case 5: // "stat" command
-            print_stat(tx_counter, info);
+            print_stat(*tx_counter, info);
             break;
         case 6: // "end" command
             end_execution(info, buffs);
             break;
         default:
-            printf("[Main] Introduzir operação: [Main] Operação não reconhecida, insira 'help' para assistência.\n");
+            printf("["BLUE "MAIN" RESET "] Introduzir operação: ["BLUE "MAIN" RESET "] Operação:"RED " %s" RESET  " não reconhecida, insira 'help' para assistência.\n", input);
             break;
         }
+        if(input)
+            free(input);
+        if(tx_counter)
+            free(tx_counter);
     }
+    
 }
 
 void write_final_statistics(struct info_container *info)
@@ -295,14 +309,39 @@ void print_balance(struct info_container *info)
 }
 
 // Falta
+// *Cria uma nova transação com os dados inseridos pelo utilizador na linha de
+// *comandos (e que ainda estão no stdin a espera de serem lidos com o scanf
+//* dentro da função), escreve-a no buffer de memória partilhada entre a main
+// *e as carteiras e atualiza o contador de transações criadas tx_counter. Caso
+//* a aplicação já tenha atingido o número máximo de transações permitidas
+//* a função retorna apenas uma mensagem de erro e não cria a nova transação.
+//verificar se é suposto usar variaveis globais
+
 void create_transaction(int *tx_counter, struct info_container *info, struct buffers *buffs)
 {
-    // tx_counter++;
-    // buffs->buff_main_wallets->buffer->src_id;
-    // info->wallets_pids;
-    (void)tx_counter;
-    (void)info;
-    (void)buffs;
+    printf("entered create transaction\n");
+    if (*tx_counter >= info->max_txs) {
+        printf("["BLUE "MAIN" RESET "] Número máximo de transações (%d) atingido. Não é possível criar uma nova transação.\n", info->max_txs);
+        return;
+    }
+    struct transaction tx;// = malloc(sizeof(struct transaction));
+    *tx_counter++;
+    
+    
+    tx.id = *tx_counter;
+    scanf("%d", &tx.src_id);
+    scanf("%d", &tx.dest_id);
+    scanf("%f", &tx.amount);
+
+    if (tx.src_id < 0 || tx.dest_id < 0 || !tx.amount) {
+        printf("[Main] Argumentos insuficientes para criar uma transação. Use: trx src_id dest_id amount\n");
+        // printf("src_id: %d, dest_id: %d, amount: %f", tx.src_id, tx.dest_id, tx.amount);
+        return;
+    }
+
+
+    // buffs->buff_main_wallets->buffer = &tx;
+    write_main_wallets_buffer(buffs->buff_main_wallets, info->buffers_size, &tx);
 }
 // Falta
 void receive_receipt(struct info_container *info, struct buffers *buffs)
@@ -343,11 +382,12 @@ void print_stat(int tx_counter, struct info_container *info)
 
 void help()
 {
-    printf(BLUE "[Main] " RESET GREEN "Operações disponíveis:\n" RESET);
-    printf(BLUE "[Main] " RESET GREEN "bal id - consultar o saldo da carteira identificada por id.\n" RESET);
-    printf(BLUE "[Main] " RESET GREEN "trx src_id dest_id amount - criar uma nova transação.\n" RESET);
-    printf(BLUE "[Main] " RESET GREEN "rcp id - obter o comprovativo da transação de número id.\n" RESET);
-    printf(BLUE "[Main] " RESET GREEN "help - imprime a informação sobre as operações disponíveis.\n" RESET);
-    printf(BLUE "[Main] " RESET GREEN "stat - imprime as estatisticas atuais do sistema SOchain\n" RESET);
-    printf(BLUE "[Main] " RESET GREEN "end - termina a execução do SOchain.\n" RESET);
+    printf("["BLUE "%d" RESET "]" ORANGE"  Operações disponíveis:\n"RESET, getpid());
+    printf("["BLUE "%d" RESET "]" ORANGE"  bal id - consultar o saldo da carteira identifcada por id\n"RESET, getpid());
+    printf("["BLUE "%d" RESET "]" ORANGE"  trx src_id dest_id amount - criar uma nova transação\n"RESET, getpid());
+    printf("["BLUE "%d" RESET "]" ORANGE"  rcp id - obter o comprovativo da transação de número id\n"RESET, getpid());
+    printf("["BLUE "%d" RESET "]" ORANGE"  help - imprime a informação sobre as operações disponíveis\n"RESET, getpid());
+    printf("["BLUE "%d" RESET "]" ORANGE"  stat - imprime as estatísticas atuais do SOchain\n"RESET, getpid());
+    printf("["BLUE "%d" RESET "]" ORANGE"  end - termina a execução do SOchain\n"RESET, getpid());
+
 }

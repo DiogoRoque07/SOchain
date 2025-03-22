@@ -46,7 +46,7 @@ void write_main_wallets_buffer(struct ra_buffer* buffer, int buffer_size, struct
     int found = 0;
     for(i = 0; i < buffer_size && found == 0; i++){
         if(!buffer->ptrs[i]){
-            buffer->buffer[i] = *tx;
+            buffer->buffer = tx;
             buffer->ptrs[i] = 1;
             found = 1;
         }
@@ -62,7 +62,7 @@ void write_wallets_servers_buffer(struct circ_buffer* buffer, int buffer_size, s
     if (next == buffer->ptrs->out)
         return;
 
-    buffer->buffer[buffer->ptrs->in] = *tx;
+    buffer->buffer = tx;
     buffer->ptrs->in = next;
 }
 
@@ -83,10 +83,11 @@ void read_main_wallets_buffer(struct ra_buffer* buffer, int wallet_id, int buffe
 {
     int i;
     int found = 0; 
-
+    // printf("\nreading buffer\n");
+    // write(1, "\nreading buffer\n",17);
     for (i = 0; i < buffer_size && found == 0; i++) {
         if (buffer->ptrs[i] == 1 && buffer->buffer[i].src_id == wallet_id) {
-            *tx = buffer->buffer[i];
+            // *tx = buffer->buffer[i];
             buffer->ptrs[i] = 0;
             found = 1;
         }

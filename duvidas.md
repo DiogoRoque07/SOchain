@@ -3,7 +3,7 @@
 ## When to Use Shared Memory
 - **Question**: Should shared memory be used for the server and wallets (e.g., dynamic for the server and shared for the wallets)?
     - **Answer (omeir)**: Use shared memory only in `buffer_wallet_server`.
-    - **Answer (prof)**: *(No response provided)*
+    - **Answer (prof)**: *View table below*
 
 ## Process Creation
 - **Question**: In the `create_process` function, is it necessary to execute the created processes (e.g., using `execl`, `execve`, or another `exec` function), or is it enough to just create them?
@@ -12,7 +12,7 @@
 
 ## Transaction Counting
 - **Question**: In the professor's program, does a failed transaction count toward the total number of transactions? Is this expected?
-    - *(No response provided)*
+    - *yes, a failed transaction should count*
 
 ## Missing Help Information
 - **Observation**: The professor's program help does not include the `stat` command.
@@ -81,6 +81,11 @@
 - Arrays de estatísticas (`info->wallets_stats`, `info->servers_stats` se apenas usados pela Main).
 
 
+# Como limpar a memória dos buffers alocados no `main`?
+A função `main_args` só recebe o parâmetro `info`. Como é que é suposto limpar a memória dos buffers alocados no `main`?
 
+# Como buscar a informação de uma transação do user interaction 
+Nos criamos variaveis globais que guardam essa informação e que podem depois ser usados no create transaction
 
-# Iniciar bem as variaveis, balances etc
+# Criação de processos
+Nos criamos os processos a partir do main (um fork por processos de server e wallet), é suposto arranjaremos uma forma mais eficiente?

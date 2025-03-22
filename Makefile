@@ -4,8 +4,9 @@
 
 NAME        := SOchain
 CC          := gcc
-FLAGS       := -Wall -Wextra -Werror -g
+FLAGS       := -g #-Wall -Wextra -Werror 
 RUN			:= ./bin/$(NAME)
+RUN_ARGS    := 200 2 4 5 10 
 ################################################################################
 #                                 PROGRAM'S SRCS                               #
 ################################################################################
@@ -43,6 +44,7 @@ clean:
 			@ echo "$(RED)Deleting $(CYAN)$(NAME) $(CLR_RMV)objs ✔️"
 
 fclean:     clean
+			clear
 			@${RM} ./bin/${NAME}
 			@ echo "$(RED)Deleting $(CYAN)$(NAME) $(CLR_RMV) ✔️"
 
@@ -53,18 +55,15 @@ run: all
 	@ echo "$(BLUE)compilação de $(CYAN)$(NAME) $(GREEN) feita $(CLR_RMV) ✔️"
 	@# @sleep 2
 	@ # clear
-	@$(RUN) 200 2 5 10 10 
+	@$(RUN) $(RUN_ARGS) 
 
 mem: all
-	@valgrind --leak-check=full --show-leak-types=all --log-file=val.log ./bin/$(NAME)
+	@valgrind --leak-check=full --show-leak-kinds=all --log-file=val.log $(RUN) $(RUN_ARGS)
 
 debug: all
-	@gdbtui --args $(RUN) 200 2 4 5 10 
+	@gdbtui --args $(RUN) $(RUN_ARGS)
 
-testsInstall:
-	sudo apt-get install libcunit1 libcunit1-doc libcunit1-dev
-
-test: src/test_main.c obj/main.o obj/memory.o obj/process.o obj/server.o
-	gcc -o test src/test_main.c obj/main.o obj/memory.o obj/process.o obj/server.o -lcunit
+install_memTest:
+	@sudo apt install valgrind
 
 .PHONY:     all clean fclean re

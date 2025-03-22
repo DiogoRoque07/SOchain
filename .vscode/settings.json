@@ -3,6 +3,7 @@
         "main.h": "c",
         "memory.h": "c",
         "unistd.h": "c",
-        "process.h": "c"
+        "process.h": "c",
+        "types.h": "c"
     }
 }

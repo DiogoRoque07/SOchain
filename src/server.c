@@ -10,7 +10,7 @@ int execute_server(int server_id, struct info_container *info, struct buffers *b
     {
         server_receive_transaction(buffs->buff_wallets_servers->buffer, info, buffs);
         if(buffs->buff_wallets_servers->buffer->id == -1){
-            usleep(100000);
+            usleep(10000);
         }
         if (server_id == buffs->buff_wallets_servers->buffer->id)
         {
@@ -35,7 +35,7 @@ void server_process_transaction(struct transaction* tx, int server_id, struct in
        || info->balances[tx->src_id] >= tx->amount){ /*verificar tbm a assinatura da carteira de origem (src wallet)*/ 
         return;
     }
-    
+    printf("exchanging cash\n");
     info->balances[tx->src_id] -= tx->amount;
     info->balances[tx->dest_id] += tx->amount;
     tx->server_signature = server_id;
