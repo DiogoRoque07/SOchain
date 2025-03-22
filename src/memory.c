@@ -13,6 +13,7 @@ void* allocate_dynamic_memory(int size)
 }
 
 //MELHORAR!!
+
 void* create_shared_memory(char* name, int size)
 {
     int protection = PROT_READ | PROT_WRITE;
@@ -21,7 +22,7 @@ void* create_shared_memory(char* name, int size)
     // char temp_name[256];
     // snprintf(temp_name, sizeof(temp_name), "%s_%u", name, getuid());
     // name = strdup(temp_name);
-    printf("shared memory created with following name: %s\n", name);
+    // printf("shared memory created with following name: %s\n", name);
     void * temp = mmap(NULL, size, protection, visibility, -1, 0);
     if (temp == MAP_FAILED) {
         printf("mmap failed for: %s\n", name);

@@ -243,7 +243,7 @@ void user_interaction(struct info_container *info, struct buffers *buffs)
     *tx_counter = -1;
     while (1)
     {
-        char *input = malloc(sizeof(int));
+        char *input = malloc(sizeof(char *));
         printf("[" BLUE "%d" RESET"] Introduzir operação: " PINK, getpid());
         scanf( "%s", input);
         printf(RESET"\n");
