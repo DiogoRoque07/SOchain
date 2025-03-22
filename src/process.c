@@ -19,6 +19,7 @@ int launch_wallet(int wallet_id, struct info_container *info, struct buffers *bu
     else if (pid == 0)
     {   
         execute_wallet(wallet_id, info, buffs);
+        destroy_dynamic_memory_structs(info, buffs);
         exit(0);
     }
     else
@@ -40,6 +41,7 @@ int launch_server(int server_id, struct info_container *info, struct buffers *bu
     else if (pid == 0)
     {
         execute_server(server_id, info, buffs);
+        destroy_dynamic_memory_structs(info, buffs);
         exit(0);
     }
     else

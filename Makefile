@@ -4,7 +4,7 @@
 
 NAME        := SOchain
 CC          := gcc
-FLAGS       := -g #-Wall -Wextra -Werror 
+FLAGS       := -g -Wall -Wextra -Werror 
 RUN			:= ./bin/$(NAME)
 RUN_ARGS    := 200 3 1 5 10 
 ################################################################################

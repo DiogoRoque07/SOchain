@@ -34,8 +34,10 @@ void* create_shared_memory(char* name, int size)
 
 void deallocate_dynamic_memory(void* ptr)
 {
-    if (ptr)
+    if (ptr){
         free(ptr);
+        ptr = NULL;
+    }
 }
 
 void destroy_shared_memory(char* name, void* ptr, int size)
@@ -64,15 +66,12 @@ void write_wallets_servers_buffer(struct circ_buffer* buffer, int buffer_size, s
     //check for full buff(circular): if the position next to in is out or (in->next == out)
     //use buffer size instead of one, (((in->next) % buffersize) == out)
     int next = (buffer->ptrs->in + 1 ) % buffer_size;
-    int in_pos = buffer->ptrs->in;
+    // int in_pos = buffer->ptrs->in;
     int out_pos = buffer->ptrs->out;
 
     if (next == buffer->ptrs->out)
         return;
-    
-    
-        
-        
+ 
     buffer->buffer[out_pos] = *tx;
     buffer->ptrs->in = next;
 

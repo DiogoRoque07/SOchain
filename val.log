@@ -1,159 +1,51 @@
-==61315== Memcheck, a memory error detector
-==61315== Copyright (C) 2002-2022, and GNU GPL'd, by Julian Seward et al.
-==61315== Using Valgrind-3.22.0 and LibVEX; rerun with -h for copyright info
-==61315== Command: ./bin/SOchain 200 3 1 5 10
-==61315== Parent PID: 61282
-==61315== 
-==61323== 
-==61323== HEAP SUMMARY:
-==61323==     in use at exit: 112 bytes in 4 blocks
-==61323==   total heap usage: 5 allocs, 1 frees, 1,136 bytes allocated
-==61323== 
-==61322== 
-==61322== HEAP SUMMARY:
-==61322==     in use at exit: 112 bytes in 4 blocks
-==61322==   total heap usage: 5 allocs, 1 frees, 1,136 bytes allocated
-==61322== 
-==61323== 4 bytes in 1 blocks are still reachable in loss record 1 of 4
-==61323==    at 0x4846828: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
-==61323==    by 0x10A89C: allocate_dynamic_memory (memory.c:10)
-==61323==    by 0x109829: create_dynamic_memory_structs (main.c:134)
-==61323==    by 0x10943F: main (main.c:36)
-==61323== 
-==61323== 12 bytes in 1 blocks are still reachable in loss record 2 of 4
-==61323==    at 0x4846828: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
-==61323==    by 0x10A89C: allocate_dynamic_memory (memory.c:10)
-==61322== 4 bytes in 1 blocks are still reachable in loss record 1 of 4
-==61323==    by 0x10980E: create_dynamic_memory_structs (main.c:133)
-==61323==    by 0x10943F: main (main.c:36)
-==61323== 
-==61322==    at 0x4846828: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
-==61323== 24 bytes in 1 blocks are still reachable in loss record 3 of 4
-==61322==    by 0x10A89C: allocate_dynamic_memory (memory.c:10)
-==61323==    at 0x4846828: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
-==61322==    by 0x109829: create_dynamic_memory_structs (main.c:134)
-==61323==    by 0x10A89C: allocate_dynamic_memory (memory.c:10)
-==61322==    by 0x10943F: main (main.c:36)
-==61323==    by 0x109413: main (main.c:32)
-==61322== 
-==61323== 
-==61323== 72 bytes in 1 blocks are still reachable in loss record 4 of 4
-==61322== 12 bytes in 1 blocks are still reachable in loss record 2 of 4
-==61323==    at 0x4846828: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
-==61322==    at 0x4846828: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
-==61323==    by 0x10A89C: allocate_dynamic_memory (memory.c:10)
-==61322==    by 0x10A89C: allocate_dynamic_memory (memory.c:10)
-==61323==    by 0x109405: main (main.c:31)
-==61322==    by 0x10980E: create_dynamic_memory_structs (main.c:133)
-==61323== 
-==61322==    by 0x10943F: main (main.c:36)
-==61323== LEAK SUMMARY:
-==61322== 
-==61323==    definitely lost: 0 bytes in 0 blocks
-==61323==    indirectly lost: 0 bytes in 0 blocks
-==61322== 24 bytes in 1 blocks are still reachable in loss record 3 of 4
-==61323==      possibly lost: 0 bytes in 0 blocks
-==61322==    at 0x4846828: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
-==61323==    still reachable: 112 bytes in 4 blocks
-==61322==    by 0x10A89C: allocate_dynamic_memory (memory.c:10)
-==61323==         suppressed: 0 bytes in 0 blocks
-==61322==    by 0x109413: main (main.c:32)
-==61323== 
-==61322== 
-==61322== 72 bytes in 1 blocks are still reachable in loss record 4 of 4
-==61323== For lists of detected and suppressed errors, rerun with: -s
-==61322==    at 0x4846828: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
-==61323== ERROR SUMMARY: 0 errors from 0 contexts (suppressed: 0 from 0)
-==61322==    by 0x10A89C: allocate_dynamic_memory (memory.c:10)
-==61322==    by 0x109405: main (main.c:31)
-==61322== 
-==61322== LEAK SUMMARY:
-==61322==    definitely lost: 0 bytes in 0 blocks
-==61322==    indirectly lost: 0 bytes in 0 blocks
-==61322==      possibly lost: 0 bytes in 0 blocks
-==61322==    still reachable: 112 bytes in 4 blocks
-==61322==         suppressed: 0 bytes in 0 blocks
-==61322== 
-==61322== For lists of detected and suppressed errors, rerun with: -s
-==61322== ERROR SUMMARY: 0 errors from 0 contexts (suppressed: 0 from 0)
-==61324== 
-==61324== HEAP SUMMARY:
-==61324==     in use at exit: 112 bytes in 4 blocks
-==61324==   total heap usage: 5 allocs, 1 frees, 1,136 bytes allocated
-==61324== 
-==61324== 4 bytes in 1 blocks are still reachable in loss record 1 of 4
-==61324==    at 0x4846828: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
-==61324==    by 0x10A89C: allocate_dynamic_memory (memory.c:10)
-==61324==    by 0x109829: create_dynamic_memory_structs (main.c:134)
-==61324==    by 0x10943F: main (main.c:36)
-==61324== 
-==61324== 12 bytes in 1 blocks are still reachable in loss record 2 of 4
-==61324==    at 0x4846828: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
-==61324==    by 0x10A89C: allocate_dynamic_memory (memory.c:10)
-==61324==    by 0x10980E: create_dynamic_memory_structs (main.c:133)
-==61324==    by 0x10943F: main (main.c:36)
-==61324== 
-==61324== 24 bytes in 1 blocks are still reachable in loss record 3 of 4
-==61324==    at 0x4846828: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
-==61324==    by 0x10A89C: allocate_dynamic_memory (memory.c:10)
-==61324==    by 0x109413: main (main.c:32)
-==61324== 
-==61324== 72 bytes in 1 blocks are still reachable in loss record 4 of 4
-==61324==    at 0x4846828: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
-==61324==    by 0x10A89C: allocate_dynamic_memory (memory.c:10)
-==61324==    by 0x109405: main (main.c:31)
-==61324== 
-==61324== LEAK SUMMARY:
-==61324==    definitely lost: 0 bytes in 0 blocks
-==61324==    indirectly lost: 0 bytes in 0 blocks
-==61324==      possibly lost: 0 bytes in 0 blocks
-==61324==    still reachable: 112 bytes in 4 blocks
-==61324==         suppressed: 0 bytes in 0 blocks
-==61324== 
-==61324== For lists of detected and suppressed errors, rerun with: -s
-==61324== ERROR SUMMARY: 0 errors from 0 contexts (suppressed: 0 from 0)
-==61325== 
-==61325== HEAP SUMMARY:
-==61325==     in use at exit: 112 bytes in 4 blocks
-==61325==   total heap usage: 5 allocs, 1 frees, 1,136 bytes allocated
-==61325== 
-==61325== 4 bytes in 1 blocks are still reachable in loss record 1 of 4
-==61325==    at 0x4846828: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
-==61325==    by 0x10A89C: allocate_dynamic_memory (memory.c:10)
-==61325==    by 0x109829: create_dynamic_memory_structs (main.c:134)
-==61325==    by 0x10943F: main (main.c:36)
-==61325== 
-==61325== 12 bytes in 1 blocks are still reachable in loss record 2 of 4
-==61325==    at 0x4846828: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
-==61325==    by 0x10A89C: allocate_dynamic_memory (memory.c:10)
-==61325==    by 0x10980E: create_dynamic_memory_structs (main.c:133)
-==61325==    by 0x10943F: main (main.c:36)
-==61325== 
-==61325== 24 bytes in 1 blocks are still reachable in loss record 3 of 4
-==61325==    at 0x4846828: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
-==61325==    by 0x10A89C: allocate_dynamic_memory (memory.c:10)
-==61325==    by 0x109413: main (main.c:32)
-==61325== 
-==61325== 72 bytes in 1 blocks are still reachable in loss record 4 of 4
-==61325==    at 0x4846828: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
-==61325==    by 0x10A89C: allocate_dynamic_memory (memory.c:10)
-==61325==    by 0x109405: main (main.c:31)
-==61325== 
-==61325== LEAK SUMMARY:
-==61325==    definitely lost: 0 bytes in 0 blocks
-==61325==    indirectly lost: 0 bytes in 0 blocks
-==61325==      possibly lost: 0 bytes in 0 blocks
-==61325==    still reachable: 112 bytes in 4 blocks
-==61325==         suppressed: 0 bytes in 0 blocks
-==61325== 
-==61325== For lists of detected and suppressed errors, rerun with: -s
-==61325== ERROR SUMMARY: 0 errors from 0 contexts (suppressed: 0 from 0)
-==61315== 
-==61315== HEAP SUMMARY:
-==61315==     in use at exit: 0 bytes in 0 blocks
-==61315==   total heap usage: 8 allocs, 8 frees, 2,168 bytes allocated
-==61315== 
-==61315== All heap blocks were freed -- no leaks are possible
-==61315== 
-==61315== For lists of detected and suppressed errors, rerun with: -s
-==61315== ERROR SUMMARY: 0 errors from 0 contexts (suppressed: 0 from 0)
+==73463== Memcheck, a memory error detector
+==73463== Copyright (C) 2002-2022, and GNU GPL'd, by Julian Seward et al.
+==73463== Using Valgrind-3.22.0 and LibVEX; rerun with -h for copyright info
+==73463== Command: ./bin/SOchain 200 3 1 5 10
+==73463== Parent PID: 73430
+==73463== 
+==73472== 
+==73472== HEAP SUMMARY:
+==73472==     in use at exit: 0 bytes in 0 blocks
+==73472==   total heap usage: 5 allocs, 5 frees, 1,136 bytes allocated
+==73472== 
+==73472== All heap blocks were freed -- no leaks are possible
+==73472== 
+==73472== For lists of detected and suppressed errors, rerun with: -s
+==73472== ERROR SUMMARY: 0 errors from 0 contexts (suppressed: 0 from 0)
+==73473== 
+==73473== HEAP SUMMARY:
+==73473==     in use at exit: 0 bytes in 0 blocks
+==73473==   total heap usage: 5 allocs, 5 frees, 1,136 bytes allocated
+==73473== 
+==73473== All heap blocks were freed -- no leaks are possible
+==73473== 
+==73473== For lists of detected and suppressed errors, rerun with: -s
+==73473== ERROR SUMMARY: 0 errors from 0 contexts (suppressed: 0 from 0)
+==73471== 
+==73471== HEAP SUMMARY:
+==73471==     in use at exit: 0 bytes in 0 blocks
+==73471==   total heap usage: 5 allocs, 5 frees, 1,136 bytes allocated
+==73471== 
+==73471== All heap blocks were freed -- no leaks are possible
+==73471== 
+==73471== For lists of detected and suppressed errors, rerun with: -s
+==73471== ERROR SUMMARY: 0 errors from 0 contexts (suppressed: 0 from 0)
+==73470== 
+==73470== HEAP SUMMARY:
+==73470==     in use at exit: 0 bytes in 0 blocks
+==73470==   total heap usage: 5 allocs, 5 frees, 1,136 bytes allocated
+==73470== 
+==73470== All heap blocks were freed -- no leaks are possible
+==73470== 
+==73470== For lists of detected and suppressed errors, rerun with: -s
+==73470== ERROR SUMMARY: 0 errors from 0 contexts (suppressed: 0 from 0)
+==73463== 
+==73463== HEAP SUMMARY:
+==73463==     in use at exit: 0 bytes in 0 blocks
+==73463==   total heap usage: 8 allocs, 8 frees, 2,168 bytes allocated
+==73463== 
+==73463== All heap blocks were freed -- no leaks are possible
+==73463== 
+==73463== For lists of detected and suppressed errors, rerun with: -s
+==73463== ERROR SUMMARY: 0 errors from 0 contexts (suppressed: 0 from 0)

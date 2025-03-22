@@ -160,9 +160,11 @@ void create_shared_memory_structs(struct info_container *info, struct buffers *b
 void destroy_dynamic_memory_structs(struct info_container *info, struct buffers *buffs)
 {
     deallocate_dynamic_memory(info->servers_pids);
-    deallocate_dynamic_memory(info->wallets_pids);
 
+    deallocate_dynamic_memory(info->wallets_pids);
+    
     deallocate_dynamic_memory(info);
+
     deallocate_dynamic_memory(buffs);
 
 }
