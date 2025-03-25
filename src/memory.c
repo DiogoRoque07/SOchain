@@ -5,36 +5,57 @@
 #include <string.h>
 #include <stdio.h>
 
-void* allocate_dynamic_memory(int size)
+#include <sys/types.h>
+#include <sys/stat.h>
+#include <fcntl.h>
+
+void *allocate_dynamic_memory(int size)
 {
-    void* ptr = malloc(size);
+    void *ptr = malloc(size);
     memset(ptr, 0, size);
     return ptr;
 }
 
-//MELHORAR!!
+// MELHORAR!!
 
-void* create_shared_memory(char* name, int size)
+void *create_shared_memory(char *name, int size)
 {
-    int protection = PROT_READ | PROT_WRITE;
-    int visibility = MAP_SHARED | MAP_ANONYMOUS;
-    
-    // char temp_name[256];
-    // snprintf(temp_name, sizeof(temp_name), "%s_%u", name, getuid());
+    char temp_name[256];
+    snprintf(temp_name, sizeof(temp_name), "%s_%u", name, getuid());
     // name = strdup(temp_name);
-    // printf("shared memory created with following name: %s\n", name);
-    void * temp = mmap(NULL, size, protection, visibility, -1, 0);
-    if (temp == MAP_FAILED)
-    {
-        printf("mmap failed for: %s\n", name);
-        free(name);
+    printf("shared memory created with following name: %s\n", temp_name);
+    int fd = shm_open(temp_name, O_RDWR | O_CREAT, S_IRUSR | S_IWUSR);
+    if (fd == -1){
+        printf("shm_open failed for %s", temp_name);
         return NULL;
     }
-    memset(temp, 0, size);
-    return temp;
+    if (ftruncate(fd, size) == -1)
+    {
+        printf("ftruncate failed");
+        return NULL;
+    }
+    void* ptr = mmap(0, sizeof(int), PROT_READ | PROT_WRITE, MAP_SHARED, fd, 0);
+    if (ptr == MAP_FAILED)
+    {
+        printf("shm-mmap");
+        return NULL;
+    }
+    memset(ptr, 0, size);
+    // int protection = PROT_READ | PROT_WRITE;
+    // int visibility = MAP_SHARED | MAP_ANONYMOUS;
+
+    // void * temp = mmap(NULL, size, protection, visibility, -1, 0);
+    // if (temp == MAP_FAILED)
+    // {
+    //     printf("mmap failed for: %s\n", name);
+    //     free(name);
+    //     return NULL;
+    // }
+    // memset(temp, 0, size);
+    return ptr;
 }
 
-void deallocate_dynamic_memory(void* ptr)
+void deallocate_dynamic_memory(void *ptr)
 {
     if (ptr)
     {
@@ -43,21 +64,21 @@ void deallocate_dynamic_memory(void* ptr)
     }
 }
 
-void destroy_shared_memory(char* name, void* ptr, int size)
+void destroy_shared_memory(char *name, void *ptr, int size)
 {
-    if(ptr)
-        munmap(ptr, size);//deallocate shared mem
+    if (ptr)
+        munmap(ptr, size); // deallocate shared mem
     shm_unlink(name);
 }
 
-//Escreve uma transação no buffer de memória partilhada entre a Main e as carteiras.
-void write_main_wallets_buffer(struct ra_buffer* buffer, int buffer_size, struct transaction* tx)
+// Escreve uma transação no buffer de memória partilhada entre a Main e as carteiras.
+void write_main_wallets_buffer(struct ra_buffer *buffer, int buffer_size, struct transaction *tx)
 {
     int i;
     int found = 0;
-    for(i = 0; i < buffer_size && found == 0; i++)
+    for (i = 0; i < buffer_size && found == 0; i++)
     {
-        if(!buffer->ptrs[i])
+        if (!buffer->ptrs[i])
         {
             buffer->buffer[i] = *tx;
             buffer->ptrs[i] = 1;
@@ -66,11 +87,11 @@ void write_main_wallets_buffer(struct ra_buffer* buffer, int buffer_size, struct
     }
 }
 
-void write_wallets_servers_buffer(struct circ_buffer* buffer, int buffer_size, struct transaction* tx)
+void write_wallets_servers_buffer(struct circ_buffer *buffer, int buffer_size, struct transaction *tx)
 {
-    //check for full buff(circular): if the position next to in is out or (in->next == out)
-    //use buffer size instead of one, (((in->next) % buffersize) == out)
-    int next = (buffer->ptrs->in + 1 ) % buffer_size;
+    // check for full buff(circular): if the position next to in is out or (in->next == out)
+    // use buffer size instead of one, (((in->next) % buffersize) == out)
+    int next = (buffer->ptrs->in + 1) % buffer_size;
     // int in_pos = buffer->ptrs->in;
     int out_pos = buffer->ptrs->out;
 
@@ -78,19 +99,18 @@ void write_wallets_servers_buffer(struct circ_buffer* buffer, int buffer_size, s
     {
         return;
     }
- 
+
     buffer->buffer[out_pos] = *tx;
     buffer->ptrs->in = next;
-
 }
 
-void write_servers_main_buffer(struct ra_buffer* buffer, int buffer_size, struct transaction* tx)
+void write_servers_main_buffer(struct ra_buffer *buffer, int buffer_size, struct transaction *tx)
 {
     int i;
     int found = 0;
-    for(i = 0; i < buffer_size && found == 0; i++)
+    for (i = 0; i < buffer_size && found == 0; i++)
     {
-        if(!buffer->ptrs[i])
+        if (!buffer->ptrs[i])
         {
             buffer->buffer[i] = *tx;
             buffer->ptrs[i] = 1;
@@ -99,10 +119,10 @@ void write_servers_main_buffer(struct ra_buffer* buffer, int buffer_size, struct
     }
 }
 
-void read_main_wallets_buffer(struct ra_buffer* buffer, int wallet_id, int buffer_size, struct transaction* tx)
+void read_main_wallets_buffer(struct ra_buffer *buffer, int wallet_id, int buffer_size, struct transaction *tx)
 {
     int i;
-    int found = 0; 
+    int found = 0;
 
     for (i = 0; i < buffer_size && found == 0; i++)
     {
@@ -119,34 +139,34 @@ void read_main_wallets_buffer(struct ra_buffer* buffer, int wallet_id, int buffe
     }
 }
 
-void read_wallets_servers_buffer(struct circ_buffer* buffer, int buffer_size, struct transaction* tx)
+void read_wallets_servers_buffer(struct circ_buffer *buffer, int buffer_size, struct transaction *tx)
 {
     int in_pos = buffer->ptrs->in;
     int out_pos = buffer->ptrs->out;
     int next = (buffer->ptrs->out + 1) % buffer_size;
 
-    if(in_pos == out_pos)
+    if (in_pos == out_pos)
     {
         tx->id = -1;
         return;
     }
-    
+
     tx->id = buffer->buffer[out_pos].id;
     tx->src_id = buffer->buffer[out_pos].src_id;
     tx->dest_id = buffer->buffer[out_pos].dest_id;
     tx->amount = buffer->buffer[out_pos].amount;
     tx->wallet_signature = buffer->buffer[out_pos].wallet_signature;
     tx->server_signature = buffer->buffer[out_pos].server_signature;
-    
+
     buffer->buffer[out_pos].id = -1;
     buffer->ptrs->out = next;
     printf("server recievies transac id= %d\n", tx->id);
 }
 
-void read_servers_main_buffer(struct ra_buffer* buffer, int tx_id, int buffer_size, struct transaction* tx)
+void read_servers_main_buffer(struct ra_buffer *buffer, int tx_id, int buffer_size, struct transaction *tx)
 {
     int i;
-    int found = 0; 
+    int found = 0;
 
     for (i = 0; i < buffer_size && found == 0; i++)
         if (buffer->ptrs[i] == 1 && buffer->buffer[i].id == tx_id)

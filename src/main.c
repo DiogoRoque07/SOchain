@@ -24,6 +24,7 @@
 // int g_dest_id;
 // float g_amount;
 
+static int G_correct_args = 0;
 
 int main(int argc, char *argv[])
 {
@@ -54,9 +55,9 @@ int check_args(int argc, char *argv[])
     int ret = 0;
     if (argc != 6)
     {
-        fprintf(stderr, RED "NUMBER OF ARGUMENTS INCORRECT\n" RESET);
-
-        ret = -1;
+        fprintf(stderr, RED "NUMBER OF ARGUMENTS INCORRECT" YELLOW "(example: ./SOchain 200 5 5 5 10)\n" RESET);
+        G_correct_args = -1;
+        return (-1);
     }
     // init_balance
     if (atoi(argv[1]) <= 0)
@@ -93,13 +94,16 @@ int check_args(int argc, char *argv[])
         fprintf(stderr,RED "MAX TRANSACTIONS NEEDS TO BE POSITIVE\n" RESET);
         ret = -1;
     }
+    G_correct_args = ret;
+    printf("\nthe var is %d\n", G_correct_args);
+
     return ret;
 }
 /*
 args usage: progam_name init_balance n_wallets n_servers buff_size max_txs
 */
 
-
+// Como apagar buffs aqui
 void main_args(int argc, char *argv[], struct info_container *info)
 {
     printf(BLUE " EU SOU O MAIN: %d" RESET "\n", getpid());
@@ -108,8 +112,10 @@ void main_args(int argc, char *argv[], struct info_container *info)
     {
         printf("[" BLUE"%d" RESET "]" RED " Parâmetros incorretos!\n" RESET, getpid());
 
-        deallocate_dynamic_memory(info);
-        exit(-1);
+        // deallocate_dynamic_memory(info);
+        // exit(-1);
+        // *info->terminate = 1; // Nao consigo
+        return;
     }
 
     if (check_args(argc, argv) == 0)
@@ -129,22 +135,31 @@ void main_args(int argc, char *argv[], struct info_container *info)
 
 void create_dynamic_memory_structs(struct info_container *info, struct buffers *buffs)
 {
-    (void)buffs;//colocado pq indica um erro ao compilar com as flags -Wall -Werror -Wextra
+    printf("\nthe var is %d\n", G_correct_args);
+    if(G_correct_args == -1){
+        return;
+    }
     info->wallets_pids = allocate_dynamic_memory(info->n_wallets * sizeof(int));
     info->servers_pids = allocate_dynamic_memory(info->n_servers * sizeof(int));
+    buffs->buff_main_wallets = allocate_dynamic_memory(info->buffers_size * sizeof(struct ra_buffer));
+    buffs->buff_wallets_servers = allocate_dynamic_memory(info->buffers_size * sizeof(struct circ_buffer));
+    buffs->buff_servers_main = allocate_dynamic_memory(info->buffers_size * sizeof(struct ra_buffer));
+
 }
 
 void create_shared_memory_structs(struct info_container *info, struct buffers *buffs)
 {
-    buffs->buff_main_wallets = create_shared_memory(ID_SHM_MAIN_WALLETS_BUFFER, info->buffers_size * sizeof(struct ra_buffer));
+    if(G_correct_args == -1)
+        return;
+    // buffs->buff_main_wallets = create_shared_memory(ID_SHM_MAIN_WALLETS_BUFFER, info->buffers_size * sizeof(struct ra_buffer));
     buffs->buff_main_wallets->buffer = create_shared_memory(ID_SHM_MAIN_WALLETS_BUFFER, info->buffers_size * sizeof(struct transaction));
     buffs->buff_main_wallets->ptrs = create_shared_memory(ID_SHM_MAIN_WALLETS_PTR, info->buffers_size *  sizeof(int));
    
-    buffs->buff_wallets_servers = create_shared_memory(ID_SHM_WALLETS_SERVERS_BUFFER, info->buffers_size * sizeof(struct ra_buffer));
+    // buffs->buff_wallets_servers = create_shared_memory(ID_SHM_WALLETS_SERVERS_BUFFER, info->buffers_size * sizeof(struct circ_buffer));
     buffs->buff_wallets_servers->buffer = create_shared_memory(ID_SHM_WALLETS_SERVERS_BUFFER, info->buffers_size * sizeof(struct transaction));
     buffs->buff_wallets_servers->ptrs = create_shared_memory(ID_SHM_WALLETS_SERVERS_PTR, sizeof(struct pointers));
 
-    buffs->buff_servers_main = create_shared_memory(ID_SHM_SERVERS_MAIN_BUFFER, info->buffers_size * sizeof(struct ra_buffer));
+    // buffs->buff_servers_main = create_shared_memory(ID_SHM_SERVERS_MAIN_BUFFER, info->buffers_size * sizeof(struct ra_buffer));
     buffs->buff_servers_main->buffer = create_shared_memory(ID_SHM_SERVERS_MAIN_BUFFER, info->buffers_size * sizeof(struct transaction));
     buffs->buff_servers_main->ptrs = create_shared_memory(ID_SHM_SERVERS_MAIN_PTR, info->buffers_size *  sizeof(int));
     
@@ -160,26 +175,30 @@ void create_shared_memory_structs(struct info_container *info, struct buffers *b
 void destroy_dynamic_memory_structs(struct info_container *info, struct buffers *buffs)
 {
     deallocate_dynamic_memory(info->servers_pids);
-
     deallocate_dynamic_memory(info->wallets_pids);
     
     deallocate_dynamic_memory(info);
-
+    
+    deallocate_dynamic_memory(buffs->buff_main_wallets);
+    deallocate_dynamic_memory(buffs->buff_wallets_servers);
+    deallocate_dynamic_memory(buffs->buff_servers_main);
+    
     deallocate_dynamic_memory(buffs);
-
 }
 
 void destroy_shared_memory_structs(struct info_container *info, struct buffers *buffs)
 {
-    destroy_shared_memory(ID_SHM_MAIN_WALLETS_BUFFER, buffs->buff_main_wallets->buffer,  info->buffers_size * sizeof(struct transaction));
+    if(G_correct_args == -1)
+        return;
+    // destroy_shared_memory(ID_SHM_MAIN_WALLETS_BUFFER, buffs->buff_main_wallets->buffer,  info->buffers_size * sizeof(struct transaction));
     destroy_shared_memory(ID_SHM_MAIN_WALLETS_PTR, buffs->buff_main_wallets->ptrs, info->buffers_size *  sizeof(int));
     destroy_shared_memory(ID_SHM_MAIN_WALLETS_BUFFER, buffs->buff_main_wallets, info->buffers_size * sizeof(struct ra_buffer));
 
-    destroy_shared_memory(ID_SHM_WALLETS_SERVERS_BUFFER,buffs->buff_wallets_servers->buffer, info->buffers_size * sizeof(struct ra_buffer));
+    // destroy_shared_memory(ID_SHM_WALLETS_SERVERS_BUFFER,buffs->buff_wallets_servers->buffer, info->buffers_size * sizeof(struct ra_buffer));
     destroy_shared_memory(ID_SHM_WALLETS_SERVERS_PTR, buffs->buff_wallets_servers->ptrs, sizeof(struct pointers));
     destroy_shared_memory(ID_SHM_WALLETS_SERVERS_BUFFER, buffs->buff_wallets_servers, info->buffers_size * sizeof(struct ra_buffer));
 
-    destroy_shared_memory(ID_SHM_SERVERS_MAIN_BUFFER, buffs->buff_servers_main->buffer, info->buffers_size * sizeof(struct transaction));
+    // destroy_shared_memory(ID_SHM_SERVERS_MAIN_BUFFER, buffs->buff_servers_main->buffer, info->buffers_size * sizeof(struct transaction));
     destroy_shared_memory(ID_SHM_SERVERS_MAIN_PTR, buffs->buff_servers_main->ptrs, info->buffers_size *  sizeof(int));
     destroy_shared_memory(ID_SHM_SERVERS_MAIN_BUFFER, buffs->buff_servers_main,  info->buffers_size * sizeof(struct ra_buffer));
 
@@ -192,6 +211,8 @@ void destroy_shared_memory_structs(struct info_container *info, struct buffers *
 
 void create_processes(struct info_container *info, struct buffers *buffs)
 {
+    if(G_correct_args == -1)
+        return;
     for (int i = 0; i < info->n_wallets; i++)
     {
         info->wallets_pids[i] = launch_wallet(i, info, buffs);
@@ -237,8 +258,9 @@ int user_hash(char op[])
 
 void user_interaction(struct info_container *info, struct buffers *buffs)
 {
-    if(*info->terminate == 1)
+    if(G_correct_args == -1 ||*info->terminate == 1)
         return;
+
     int *tx_counter = malloc(sizeof(int));
     *tx_counter = -1;
     while (1)

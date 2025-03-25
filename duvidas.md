@@ -86,11 +86,15 @@ A função `main_args` só recebe o parâmetro `info`. Como é que é suposto li
 
 # Uso de variaveis globais
 Nos usamos uma variavel global para que os processos do servidor e wallet nao entrarem no user interaction
+- Ja não usamos mas podemos usar?
+
 
 # Criação de processos
 Nos criamos os processos a partir do main (um fork por processos de server e wallet), é suposto arranjaremos uma forma mais eficiente?
 
 # handle memory loss when quiting with CTRL-C or other signals
 maybe use libx or simillar to capture the event
+
+# se os buffers forem de memoria dinamica o valgrind quexia se, apesar de nao haver leaks ha muitos invalid writes e invalid reads, no entanto o programa funciona 
 
 # rever recibos!!   
