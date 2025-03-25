@@ -24,7 +24,8 @@ void* create_shared_memory(char* name, int size)
     // name = strdup(temp_name);
     // printf("shared memory created with following name: %s\n", name);
     void * temp = mmap(NULL, size, protection, visibility, -1, 0);
-    if (temp == MAP_FAILED) {
+    if (temp == MAP_FAILED)
+    {
         printf("mmap failed for: %s\n", name);
         free(name);
         return NULL;
@@ -35,7 +36,8 @@ void* create_shared_memory(char* name, int size)
 
 void deallocate_dynamic_memory(void* ptr)
 {
-    if (ptr){
+    if (ptr)
+    {
         free(ptr);
         ptr = NULL;
     }
@@ -53,8 +55,10 @@ void write_main_wallets_buffer(struct ra_buffer* buffer, int buffer_size, struct
 {
     int i;
     int found = 0;
-    for(i = 0; i < buffer_size && found == 0; i++){
-        if(!buffer->ptrs[i]){
+    for(i = 0; i < buffer_size && found == 0; i++)
+    {
+        if(!buffer->ptrs[i])
+        {
             buffer->buffer[i] = *tx;
             buffer->ptrs[i] = 1;
             found = 1;
@@ -71,7 +75,9 @@ void write_wallets_servers_buffer(struct circ_buffer* buffer, int buffer_size, s
     int out_pos = buffer->ptrs->out;
 
     if (next == buffer->ptrs->out)
+    {
         return;
+    }
  
     buffer->buffer[out_pos] = *tx;
     buffer->ptrs->in = next;
@@ -82,8 +88,10 @@ void write_servers_main_buffer(struct ra_buffer* buffer, int buffer_size, struct
 {
     int i;
     int found = 0;
-    for(i = 0; i < buffer_size && found == 0; i++){
-        if(!buffer->ptrs[i]){
+    for(i = 0; i < buffer_size && found == 0; i++)
+    {
+        if(!buffer->ptrs[i])
+        {
             buffer->buffer[i] = *tx;
             buffer->ptrs[i] = 1;
             found = 1;
@@ -96,14 +104,17 @@ void read_main_wallets_buffer(struct ra_buffer* buffer, int wallet_id, int buffe
     int i;
     int found = 0; 
 
-    for (i = 0; i < buffer_size && found == 0; i++) {
-        if (buffer->ptrs[i] == 1 && buffer->buffer[i].src_id == wallet_id) {
+    for (i = 0; i < buffer_size && found == 0; i++)
+    {
+        if (buffer->ptrs[i] == 1 && buffer->buffer[i].src_id == wallet_id)
+        {
             *tx = buffer->buffer[i];
             buffer->ptrs[i] = 0;
             found = 1;
         }
     }
-    if (!found) {
+    if (!found)
+    {
         tx->id = -1;
     }
 }
@@ -114,7 +125,8 @@ void read_wallets_servers_buffer(struct circ_buffer* buffer, int buffer_size, st
     int out_pos = buffer->ptrs->out;
     int next = (buffer->ptrs->out + 1) % buffer_size;
 
-    if(in_pos == out_pos){
+    if(in_pos == out_pos)
+    {
         tx->id = -1;
         return;
     }
@@ -128,6 +140,7 @@ void read_wallets_servers_buffer(struct circ_buffer* buffer, int buffer_size, st
     
     buffer->buffer[out_pos].id = -1;
     buffer->ptrs->out = next;
+    printf("server recievies transac id= %d\n", tx->id);
 }
 
 void read_servers_main_buffer(struct ra_buffer* buffer, int tx_id, int buffer_size, struct transaction* tx)
@@ -136,12 +149,14 @@ void read_servers_main_buffer(struct ra_buffer* buffer, int tx_id, int buffer_si
     int found = 0; 
 
     for (i = 0; i < buffer_size && found == 0; i++)
-        if (buffer->ptrs[i] == 1 && buffer->buffer[i].id == tx_id) {
+        if (buffer->ptrs[i] == 1 && buffer->buffer[i].id == tx_id)
+        {
             *tx = buffer->buffer[i];
             buffer->ptrs[i] = 0;
             found = 1;
         }
-    if (!found) {
+    if (!found)
+    {
         tx->id = -1;
     }
 }

@@ -10,7 +10,8 @@ int execute_server(int server_id, struct info_container *info, struct buffers *b
     {
         struct transaction tx;
         server_receive_transaction(&tx, info, buffs);
-        if(tx.id == -1){
+        if(tx.id == -1)
+        {
             usleep(10000);
         }
         if (tx.id >= 0)
@@ -25,8 +26,9 @@ int execute_server(int server_id, struct info_container *info, struct buffers *b
 
 void server_receive_transaction(struct transaction* tx, struct info_container* info, struct buffers* buffs)
 {
-    if (*info->terminate == 1)
+    if (*info->terminate == 1){
         return;
+    }
 
     read_wallets_servers_buffer(buffs->buff_wallets_servers, info->buffers_size, tx);
 }
@@ -41,12 +43,12 @@ void server_process_transaction(struct transaction* tx, int server_id, struct in
     info->balances[tx->dest_id] += tx->amount;
     tx->server_signature = server_id;
     info->servers_stats[server_id]++;
-
 }
 
 void server_send_transaction(struct transaction* tx, struct info_container* info, struct buffers* buffs)
 {
-    if (!tx->server_signature || tx->server_signature == -1)
+    if ( tx->server_signature == -1){
         return;
+    }
     write_servers_main_buffer(buffs->buff_servers_main, info->buffers_size, tx);
 }

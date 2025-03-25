@@ -8,7 +8,8 @@ int execute_wallet(int wallet_id, struct info_container* info, struct buffers* b
         // write(1, "\nprocess loop\n", 15);
         struct transaction tx;
         wallet_receive_transaction(&tx, wallet_id, info, buffs);
-        if(tx.id == -1){
+        if(tx.id == -1)
+        {
             // write(1, "\ngoing to sleep\n", 17);
             usleep(10000);
         }

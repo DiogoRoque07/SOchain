@@ -93,4 +93,4 @@ Nos criamos os processos a partir do main (um fork por processos de server e wal
 # handle memory loss when quiting with CTRL-C or other signals
 maybe use libx or simillar to capture the event
 
-# rever logica do read e write circ buffer 
+# rever recibos!!   

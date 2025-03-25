@@ -54,28 +54,28 @@ int check_args(int argc, char *argv[])
     int ret = 0;
     if (argc != 6)
     {
-        fprintf(stderr, "NUMBER OF ARGUMENTS INCORRECT\n");
+        fprintf(stderr, RED "NUMBER OF ARGUMENTS INCORRECT\n" RESET);
 
         ret = -1;
     }
     // init_balance
     if (atoi(argv[1]) <= 0)
     {
-        fprintf(stderr, "INITIAL BALANCE NEEDS TO BE POSITIVE\n");
+        fprintf(stderr,RED "INITIAL BALANCE NEEDS TO BE POSITIVE\n" RESET);
         ret = -1;
     }
 
     // n_wallets
     if (atoi(argv[2]) <= 0)
     {
-        fprintf(stderr, "NUMBER OF WALLETS NEEDS TO BE POSITIVE\n");
+        fprintf(stderr,RED "NUMBER OF WALLETS NEEDS TO BE POSITIVE\n" RESET);
         ret = -1;
     }
 
     // n_servers
     if (atoi(argv[3]) <= 0)
     {
-        fprintf(stderr, "NUMBER OF SERVERS NEEDS TO BE POSITIVE\n");
+        fprintf(stderr,RED "NUMBER OF SERVERS NEEDS TO BE POSITIVE\n" RESET);
         ret = -1;
     }
 
@@ -83,14 +83,14 @@ int check_args(int argc, char *argv[])
     // TODO: ver
     if (atoi(argv[4]) <= 0)
     {
-        fprintf(stderr, "BUFFER SIZE NEEDS TO BE POSITIVE\n");
+        fprintf(stderr,RED "BUFFER SIZE NEEDS TO BE POSITIVE\n" RESET);
         ret = -1;
     }
 
     // max_txs
     if (atoi(argv[5]) <= 0)
     {
-        fprintf(stderr, "MAX TRANSACTIONS NEEDS TO BE POSITIVE\n");
+        fprintf(stderr,RED "MAX TRANSACTIONS NEEDS TO BE POSITIVE\n" RESET);
         ret = -1;
     }
     return ret;
@@ -102,7 +102,7 @@ args usage: progam_name init_balance n_wallets n_servers buff_size max_txs
 
 void main_args(int argc, char *argv[], struct info_container *info)
 {
-    printf(BLUE " EU SOU O MAIN: %d"  "\n", getpid());
+    printf(BLUE " EU SOU O MAIN: %d" RESET "\n", getpid());
 
     if (check_args(argc, argv) == -1)
     {
@@ -328,15 +328,6 @@ void print_balance(struct info_container *info)
         printf("[Main] Não foi possível verificar o saldo da carteira %d\n", wallet_id);
 }
 
-// Falta
-// *Cria uma nova transação com os dados inseridos pelo utilizador na linha de
-// *comandos (e que ainda estão no stdin a espera de serem lidos com o scanf
-//* dentro da função), escreve-a no buffer de memória partilhada entre a main
-// *e as carteiras e atualiza o contador de transações criadas tx_counter. Caso
-//* a aplicação já tenha atingido o número máximo de transações permitidas
-//* a função retorna apenas uma mensagem de erro e não cria a nova transação.
-//verificar se é suposto usar variaveis globais
-
 void create_transaction(int *tx_counter, struct info_container *info, struct buffers *buffs)
 {
     if (*tx_counter >= info->max_txs) {
@@ -357,16 +348,34 @@ void create_transaction(int *tx_counter, struct info_container *info, struct buf
     }
     write_main_wallets_buffer(buffs->buff_main_wallets, info->buffers_size, &tx);
     usleep(20000);
+    printf("Transaction id = %d\n", tx.id);
     printf("wallet[%d] new balance: %f\nwallet[%d] new balance: %f\n", tx.src_id, info->balances[tx.src_id], tx.dest_id, info->balances[tx.dest_id]);
 }
 
+/* Tenta ler o recibo da transação (identificada por id, o qual ainda está no
+ * stdin a espera de ser lido dentro da função com o scanf) do buffer de memória
+ * partilhada entre os servidores e a main, comprovando a conclusão da transação.
+ */
 
-// Falta
+ // erro qualquer aqui!!!!
 void receive_receipt(struct info_container *info, struct buffers *buffs)
 {
-    (void)info;
-    (void)buffs;
-}
+    int transac_id;
+    scanf("%d", &transac_id);
+    // struct transaction receipt;
+    for (int i = 0; i < info->buffers_size; i++)
+    {
+        if(buffs->buff_servers_main->ptrs[i] == 1)
+        {
+            if(buffs->buff_servers_main->buffer[i].id == transac_id)
+            {
+                struct transaction *tx = &buffs->buff_servers_main->buffer[i];
+                printf("Transaction id: %d\n Source id: %d \n Destination id: %d\n Amount: %.2f\n Wallet Signature: %d\n Server Signature: %d\n",
+                        tx->id, tx->src_id, tx->dest_id, tx->amount, tx->wallet_signature, tx->server_signature);
+            }
+        }
+    }
+} 
 
 void print_stat(int tx_counter, struct info_container *info)
 {

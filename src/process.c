@@ -53,14 +53,17 @@ int launch_server(int server_id, struct info_container *info, struct buffers *bu
 int wait_process(int process_id)
 {
     int status;
-    if (waitpid(process_id, &status, 0) == -1) {
+    if (waitpid(process_id, &status, 0) == -1)
+    {
         perror("waitpid failed");
         return -1;
     }
 
-    if (WIFEXITED(status)) {
+    if (WIFEXITED(status))
+    {
         return WEXITSTATUS(status);
-    } else {
+    } else
+    {
         printf("Process %d did not terminate normally.\n", process_id);
         return -1;
     }
