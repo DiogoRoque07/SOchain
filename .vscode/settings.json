@@ -5,6 +5,8 @@
         "unistd.h": "c",
         "process.h": "c",
         "types.h": "c",
-        "stdio.h": "c"
+        "stdio.h": "c",
+        "string.h": "c",
+        "wallet.h": "c"
     }
 }

@@ -9,6 +9,29 @@
 #include <sys/stat.h>
 #include <fcntl.h>
 
+#define RESET "\033[0m"
+#define RED "\033[31m"
+#define GREEN "\033[32m"
+#define YELLOW "\033[33m"
+#define BLUE "\033[34m"
+#define MAGENTA "\033[35m"
+#define CYAN "\033[36m"
+#define WHITE "\033[37m"
+#define PINK "\033[35m"
+#define ORANGE "\033[38;5;214m"
+
+
+
+void printTX(struct transaction tx){
+    printf(YELLOW "Transaction ID: " RESET "%d | " 
+           GREEN "Source ID: " RESET "%d | " 
+           CYAN "Destination ID: " RESET "%d | " 
+           MAGENTA "Amount: " RESET "%.2f | " 
+           BLUE "Wallet Signature: " RESET "%d | " 
+           RED "Server Signature: " RESET "%d\n",
+           tx.id, tx.src_id, tx.dest_id, tx.amount, tx.wallet_signature, tx.server_signature);
+}
+
 void *allocate_dynamic_memory(int size)
 {
     void *ptr = malloc(size);
@@ -23,7 +46,7 @@ void *create_shared_memory(char *name, int size)
     char temp_name[256];
     snprintf(temp_name, sizeof(temp_name), "%s_%u", name, getuid());
     // name = strdup(temp_name);
-    printf("shared memory created with following name: %s\n", temp_name);
+    // printf("shared memory created with following name: %s\n", temp_name);
     int fd = shm_open(temp_name, O_RDWR | O_CREAT, S_IRUSR | S_IWUSR);
     if (fd == -1){
         printf("shm_open failed for %s", temp_name);
@@ -74,6 +97,7 @@ void destroy_shared_memory(char *name, void *ptr, int size)
 // Escreve uma transação no buffer de memória partilhada entre a Main e as carteiras.
 void write_main_wallets_buffer(struct ra_buffer *buffer, int buffer_size, struct transaction *tx)
 {
+
     int i;
     int found = 0;
     for (i = 0; i < buffer_size && found == 0; i++)
@@ -83,6 +107,8 @@ void write_main_wallets_buffer(struct ra_buffer *buffer, int buffer_size, struct
             buffer->buffer[i] = *tx;
             buffer->ptrs[i] = 1;
             found = 1;
+            // printf("printing transaction in write_main_wallets_buffer\n");
+            // printTX(*tx);
         }
     }
 }
@@ -99,7 +125,8 @@ void write_wallets_servers_buffer(struct circ_buffer *buffer, int buffer_size, s
     {
         return;
     }
-
+    // printf("printing transaction in write_wallets_servers_buffer\n");
+    // printTX(*tx);
     buffer->buffer[out_pos] = *tx;
     buffer->ptrs->in = next;
 }
@@ -110,11 +137,13 @@ void write_servers_main_buffer(struct ra_buffer *buffer, int buffer_size, struct
     int found = 0;
     for (i = 0; i < buffer_size && found == 0; i++)
     {
-        if (!buffer->ptrs[i])
+        if (buffer->ptrs[i] == 0)
         {
             buffer->buffer[i] = *tx;
             buffer->ptrs[i] = 1;
             found = 1;
+            // printf("printing transaction in write_servers_main_buffer\n");
+            // printTX(*tx);
         }
     }
 }
@@ -131,11 +160,14 @@ void read_main_wallets_buffer(struct ra_buffer *buffer, int wallet_id, int buffe
             *tx = buffer->buffer[i];
             buffer->ptrs[i] = 0;
             found = 1;
+            // printf("printing transaction in read_main_wallets_buffer\n");
+            // printTX(*tx);
         }
     }
     if (!found)
     {
         tx->id = -1;
+        
     }
 }
 
@@ -150,17 +182,17 @@ void read_wallets_servers_buffer(struct circ_buffer *buffer, int buffer_size, st
         tx->id = -1;
         return;
     }
-
     tx->id = buffer->buffer[out_pos].id;
     tx->src_id = buffer->buffer[out_pos].src_id;
     tx->dest_id = buffer->buffer[out_pos].dest_id;
     tx->amount = buffer->buffer[out_pos].amount;
     tx->wallet_signature = buffer->buffer[out_pos].wallet_signature;
     tx->server_signature = buffer->buffer[out_pos].server_signature;
+    // printf("printing transaction in read_wallets_servers_buffer\n");
+    // printTX(*tx);
 
     buffer->buffer[out_pos].id = -1;
     buffer->ptrs->out = next;
-    printf("server recievies transac id= %d\n", tx->id);
 }
 
 void read_servers_main_buffer(struct ra_buffer *buffer, int tx_id, int buffer_size, struct transaction *tx)
@@ -172,8 +204,10 @@ void read_servers_main_buffer(struct ra_buffer *buffer, int tx_id, int buffer_si
         if (buffer->ptrs[i] == 1 && buffer->buffer[i].id == tx_id)
         {
             *tx = buffer->buffer[i];
-            buffer->ptrs[i] = 0;
+            // buffer->ptrs[i] = 0;
             found = 1;
+            // printf("printing transaction in read_servers_main_buffer\n");
+            // printTX(*tx);
         }
     if (!found)
     {

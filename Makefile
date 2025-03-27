@@ -58,7 +58,7 @@ run: all
 	@$(RUN) $(RUN_ARGS) 
 
 mem: all
-	@valgrind --leak-check=full --show-leak-kinds=all --track-origins=yes --log-file=val.log $(RUN) # $(RUN_ARGS)
+	@valgrind --leak-check=full --show-leak-kinds=all --track-origins=yes --log-file=val.log $(RUN)  $(RUN_ARGS)
 
 debug: all
 	@gdbtui --args $(RUN) # $(RUN_ARGS)

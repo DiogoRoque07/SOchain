@@ -26,6 +26,17 @@
 
 static int G_correct_args = 0;
 
+void mprintTX(struct transaction tx){
+    printf(YELLOW "Transaction ID: " RESET "%d | " 
+        GREEN "Source ID: " RESET "%d | " 
+        CYAN "Destination ID: " RESET "%d | " 
+        MAGENTA "Amount: " RESET "%.2f | " 
+        BLUE "Wallet Signature: " RESET "%d | " 
+        RED "Server Signature: " RESET "%d\n",
+        tx.id, tx.src_id, tx.dest_id, tx.amount, tx.wallet_signature, tx.server_signature);
+}
+
+
 int main(int argc, char *argv[])
 {
     // init data structures
@@ -95,7 +106,6 @@ int check_args(int argc, char *argv[])
         ret = -1;
     }
     G_correct_args = ret;
-    printf("\nthe var is %d\n", G_correct_args);
 
     return ret;
 }
@@ -135,7 +145,6 @@ void main_args(int argc, char *argv[], struct info_container *info)
 
 void create_dynamic_memory_structs(struct info_container *info, struct buffers *buffs)
 {
-    printf("\nthe var is %d\n", G_correct_args);
     if(G_correct_args == -1){
         return;
     }
@@ -353,10 +362,10 @@ void print_balance(struct info_container *info)
 void create_transaction(int *tx_counter, struct info_container *info, struct buffers *buffs)
 {
     if (*tx_counter >= info->max_txs) {
-        printf("["BLUE "MAIN" RESET "] Número máximo de transações (%d) atingido. Não é possível criar uma nova transação.\n", info->max_txs);
+        printf("["RED "MAIN" RESET "] Número máximo de transações (%d) atingido. Não é possível criar uma nova transação.\n", info->max_txs);
         return;
     }
-    struct transaction tx;// = malloc(sizeof(struct transaction));
+    struct transaction tx;
     (*tx_counter)++;
     
     tx.id = *tx_counter;
@@ -369,9 +378,12 @@ void create_transaction(int *tx_counter, struct info_container *info, struct buf
         return;
     }
     write_main_wallets_buffer(buffs->buff_main_wallets, info->buffers_size, &tx);
-    usleep(20000);
-    printf("Transaction id = %d\n", tx.id);
-    printf("wallet[%d] new balance: %f\nwallet[%d] new balance: %f\n", tx.src_id, info->balances[tx.src_id], tx.dest_id, info->balances[tx.dest_id]);
+    usleep(50000);
+    read_servers_main_buffer(buffs->buff_servers_main, *tx_counter, info->buffers_size, &tx );
+    // printf("printing transac at main after everything:\n");
+    // mprintTX(tx);
+    // printf("Transaction id = %d\n", tx.id);
+    // printf("wallet[%d] new balance: %f\nwallet[%d] new balance: %f\n", tx.src_id, info->balances[tx.src_id], tx.dest_id, info->balances[tx.dest_id]);
 }
 
 /* Tenta ler o recibo da transação (identificada por id, o qual ainda está no

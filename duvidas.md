@@ -97,4 +97,4 @@ maybe use libx or simillar to capture the event
 
 # se os buffers forem de memoria dinamica o valgrind quexia se, apesar de nao haver leaks ha muitos invalid writes e invalid reads, no entanto o programa funciona 
 
-# rever recibos!!   
+# OQ FAZER QUANDO O BUFFER DOS RECIBOS(BUFF_SERVERS_MAIN) FICAR CHEIO
