@@ -65,8 +65,8 @@ void wallet_process_transaction(struct transaction* tx, int wallet_id, struct in
             tx->wallet_signature = wallet_id;
             // count_signed_transactions++;
             info->wallets_stats[wallet_id]++;
-            printf("wallet processed transaction:\n");
-            wprintTX(*tx);
+            // printf("wallet processed transaction:\n");
+            // wprintTX(*tx);
             
         }
 }

@@ -404,8 +404,7 @@ void receive_receipt(struct info_container *info, struct buffers *buffs)
             if(buffs->buff_servers_main->buffer[i].id == transac_id)
             {
                 struct transaction *tx = &buffs->buff_servers_main->buffer[i];
-                printf("Transaction id: %d\n Source id: %d \n Destination id: %d\n Amount: %.2f\n Wallet Signature: %d\n Server Signature: %d\n",
-                        tx->id, tx->src_id, tx->dest_id, tx->amount, tx->wallet_signature, tx->server_signature);
+                mprintTX(*tx);
             }
         }
     }
