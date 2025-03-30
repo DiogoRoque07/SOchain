@@ -25,9 +25,15 @@
 
 | **Data Structure**               | **Memory Type**   | **Size**                  | **Reason**                                                                 |
 |-----------------------------------|-------------------|---------------------------|-----------------------------------------------------------------------------|
-| `BUFF_RA_MAIN_WALLETS`            | Shared Memory     | Configurable (e.g., 1 MB) | Communication between Main and Wallets.                                    |
-| `BUFF_CIRC_WALLETS_SERVERS`       | Shared Memory     | Configurable (e.g., 1 MB) | Communication between Wallets and Servers.                                 |
-| `BUFF_RA_SERVERS_MAIN`            | Shared Memory     | Configurable (e.g., 1 MB) | Communication between Servers and Main.                                    |
+| `BUFF_RA_MAIN_WALLETS`            | dynamic memory     | `buff_size * sizeof(struct)` | Communication between Main and Wallets.                                    |
+| `BUFF_CIRC_WALLETS_SERVERS`       | dynamic memory     | `buff_size * sizeof(struct)` | Communication between Wallets and Servers.                                 |
+| `BUFF_RA_SERVERS_MAIN`            | dynamic memory     | `buff_size * sizeof(struct)` | Communication between Servers and Main.                                    |
+| `BUFF_RA_MAIN_WALLETS transacation buffer`            | Shared Memory     | ` info->buffers_size * sizeof(struct transaction)` | Communication between Main and Wallets.                                    |
+| `BUFF_CIRC_WALLETS_SERVERS transacation buffer`       | Shared Memory     | ` info->buffers_size * sizeof(struct transaction)` | Communication between Wallets and Servers.                                 |
+| `BUFF_RA_SERVERS_MAIN transacation buffer`            | Shared Memory     | ` info->buffers_size * sizeof(struct transaction)` | Communication between Servers and Main.                                    |
+| `BUFF_RA_MAIN_WALLETS transacation pointers`            | Shared Memory     | `sizeof(struct pointers)` | Communication between Main and Wallets.                                    |
+| `BUFF_CIRC_WALLETS_SERVERS transacation pointers`       | Shared Memory     | `sizeof(struct pointers)` | Communication between Wallets and Servers.                                 |
+| `BUFF_RA_SERVERS_MAIN transacation pointers`            | Shared Memory     | `sizeof(struct pointers)` | Communication between Servers and Main.                                    |
 | `info->balances`                  | Shared Memory     | `sizeof(double) * N`      | Shared between Wallets and Servers to update wallet balances.              |
 | `info->terminate`                 | Shared Memory     | `sizeof(int)`             | Shared between all processes to signal termination.                        |
 | `info->wallets_stats`             | Shared Memory     | `sizeof(int) * N`         | Shared if Wallets update their transaction counts.                         |
