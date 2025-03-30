@@ -271,7 +271,7 @@ void user_interaction(struct info_container *info, struct buffers *buffs)
         return;
 
     int *tx_counter = malloc(sizeof(int));
-    *tx_counter = -1;
+    *tx_counter = 0;
     while (1)
     {
         char *input = malloc(sizeof(char *));
@@ -368,7 +368,7 @@ void create_transaction(int *tx_counter, struct info_container *info, struct buf
     struct transaction tx;
     (*tx_counter)++;
     
-    tx.id = *tx_counter;
+    tx.id = *tx_counter - 1;
     scanf("%d", &tx.src_id);
     scanf("%d", &tx.dest_id);
     scanf("%f", &tx.amount);
