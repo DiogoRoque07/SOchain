@@ -78,9 +78,9 @@ int check_args(int argc, char *argv[])
     }
 
     // n_wallets
-    if (atoi(argv[2]) <= 2)
+    if (atoi(argv[2]) <= 0)
     {
-        fprintf(stderr,RED "NUMBER OF WALLETS NEEDS TO BE POSITIVE AND AT LEAST 2\n" RESET);
+        fprintf(stderr,RED "NUMBER OF WALLETS NEEDS TO BE POSITIVE\n" RESET);
         ret = -1;
     }
 
@@ -116,7 +116,7 @@ args usage: progam_name init_balance n_wallets n_servers buff_size max_txs
 // Como apagar buffs aqui
 void main_args(int argc, char *argv[], struct info_container *info)
 {
-    printf(BLUE " EU SOU O MAIN: %d" RESET "\n", getpid());
+    // printf(BLUE " EU SOU O MAIN: %d" RESET "\n", getpid());
 
     if (check_args(argc, argv) == -1)
     {
@@ -412,21 +412,38 @@ void receive_receipt(struct info_container *info, struct buffers *buffs)
     }
 } 
 
+#define RESET "\033[0m"
+#define RED "\033[31m"
+#define GREEN "\033[32m"
+#define YELLOW "\033[33m"
+#define BLUE "\033[34m"
+#define MAGENTA "\033[35m"
+#define CYAN "\033[36m"
+#define WHITE "\033[37m"
+#define PINK "\033[35m"
+#define ORANGE "\033[38;5;214m"
+#define LIGHT_BLUE "\033[94m"
+#define LIGHT_GREEN "\033[92m"
+#define LIGHT_YELLOW "\033[93m"
+#define LIGHT_RED "\033[91m"
+#define LIGHT_MAGENTA "\033[95m"
+#define LIGHT_CYAN "\033[96m"
+#define GRAY "\033[90m"
 void print_stat(int tx_counter, struct info_container *info)
 {
     char tabulation[] = "        ";
-    printf("- Configuração inicial:\n");
-    printf("%sPropriedade     Valor\n", tabulation);
-    printf("%sinit_balance    %.2f\n", tabulation, info->init_balance);
-    printf("%sn_wallets       %d\n", tabulation, info->n_wallets);
-    printf("%sn_servers       %d\n", tabulation, info->n_servers);
-    printf("%sbuffer_size     %d\n", tabulation, info->buffers_size);
-    printf("%smax_txs         %d\n", tabulation, info->max_txs);
+    printf(LIGHT_MAGENTA"- Configuração inicial:\n");
+    printf(PINK "%sPropriedade     Valor\n", tabulation);
+    printf(BLUE "%sinit_balance    "RED"%.2f\n", tabulation, info->init_balance);
+    printf(YELLOW "%sn_wallets       "GREEN"%d\n", tabulation, info->n_wallets);
+    printf(ORANGE"%sn_servers       "CYAN"%d\n", tabulation, info->n_servers);
+    printf(MAGENTA"%sbuffer_size     "BLUE"%d\n", tabulation, info->buffers_size);
+    printf(GREEN"%smax_txs         "PINK"%d\n", tabulation, info->max_txs);
     printf("- Variáveis atuais:\n");
-    printf("%stx_count        %d\n", tabulation, tx_counter);
-    printf("%sterminate       %d\n", tabulation, *info->terminate);
+    printf(CYAN"%stx_count        "RED"%d\n", tabulation, tx_counter);
+    printf(YELLOW"%sterminate       "ORANGE"%d\n", tabulation, *info->terminate);
     printf("- Informações sobre as carteiras:\n");
-    printf("%sCarteira        PID             Saldo           Transações Assinadas\n", tabulation);
+    printf(LIGHT_GREEN"%sCarteira        "LIGHT_MAGENTA"PID             "LIGHT_CYAN"Saldo           "ORANGE"Transações Assinadas\n" RESET, tabulation);
     for (int i = 0; i < info->n_wallets; i++)
     {   
         char* balances = malloc(20 * sizeof(char));
@@ -434,8 +451,8 @@ void print_stat(int tx_counter, struct info_container *info)
         printf("%s%-16d%-16d%-16s%-12d\n", tabulation, i, info->wallets_pids[i], balances ,info->wallets_stats[i]);
         free(balances);
     }
-    printf("- Informações sobre os servidores:\n");
-    printf("%sServidor        PID             Transações Processadas\n", tabulation);
+    printf(LIGHT_RED"- Informações sobre os servidores:\n");
+    printf(""BLUE"%sServidor        "YELLOW"PID             "PINK"Transações Processadas\n", tabulation);
     for (int i = 0; i < info->n_servers; i++)
     {   
         printf("%s%-16d%-16d%-16d\n", tabulation, i, info->servers_pids[i], info->servers_stats[i]);
