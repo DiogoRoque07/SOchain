@@ -80,7 +80,7 @@ int check_args(int argc, char *argv[])
     // n_wallets
     if (atoi(argv[2]) <= 2)
     {
-        fprintf(stderr,RED "NUMBER OF WALLETS NEEDS TO BE POSITIVE AND MORE THAN 2\n" RESET);
+        fprintf(stderr,RED "NUMBER OF WALLETS NEEDS TO BE POSITIVE AND AT LEAST 2\n" RESET);
         ret = -1;
     }
 
@@ -326,7 +326,7 @@ void write_final_statistics(struct info_container *info)
 {
     printf("[Main] A encerrar a execução do SOchain! As estatísticas da execução são:\n");
     for (int i = 0; i < info->n_wallets; i++)
-        printf("[Main] A carteira %d assinou %d transações e terminou com %.2f\n", i, info->wallets_stats[i], info->balances[i]);
+        printf("[Main] A carteira %d assinou %d transações e terminou com %.2f SOT!\n", i, info->wallets_stats[i], info->balances[i]);
     for (int i = 0; i < info->n_servers; i++)
         printf("[Main] Servidor %d assinou %d transações\n", i, info->servers_stats[i]);
 }
@@ -380,6 +380,8 @@ void create_transaction(int *tx_counter, struct info_container *info, struct buf
     write_main_wallets_buffer(buffs->buff_main_wallets, info->buffers_size, &tx);
     usleep(50000);
     read_servers_main_buffer(buffs->buff_servers_main, *tx_counter, info->buffers_size, &tx );
+    // TODO adicionar a cor
+    printf("[Main] A transação %d foi criada para transferir %.2f SOT da carteira %d para a carteira %d!\n", tx.id + 1, tx.amount ,tx.src_id, tx.dest_id);
     // printf("printing transac at main after everything:\n");
     // mprintTX(tx);
     // printf("Transaction id = %d\n", tx.id);
