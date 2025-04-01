@@ -78,9 +78,9 @@ int check_args(int argc, char *argv[])
     }
 
     // n_wallets
-    if (atoi(argv[2]) <= 0)
+    if (atoi(argv[2]) <= 2)
     {
-        fprintf(stderr,RED "NUMBER OF WALLETS NEEDS TO BE POSITIVE\n" RESET);
+        fprintf(stderr,RED "NUMBER OF WALLETS NEEDS TO BE POSITIVE AND MORE THAN 2\n" RESET);
         ret = -1;
     }
 
@@ -205,7 +205,7 @@ void destroy_shared_memory_structs(struct info_container *info, struct buffers *
 
     // destroy_shared_memory(ID_SHM_WALLETS_SERVERS_BUFFER,buffs->buff_wallets_servers->buffer, info->buffers_size * sizeof(struct ra_buffer));
     destroy_shared_memory(ID_SHM_WALLETS_SERVERS_PTR, buffs->buff_wallets_servers->ptrs, sizeof(struct pointers));
-    destroy_shared_memory(ID_SHM_WALLETS_SERVERS_BUFFER, buffs->buff_wallets_servers, info->buffers_size * sizeof(struct ra_buffer));
+    destroy_shared_memory(ID_SHM_WALLETS_SERVERS_BUFFER, buffs->buff_wallets_servers, info->buffers_size * sizeof(struct circ_buffer));
 
     // destroy_shared_memory(ID_SHM_SERVERS_MAIN_BUFFER, buffs->buff_servers_main->buffer, info->buffers_size * sizeof(struct transaction));
     destroy_shared_memory(ID_SHM_SERVERS_MAIN_PTR, buffs->buff_servers_main->ptrs, info->buffers_size *  sizeof(int));

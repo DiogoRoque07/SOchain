@@ -7,6 +7,7 @@ CC          := gcc
 FLAGS       := -g -Wall -Wextra -Werror 
 RUN			:= ./bin/$(NAME)
 RUN_ARGS    := 200 3 1 5 10 
+TEST_ARGS    := 200 1 1 5 10 
 ################################################################################
 #                                 PROGRAM'S SRCS                               #
 ################################################################################
@@ -56,6 +57,13 @@ run: all
 	@# @sleep 2
 	@ # clear
 	@$(RUN) $(RUN_ARGS) 
+
+test: all
+
+	@ echo "$(BLUE)compilação de $(CYAN)$(NAME) $(GREEN) feita $(CLR_RMV) ✔️"
+	@# @sleep 2
+	@ # clear
+	@$(RUN) $(TEST_ARGS) 
 
 mem: all
 	@valgrind --leak-check=full --show-leak-kinds=all --track-origins=yes --log-file=val.log $(RUN)  $(RUN_ARGS)
