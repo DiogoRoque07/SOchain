@@ -379,7 +379,14 @@ void create_transaction(int *tx_counter, struct info_container *info, struct buf
     }
     write_main_wallets_buffer(buffs->buff_main_wallets, info->buffers_size, &tx);
     usleep(50000);
-    read_servers_main_buffer(buffs->buff_servers_main, *tx_counter, info->buffers_size, &tx );
+    if (tx.src_id < 0 || tx.src_id >= info->n_wallets || tx.dest_id < 0 || tx.dest_id >= info->n_wallets || info->balances[tx.src_id] <= tx.amount)
+    { /*verificar tbm a assinatura da carteira de origem (src wallet)*/
+        tx.server_signature = -1;
+        return;
+    }
+    info->balances[tx.src_id] -= tx.amount;
+    info->balances[tx.dest_id] += tx.amount;
+    // read_servers_main_buffer(buffs->buff_servers_main, *tx_counter, info->buffers_size, &tx );
     // TODO adicionar a cor
     printf("[Main] A transação %d foi criada para transferir %.2f SOT da carteira %d para a carteira %d!\n", tx.id + 1, tx.amount ,tx.src_id, tx.dest_id);
     // printf("printing transac at main after everything:\n");
