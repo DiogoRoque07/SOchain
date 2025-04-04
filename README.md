@@ -99,13 +99,11 @@ The project should be submitted as a ZIP file named `SO-XXX-p1.zip` (where XXX i
 ## Authors
 
 - Omeir Haroon (61810)
-- Isa David (61857)
-- Diogo Roque (61871)
+- Isa David (61871)
+- Diogo Roque (61857)
 
 ## Limitations
-
-- [Any limitations or known issues with the implementation]
+- A transferência de dinheiro ocorre no main devido à limitação de processos não conseguirem "comunicar" e como acedem à mesma memória(ex: com vários servidores a transação pode transferir dinheiro n_servers vezes). Apesar disso tirar um dos objetivos do server, é a solução mais eficiente para este não ocorrer. 
 
 ## Notes
 
-- [Any additional notes or clarifications]
