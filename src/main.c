@@ -359,6 +359,26 @@ void print_balance(struct info_container *info)
         printf("[Main] Não foi possível verificar o saldo da carteira %d\n", wallet_id);
 }
 
+void remove_extras_from_buffer(struct info_container *info, struct buffers *buffs){
+
+    for(int i = 0; i < info->buffers_size; i++){
+        if(buffs->buff_servers_main->ptrs[i] == 1){
+
+            int id1 = buffs->buff_servers_main->buffer[i].id;
+            for (int j = 0; j < info->buffers_size; j++)
+            {
+                if(i != j && buffs->buff_servers_main->ptrs[i] == 1){
+                    if(id1 == buffs->buff_servers_main->buffer[j].id){
+                        buffs->buff_servers_main->ptrs[j] = 0;
+                        // info->servers_stats[j]--;
+                    }
+                }
+            }
+            
+        }
+    }
+}
+
 void create_transaction(int *tx_counter, struct info_container *info, struct buffers *buffs)
 {
     if (*tx_counter >= info->max_txs) {
@@ -386,9 +406,11 @@ void create_transaction(int *tx_counter, struct info_container *info, struct buf
     }
     info->balances[tx.src_id] -= tx.amount;
     info->balances[tx.dest_id] += tx.amount;
-    // read_servers_main_buffer(buffs->buff_servers_main, *tx_counter, info->buffers_size, &tx );
+    read_servers_main_buffer(buffs->buff_servers_main, *tx_counter, info->buffers_size, &tx );
+    // info->servers_stats[tx.server_signature]++;
     // TODO adicionar a cor
     printf("[Main] A transação %d foi criada para transferir %.2f SOT da carteira %d para a carteira %d!\n", tx.id + 1, tx.amount ,tx.src_id, tx.dest_id);
+    remove_extras_from_buffer(info, buffs);
     // printf("printing transac at main after everything:\n");
     // mprintTX(tx);
     // printf("Transaction id = %d\n", tx.id);
@@ -414,6 +436,7 @@ void receive_receipt(struct info_container *info, struct buffers *buffs)
             {
                 struct transaction *tx = &buffs->buff_servers_main->buffer[i];
                 mprintTX(*tx);
+                // return;
             }
         }
     }
@@ -459,10 +482,10 @@ void print_stat(int tx_counter, struct info_container *info)
         free(balances);
     }
     printf(LIGHT_RED"- Informações sobre os servidores:\n");
-    printf(""BLUE"%sServidor        "YELLOW"PID             "PINK"Transações Processadas\n", tabulation);
+    printf(""BLUE"%sServidor        "YELLOW"PID             "PINK"Transações Processadas\n"RESET, tabulation);
     for (int i = 0; i < info->n_servers; i++)
     {   
-        printf("%s%-16d%-16d%-16d\n", tabulation, i, info->servers_pids[i], info->servers_stats[i]);
+        printf(BLUE"%s%-16d%-16d"YELLOW"%-16d\n"RESET   , tabulation, i, info->servers_pids[i], info->servers_stats[i]);
     }
 }
 

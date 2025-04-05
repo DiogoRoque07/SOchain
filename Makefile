@@ -6,7 +6,7 @@ NAME        := SOchain
 CC          := gcc
 FLAGS       := -g -Wall -Wextra -Werror 
 RUN			:= ./bin/$(NAME)
-RUN_ARGS    := 200 3 3 5 10 
+RUN_ARGS    := 200 3 10 2 10 
 TEST_ARGS    := 200 1 1 5 10 
 ################################################################################
 #                                 PROGRAM'S SRCS                               #

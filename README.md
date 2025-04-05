@@ -104,6 +104,7 @@ The project should be submitted as a ZIP file named `SO-XXX-p1.zip` (where XXX i
 
 ## Limitations
 - A transferência de dinheiro ocorre no main devido à limitação de processos não conseguirem "comunicar" e como acedem à mesma memória(ex: com vários servidores a transação pode transferir dinheiro n_servers vezes). Apesar disso tirar um dos objetivos do server, é a solução mais eficiente para este não ocorrer. 
+- As estatisticas do servidor podem não estar corretos, pois apesar de conseguir fazer uma unica transferencia e fazer com que haja so uma unica transação existente(no buffer) por cada transação feita estas estatisicas não mostram o valor correto (é de mencionar que depois de testar o programa do professor o mesmo acontece).
 
 ## Notes
 
