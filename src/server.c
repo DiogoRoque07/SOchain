@@ -61,7 +61,7 @@ void server_process_transaction(struct transaction *tx, int server_id, struct in
 {
     // (void)info;
     info->servers_stats[server_id]++;
-    // if (tx->src_id < 0 || tx->src_id >= info->n_wallets || tx->dest_id < 0 || tx->dest_id >= info->n_wallets || info->balances[tx->src_id] <= tx->amount)
+    // if (tx->src_id < 0 || tx->src_id >= info->n_wallets || tx->dest_id < 0 || tx->dest_id >= info->n_wallets || info->balances[tx->src_id] < tx->amount)
     // { /*verificar tbm a assinatura da carteira de origem (src wallet)*/
     //     tx->server_signature = -1;
     //     return;

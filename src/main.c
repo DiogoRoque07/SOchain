@@ -399,7 +399,7 @@ void create_transaction(int *tx_counter, struct info_container *info, struct buf
     }
     write_main_wallets_buffer(buffs->buff_main_wallets, info->buffers_size, &tx);
     usleep(50000);
-    if (tx.src_id < 0 || tx.src_id >= info->n_wallets || tx.dest_id < 0 || tx.dest_id >= info->n_wallets || info->balances[tx.src_id] <= tx.amount)
+    if (tx.src_id < 0 || tx.src_id >= info->n_wallets || tx.dest_id < 0 || tx.dest_id >= info->n_wallets || info->balances[tx.src_id] < tx.amount)
     { /*verificar tbm a assinatura da carteira de origem (src wallet)*/
         tx.server_signature = -1;
         return;
