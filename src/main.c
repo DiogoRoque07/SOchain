@@ -1,3 +1,12 @@
+/**
+ * @autores (grupo SO-003)
+ * OMEIR HAROON (61810)
+ * Isa David    (61871)
+ * Diogo Roque  (61857)
+ */
+
+
+
 #include <stdio.h>
 #include "../inc/main.h"
 #include "../inc/process.h"
@@ -383,10 +392,6 @@ void remove_extras_from_buffer(struct info_container *info, struct buffers *buff
 
 void create_transaction(int *tx_counter, struct info_container *info, struct buffers *buffs)
 {
-    if (*tx_counter >= info->max_txs) {
-        printf("["RED "MAIN" RESET "] Número máximo de transações (%d) atingido. Não é possível criar uma nova transação.\n", info->max_txs);
-        return;
-    }
     struct transaction tx;
     (*tx_counter)++;
     
@@ -394,6 +399,10 @@ void create_transaction(int *tx_counter, struct info_container *info, struct buf
     scanf("%d", &tx.src_id);
     scanf("%d", &tx.dest_id);
     scanf("%f", &tx.amount);
+    if (*tx_counter > info->max_txs) {
+        printf("["RED "MAIN" RESET "] Número máximo de transações (%d) atingido. Não é possível criar uma nova transação.\n", info->max_txs);
+        return;
+    }
 
     if (tx.src_id < 0 || tx.dest_id < 0 || !tx.amount) {
         printf("["RED "MAIN" RESET "] Argumentos insuficientes para criar uma transação. Use: "YELLOW"trx src_id dest_id amount\n"RESET);

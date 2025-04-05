@@ -1,3 +1,10 @@
+/**
+ * @autores (grupo SO-003)
+ * OMEIR HAROON (61810)
+ * Isa David    (61871)
+ * Diogo Roque  (61857)
+ */
+
 #include "../inc/memory.h"
 #include <stdlib.h>
 #include <unistd.h>

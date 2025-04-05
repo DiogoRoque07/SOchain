@@ -1,3 +1,10 @@
+/**
+ * @autores (grupo SO-003)
+ * OMEIR HAROON (61810)
+ * Isa David    (61871)
+ * Diogo Roque  (61857)
+ */
+
 #include "../inc/process.h"
 #include "../inc/wallet.h"
 #include "../inc/server.h"

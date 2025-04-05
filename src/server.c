@@ -1,3 +1,10 @@
+/**
+ * @autores (grupo SO-003)
+ * OMEIR HAROON (61810)
+ * Isa David    (61871)
+ * Diogo Roque  (61857)
+ */
+
 #include "../inc/server.h"
 #include "../inc/wallet.h"
 #include <unistd.h>
@@ -56,8 +63,10 @@ void server_receive_transaction(struct transaction *tx, struct info_container *i
 void server_process_transaction(struct transaction *tx, int server_id, struct info_container *info)
 {
     info->servers_stats[server_id]++;
-
-    tx->server_signature = server_id;
+    if (tx->src_id < 0 || tx->src_id >= info->n_wallets || tx->dest_id < 0 || tx->dest_id >= info->n_wallets || info->balances[tx->src_id] < tx->amount)
+        tx->server_signature = -1;
+    else
+        tx->server_signature = server_id;
 }
 
 void server_send_transaction(struct transaction *tx, struct info_container *info, struct buffers *buffs)
