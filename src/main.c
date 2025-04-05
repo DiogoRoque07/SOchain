@@ -9,6 +9,7 @@
 
 #include <string.h>
 
+
 #define RESET "\033[0m"
 #define RED "\033[31m"
 #define GREEN "\033[32m"
@@ -19,13 +20,19 @@
 #define WHITE "\033[37m"
 #define PINK "\033[35m"
 #define ORANGE "\033[38;5;214m"
-
-// int g_src_id;
-// int g_dest_id;
-// float g_amount;
+#define LIGHT_BLUE "\033[38;5;117m"
+#define LIGHT_GREEN "\033[92m"
+#define LIGHT_YELLOW "\033[93m"
+#define LIGHT_RED "\033[91m"
+#define LIGHT_MAGENTA "\033[95m"
+#define LIGHT_CYAN "\033[96m"
+#define GRAY "\033[90m"
 
 static int G_correct_args = 0;
 
+/**
+    * prints the reciept (or transaction information) in a readable way
+ */
 void mprintTX(struct transaction tx){
     printf(YELLOW "Transaction ID: " RESET "%d | " 
         GREEN "Source ID: " RESET "%d | " 
@@ -39,11 +46,9 @@ void mprintTX(struct transaction tx){
 
 int main(int argc, char *argv[])
 {
-    // init data structures
     struct info_container *info = allocate_dynamic_memory(sizeof(struct info_container));
     struct buffers *buffs = allocate_dynamic_memory(sizeof(struct buffers));
 
-    // execute main code
     main_args(argc, argv, info);
     create_dynamic_memory_structs(info, buffs);
     create_shared_memory_structs(info, buffs);
@@ -52,8 +57,7 @@ int main(int argc, char *argv[])
 
     user_interaction(info, buffs);
 
-    // release memory before terminating
-    destroy_shared_memory_structs(info, buffs);//tem de ser chamado antes do destroy_dynamic pq o dynamic deAlloca os structs info e buffs em si
+    destroy_shared_memory_structs(info, buffs);
     destroy_dynamic_memory_structs(info, buffs);
     return 0;
 }
@@ -92,7 +96,6 @@ int check_args(int argc, char *argv[])
     }
 
     // buff_size
-    // TODO: ver
     if (atoi(argv[4]) <= 0)
     {
         fprintf(stderr,RED "BUFFER SIZE NEEDS TO BE POSITIVE\n" RESET);
@@ -109,37 +112,27 @@ int check_args(int argc, char *argv[])
 
     return ret;
 }
-/*
-args usage: progam_name init_balance n_wallets n_servers buff_size max_txs
-*/
 
-// Como apagar buffs aqui
+
 void main_args(int argc, char *argv[], struct info_container *info)
 {
-    // printf(BLUE " EU SOU O MAIN: %d" RESET "\n", getpid());
-
     if (check_args(argc, argv) == -1)
     {
-        printf("[" BLUE"%d" RESET "]" RED " Parâmetros incorretos!\n" RESET, getpid());
-
-        // deallocate_dynamic_memory(info);
-        // exit(-1);
-        // *info->terminate = 1; // Nao consigo
+        printf("[" BLUE"MAIN" RESET "]" RED " Parâmetros incorretos!\n" RESET);
         return;
     }
 
     if (check_args(argc, argv) == 0)
     {
-        printf("[" BLUE"%d" RESET "]" GREEN " Parâmetros corretos!\n" RESET, getpid());
+        printf("[" BLUE"MAIN" RESET "]" GREEN " Parâmetros corretos!\n" RESET);
         info->init_balance = atof(argv[1]);
         info->n_wallets = atoi(argv[2]);
         info->n_servers = atoi(argv[3]);
         info->buffers_size = atoi(argv[4]);
         info->max_txs = atoi(argv[5]);
-
         
-        printf("[" BLUE "%d" RESET "]" GREEN " init_balance: %.2f, n_wallets: %d, n_servers: %d, buffers_size: %d, max_txs: %d\n" RESET, 
-               getpid(), info->init_balance, info->n_wallets, info->n_servers, info->buffers_size, info->max_txs);
+        printf("[" BLUE "MAIN" RESET "]" YELLOW " init_balance"RESET": %.2f, " YELLOW"n_wallets"RESET": %d, "YELLOW"n_servers"RESET": %d, "YELLOW"buffers_size"RESET": %d, "YELLOW"max_txs"RESET": %d\n", 
+                info->init_balance, info->n_wallets, info->n_servers, info->buffers_size, info->max_txs);
     }
 }
 
@@ -160,15 +153,12 @@ void create_shared_memory_structs(struct info_container *info, struct buffers *b
 {
     if(G_correct_args == -1)
         return;
-    // buffs->buff_main_wallets = create_shared_memory(ID_SHM_MAIN_WALLETS_BUFFER, info->buffers_size * sizeof(struct ra_buffer));
     buffs->buff_main_wallets->buffer = create_shared_memory(ID_SHM_MAIN_WALLETS_BUFFER, info->buffers_size * sizeof(struct transaction));
     buffs->buff_main_wallets->ptrs = create_shared_memory(ID_SHM_MAIN_WALLETS_PTR, info->buffers_size *  sizeof(int));
    
-    // buffs->buff_wallets_servers = create_shared_memory(ID_SHM_WALLETS_SERVERS_BUFFER, info->buffers_size * sizeof(struct circ_buffer));
     buffs->buff_wallets_servers->buffer = create_shared_memory(ID_SHM_WALLETS_SERVERS_BUFFER, info->buffers_size * sizeof(struct transaction));
     buffs->buff_wallets_servers->ptrs = create_shared_memory(ID_SHM_WALLETS_SERVERS_PTR, sizeof(struct pointers));
 
-    // buffs->buff_servers_main = create_shared_memory(ID_SHM_SERVERS_MAIN_BUFFER, info->buffers_size * sizeof(struct ra_buffer));
     buffs->buff_servers_main->buffer = create_shared_memory(ID_SHM_SERVERS_MAIN_BUFFER, info->buffers_size * sizeof(struct transaction));
     buffs->buff_servers_main->ptrs = create_shared_memory(ID_SHM_SERVERS_MAIN_PTR, info->buffers_size *  sizeof(int));
     
@@ -199,15 +189,12 @@ void destroy_shared_memory_structs(struct info_container *info, struct buffers *
 {
     if(G_correct_args == -1)
         return;
-    // destroy_shared_memory(ID_SHM_MAIN_WALLETS_BUFFER, buffs->buff_main_wallets->buffer,  info->buffers_size * sizeof(struct transaction));
     destroy_shared_memory(ID_SHM_MAIN_WALLETS_PTR, buffs->buff_main_wallets->ptrs, info->buffers_size *  sizeof(int));
     destroy_shared_memory(ID_SHM_MAIN_WALLETS_BUFFER, buffs->buff_main_wallets, info->buffers_size * sizeof(struct ra_buffer));
 
-    // destroy_shared_memory(ID_SHM_WALLETS_SERVERS_BUFFER,buffs->buff_wallets_servers->buffer, info->buffers_size * sizeof(struct ra_buffer));
     destroy_shared_memory(ID_SHM_WALLETS_SERVERS_PTR, buffs->buff_wallets_servers->ptrs, sizeof(struct pointers));
     destroy_shared_memory(ID_SHM_WALLETS_SERVERS_BUFFER, buffs->buff_wallets_servers, info->buffers_size * sizeof(struct circ_buffer));
 
-    // destroy_shared_memory(ID_SHM_SERVERS_MAIN_BUFFER, buffs->buff_servers_main->buffer, info->buffers_size * sizeof(struct transaction));
     destroy_shared_memory(ID_SHM_SERVERS_MAIN_PTR, buffs->buff_servers_main->ptrs, info->buffers_size *  sizeof(int));
     destroy_shared_memory(ID_SHM_SERVERS_MAIN_BUFFER, buffs->buff_servers_main,  info->buffers_size * sizeof(struct ra_buffer));
 
@@ -265,6 +252,20 @@ int user_hash(char op[])
         return 7;
 }
 
+char * toLowerCase(char * s){
+    char* temp = s;
+    int i = 0;
+    while(temp[i] != '\n' && temp[i] != ' ' && temp[i] != '\0') {
+        if (temp[i] >= 'A' && temp[i] <= 'Z') {
+            s[i] = temp[i] + (32);
+        } else {
+            s[i] = temp[i];
+        }
+        i++;
+    }
+    return s;
+}
+
 void user_interaction(struct info_container *info, struct buffers *buffs)
 {
     if(G_correct_args == -1 ||*info->terminate == 1)
@@ -275,10 +276,10 @@ void user_interaction(struct info_container *info, struct buffers *buffs)
     while (1)
     {
         char *input = malloc(sizeof(char *));
-        printf("[" BLUE "%d" RESET"] Introduzir operação: " PINK, getpid());
+        printf("[" BLUE "MAIN" RESET"] Introduzir operação: ");
         scanf( "%s", input);
-        printf(RESET"\n");
-        // dividir as informações do comando
+        printf("\n");
+        input = toLowerCase(input);
         char *words = strtok(input, " ");
         if (!words)
             continue;
@@ -311,7 +312,7 @@ void user_interaction(struct info_container *info, struct buffers *buffs)
 
             return;
         default:
-            printf("["BLUE "MAIN" RESET "] Introduzir operação: ["BLUE "MAIN" RESET "] Operação:"RED " %s" RESET  " não reconhecida, insira 'help' para assistência.\n", input);
+            printf("["RED "MAIN" RESET "] Operação:"RED " %s" RESET  " não reconhecida, insira '"YELLOW"help"RESET"' para assistência.\n", input);
             break;
         }
 
@@ -319,27 +320,26 @@ void user_interaction(struct info_container *info, struct buffers *buffs)
             free(input);
     }
     if(tx_counter)
-        free(tx_counter); // Free tx_counter only once after the loop
+        free(tx_counter);
 }
 
 void write_final_statistics(struct info_container *info)
 {
-    printf("[Main] A encerrar a execução do SOchain! As estatísticas da execução são:\n");
+    printf("["BLUE "MAIN" RESET "] A "RED"encerrar"RESET" a execução do SOchain! As estatísticas da execução são:\n");
     for (int i = 0; i < info->n_wallets; i++)
-        printf("[Main] A carteira %d assinou %d transações e terminou com %.2f SOT!\n", i, info->wallets_stats[i], info->balances[i]);
+        printf("["BLUE "MAIN" RESET "] A carteira "YELLOW"%d"RESET" assinou "GREEN"%d"RESET" transações e terminou com "GREEN"%.2f"RESET" SOT!\n", i, info->wallets_stats[i], info->balances[i]);
     for (int i = 0; i < info->n_servers; i++)
-        printf("[Main] Servidor %d assinou %d transações\n", i, info->servers_stats[i]);
+        printf("["BLUE "MAIN" RESET "] Servidor "YELLOW"%d"RESET" assinou "GREEN"%d"RESET" transações\n", i, info->servers_stats[i]);
 }
 
 void end_execution(struct info_container *info, struct buffers *buffs)
 {
     *info->terminate = 1;
-    (void)buffs;
+    (void)buffs;//para evitar problemas de compilação com a flag WEXTRA
     wait_processes(info);
     write_final_statistics(info);
 }
 
-//resets stats find out why
 void wait_processes(struct info_container *info)
 {
     for (int i = 0; i < info->n_wallets; i++)
@@ -354,11 +354,14 @@ void print_balance(struct info_container *info)
     int wallet_id;
     scanf("%d", &wallet_id);
     if (wallet_id >= 0 && wallet_id < info->n_wallets)
-        printf("[Main] O saldo da carteira %d é de %.2f SOT atualmente.\n", wallet_id, info->balances[wallet_id]);
+        printf("["BLUE "MAIN" RESET "] O saldo da carteira "YELLOW"%d"RESET" é de "GREEN"%.2f"RESET" SOT atualmente.\n", wallet_id, info->balances[wallet_id]);
     else
-        printf("[Main] Não foi possível verificar o saldo da carteira %d\n", wallet_id);
+        printf("["RED "MAIN" RESET "] Não foi possível verificar o saldo da carteira "YELLOW"%d"RESET"\n", wallet_id);
 }
 
+/**
+ * Caso varias servidores processam a mesma transação estes não ocupam lugar no buffer
+ */
 void remove_extras_from_buffer(struct info_container *info, struct buffers *buffs){
 
     for(int i = 0; i < info->buffers_size; i++){
@@ -370,7 +373,6 @@ void remove_extras_from_buffer(struct info_container *info, struct buffers *buff
                 if(i != j && buffs->buff_servers_main->ptrs[i] == 1){
                     if(id1 == buffs->buff_servers_main->buffer[j].id){
                         buffs->buff_servers_main->ptrs[j] = 0;
-                        // info->servers_stats[j]--;
                     }
                 }
             }
@@ -394,40 +396,29 @@ void create_transaction(int *tx_counter, struct info_container *info, struct buf
     scanf("%f", &tx.amount);
 
     if (tx.src_id < 0 || tx.dest_id < 0 || !tx.amount) {
-        printf("[Main] Argumentos insuficientes para criar uma transação. Use: trx src_id dest_id amount\n");
+        printf("["RED "MAIN" RESET "] Argumentos insuficientes para criar uma transação. Use: "YELLOW"trx src_id dest_id amount\n"RESET);
         return;
     }
+    printf("["BLUE "MAIN" RESET "] A transação %d foi criada para transferir %.2f SOT da carteira %d para a carteira %d!\n", tx.id + 1, tx.amount ,tx.src_id, tx.dest_id);
     write_main_wallets_buffer(buffs->buff_main_wallets, info->buffers_size, &tx);
     usleep(50000);
     if (tx.src_id < 0 || tx.src_id >= info->n_wallets || tx.dest_id < 0 || tx.dest_id >= info->n_wallets || info->balances[tx.src_id] < tx.amount)
-    { /*verificar tbm a assinatura da carteira de origem (src wallet)*/
+    {
         tx.server_signature = -1;
+        printf("["RED "MAIN" RESET "] A transação %d foi criada para transferir %.2f SOT da carteira %d para a carteira %d "RED"falhou por algum motivo!\n"RESET, tx.id + 1, tx.amount ,tx.src_id, tx.dest_id);
         return;
     }
     info->balances[tx.src_id] -= tx.amount;
     info->balances[tx.dest_id] += tx.amount;
-    read_servers_main_buffer(buffs->buff_servers_main, *tx_counter, info->buffers_size, &tx );
-    // info->servers_stats[tx.server_signature]++;
-    // TODO adicionar a cor
-    printf("[Main] A transação %d foi criada para transferir %.2f SOT da carteira %d para a carteira %d!\n", tx.id + 1, tx.amount ,tx.src_id, tx.dest_id);
+    printf("["BLUE "MAIN" RESET "] A transação %d para transferir %.2f SOT da carteira %d para a carteira %d "GREEN"foi efetuada!\n"RESET, tx.id + 1, tx.amount ,tx.src_id, tx.dest_id);
+
     remove_extras_from_buffer(info, buffs);
-    // printf("printing transac at main after everything:\n");
-    // mprintTX(tx);
-    // printf("Transaction id = %d\n", tx.id);
-    // printf("wallet[%d] new balance: %f\nwallet[%d] new balance: %f\n", tx.src_id, info->balances[tx.src_id], tx.dest_id, info->balances[tx.dest_id]);
 }
 
-/* Tenta ler o recibo da transação (identificada por id, o qual ainda está no
- * stdin a espera de ser lido dentro da função com o scanf) do buffer de memória
- * partilhada entre os servidores e a main, comprovando a conclusão da transação.
- */
-
- // erro qualquer aqui!!!!
 void receive_receipt(struct info_container *info, struct buffers *buffs)
 {
     int transac_id;
     scanf("%d", &transac_id);
-    // struct transaction receipt;
     for (int i = 0; i < info->buffers_size; i++)
     {
         if(buffs->buff_servers_main->ptrs[i] == 1)
@@ -436,56 +427,39 @@ void receive_receipt(struct info_container *info, struct buffers *buffs)
             {
                 struct transaction *tx = &buffs->buff_servers_main->buffer[i];
                 mprintTX(*tx);
-                // return;
+                return;
             }
         }
     }
 } 
 
-#define RESET "\033[0m"
-#define RED "\033[31m"
-#define GREEN "\033[32m"
-#define YELLOW "\033[33m"
-#define BLUE "\033[34m"
-#define MAGENTA "\033[35m"
-#define CYAN "\033[36m"
-#define WHITE "\033[37m"
-#define PINK "\033[35m"
-#define ORANGE "\033[38;5;214m"
-#define LIGHT_BLUE "\033[94m"
-#define LIGHT_GREEN "\033[92m"
-#define LIGHT_YELLOW "\033[93m"
-#define LIGHT_RED "\033[91m"
-#define LIGHT_MAGENTA "\033[95m"
-#define LIGHT_CYAN "\033[96m"
-#define GRAY "\033[90m"
 void print_stat(int tx_counter, struct info_container *info)
 {
     char tabulation[] = "        ";
     printf(LIGHT_MAGENTA"- Configuração inicial:\n");
-    printf(PINK "%sPropriedade     Valor\n", tabulation);
-    printf(BLUE "%sinit_balance    "RED"%.2f\n", tabulation, info->init_balance);
+    printf(ORANGE "%sPropriedade     Valor\n", tabulation);
+    printf(YELLOW "%sinit_balance    "GREEN"%.2f\n", tabulation, info->init_balance);
     printf(YELLOW "%sn_wallets       "GREEN"%d\n", tabulation, info->n_wallets);
-    printf(ORANGE"%sn_servers       "CYAN"%d\n", tabulation, info->n_servers);
-    printf(MAGENTA"%sbuffer_size     "BLUE"%d\n", tabulation, info->buffers_size);
-    printf(GREEN"%smax_txs         "PINK"%d\n", tabulation, info->max_txs);
-    printf("- Variáveis atuais:\n");
-    printf(CYAN"%stx_count        "RED"%d\n", tabulation, tx_counter);
-    printf(YELLOW"%sterminate       "ORANGE"%d\n", tabulation, *info->terminate);
-    printf("- Informações sobre as carteiras:\n");
-    printf(LIGHT_GREEN"%sCarteira        "LIGHT_MAGENTA"PID             "LIGHT_CYAN"Saldo           "ORANGE"Transações Assinadas\n" RESET, tabulation);
+    printf(YELLOW"%sn_servers       "GREEN"%d\n", tabulation, info->n_servers);
+    printf(YELLOW"%sbuffer_size     "GREEN"%d\n", tabulation, info->buffers_size);
+    printf(YELLOW"%smax_txs         "GREEN"%d\n", tabulation, info->max_txs);
+    printf(LIGHT_MAGENTA"- Variáveis atuais:\n");
+    printf(YELLOW"%stx_count        "GREEN"%d\n", tabulation, tx_counter);
+    printf(YELLOW"%sterminate       "GREEN"%d\n", tabulation, *info->terminate);
+    printf(LIGHT_MAGENTA"- Informações sobre as carteiras:\n");
+    printf(ORANGE"%sCarteira        PID             Saldo           Transações Assinadas\n" RESET, tabulation);
     for (int i = 0; i < info->n_wallets; i++)
     {   
         char* balances = malloc(20 * sizeof(char));
         sprintf(balances,"%.2f SOT", info->balances[i]);
-        printf("%s%-16d%-16d%-16s%-12d\n", tabulation, i, info->wallets_pids[i], balances ,info->wallets_stats[i]);
+        printf(GREEN"%s%-16d"LIGHT_BLUE"%-16d"RESET"%-16s"GREEN"%-12d\n", tabulation, i, info->wallets_pids[i], balances ,info->wallets_stats[i]);
         free(balances);
     }
-    printf(LIGHT_RED"- Informações sobre os servidores:\n");
-    printf(""BLUE"%sServidor        "YELLOW"PID             "PINK"Transações Processadas\n"RESET, tabulation);
+    printf(LIGHT_MAGENTA"- Informações sobre os servidores:\n");
+    printf(ORANGE"%sServidor        PID             Transações Processadas\n"RESET, tabulation);
     for (int i = 0; i < info->n_servers; i++)
     {   
-        printf(BLUE"%s%-16d%-16d"YELLOW"%-16d\n"RESET   , tabulation, i, info->servers_pids[i], info->servers_stats[i]);
+        printf("%s"GREEN"%-16d"LIGHT_BLUE"%-16d"GREEN"%-16d\n"RESET   , tabulation, i, info->servers_pids[i], info->servers_stats[i]);
     }
 }
 

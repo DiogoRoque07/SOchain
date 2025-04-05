@@ -45,8 +45,6 @@ void *create_shared_memory(char *name, int size)
 {
     char temp_name[256];
     snprintf(temp_name, sizeof(temp_name), "%s_%u", name, getuid());
-    // name = strdup(temp_name);
-    // printf("shared memory created with following name: %s\n", temp_name);
     int fd = shm_open(temp_name, O_RDWR | O_CREAT, S_IRUSR | S_IWUSR);
     if (fd == -1){
         printf("shm_open failed for %s", temp_name);
@@ -54,27 +52,16 @@ void *create_shared_memory(char *name, int size)
     }
     if (ftruncate(fd, size) == -1)
     {
-        printf("ftruncate failed");
+        printf(RED"ftruncate failed"RESET);
         return NULL;
     }
     void* ptr = mmap(0, sizeof(int), PROT_READ | PROT_WRITE, MAP_SHARED, fd, 0);
     if (ptr == MAP_FAILED)
     {
-        printf("shm-mmap");
+        printf(RED"shm-mmap"RESET);
         return NULL;
     }
     memset(ptr, 0, size);
-    // int protection = PROT_READ | PROT_WRITE;
-    // int visibility = MAP_SHARED | MAP_ANONYMOUS;
-
-    // void * temp = mmap(NULL, size, protection, visibility, -1, 0);
-    // if (temp == MAP_FAILED)
-    // {
-    //     printf("mmap failed for: %s\n", name);
-    //     free(name);
-    //     return NULL;
-    // }
-    // memset(temp, 0, size);
     return ptr;
 }
 
@@ -90,7 +77,7 @@ void deallocate_dynamic_memory(void *ptr)
 void destroy_shared_memory(char *name, void *ptr, int size)
 {
     if (ptr)
-        munmap(ptr, size); // deallocate shared mem
+        munmap(ptr, size);
     shm_unlink(name);
 }
 
