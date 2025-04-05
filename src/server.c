@@ -28,7 +28,6 @@ int execute_server(int server_id, struct info_container *info, struct buffers *b
     {
         struct transaction tx;
         memset(&tx, 0, sizeof(tx));
-        // sprintTX(tx);
         server_receive_transaction(&tx, info, buffs);
         if (tx.id == -1)
         {
@@ -36,12 +35,9 @@ int execute_server(int server_id, struct info_container *info, struct buffers *b
         }
         if (tx.id >= 0)
         {
-            // printf(YELLOW "\nSTARTING TRANSAC in server\n" RESET);
             server_process_transaction(&tx, server_id, info);
-            // sprintTX(tx);
             server_send_transaction(&tx, info, buffs);
             trxs++;
-            // printf(YELLOW "\nSERVER[%d] AVAILABLE TO USE AFTER TRX\n"RESET, server_id);
         }
     }
     return trxs;
@@ -59,26 +55,15 @@ void server_receive_transaction(struct transaction *tx, struct info_container *i
 
 void server_process_transaction(struct transaction *tx, int server_id, struct info_container *info)
 {
-    // (void)info;
     info->servers_stats[server_id]++;
-    // if (tx->src_id < 0 || tx->src_id >= info->n_wallets || tx->dest_id < 0 || tx->dest_id >= info->n_wallets || info->balances[tx->src_id] < tx->amount)
-    // { /*verificar tbm a assinatura da carteira de origem (src wallet)*/
-    //     tx->server_signature = -1;
-    //     return;
-    // }
-    // info->balances[tx->src_id] -= tx->amount;
-    // info->balances[tx->dest_id] += tx->amount;
+
     tx->server_signature = server_id;
 }
 
 void server_send_transaction(struct transaction *tx, struct info_container *info, struct buffers *buffs)
 {
     if (tx->server_signature == -1)
-    {
         return;
-    }
-    // printf("going to write the following transac to servers_main buffer\n");
-    // sprintTX(*tx);
 
     write_servers_main_buffer(buffs->buff_servers_main, info->buffers_size, tx);
 }

@@ -465,12 +465,12 @@ void print_stat(int tx_counter, struct info_container *info)
 
 void help()
 {
-    printf("["BLUE "%d" RESET "]" ORANGE"  Operações disponíveis:\n"RESET, getpid());
-    printf("["BLUE "%d" RESET "]" ORANGE"  bal id - consultar o saldo da carteira identifcada por id\n"RESET, getpid());
-    printf("["BLUE "%d" RESET "]" ORANGE"  trx src_id dest_id amount - criar uma nova transação\n"RESET, getpid());
-    printf("["BLUE "%d" RESET "]" ORANGE"  rcp id - obter o comprovativo da transação de número id\n"RESET, getpid());
-    printf("["BLUE "%d" RESET "]" ORANGE"  help - imprime a informação sobre as operações disponíveis\n"RESET, getpid());
-    printf("["BLUE "%d" RESET "]" ORANGE"  stat - imprime as estatísticas atuais do SOchain\n"RESET, getpid());
-    printf("["BLUE "%d" RESET "]" ORANGE"  end - termina a execução do SOchain\n"RESET, getpid());
+    printf("["BLUE "MAIN" RESET "]" ORANGE"  Operações disponíveis:\n"RESET);
+    printf("["BLUE "MAIN" RESET "]" ORANGE"  bal id - consultar o saldo da carteira identifcada por id\n"RESET);
+    printf("["BLUE "MAIN" RESET "]" ORANGE"  trx src_id dest_id amount - criar uma nova transação\n"RESET);
+    printf("["BLUE "MAIN" RESET "]" ORANGE"  rcp id - obter o comprovativo da transação de número id\n"RESET);
+    printf("["BLUE "MAIN" RESET "]" ORANGE"  help - imprime a informação sobre as operações disponíveis\n"RESET);
+    printf("["BLUE "MAIN" RESET "]" ORANGE"  stat - imprime as estatísticas atuais do SOchain\n"RESET);
+    printf("["BLUE "MAIN" RESET "]" ORANGE"  end - termina a execução do SOchain\n"RESET);
 
 }
